@@ -1,0 +1,69 @@
+{
+  "voice": "kokoro:af_heart",
+  "duration": 151.58,
+  "chunks": [
+    {
+      "text": "Spain's emissions are not at historical lows, not even close",
+      "start": 0.0,
+      "end": 4.55,
+      "charStart": 0,
+      "charEnd": 60
+    },
+    {
+      "text": "The series since 1860 changes the reading of headlines based only on inventories from 1990.",
+      "start": 4.77,
+      "end": 12.445,
+      "charStart": 62,
+      "charEnd": 153
+    },
+    {
+      "text": "In late 2023, some headlines said that Spain's greenhouse-gas emissions had fallen to historical lows. Usually, the small print meant historical since 1990, because the official inventory starts there. But Spain's environmental history does not begin in 1990.",
+      "start": 12.665,
+      "end": 32.39,
+      "charStart": 155,
+      "charEnd": 414
+    },
+    {
+      "text": "CAHE reconstructs a longer series back to 1860. That longer view changes the interpretation. It shows that emissions before 1990 were not invisible; they were part of a long transition from agrarian land-based emissions to fossil and industrial emissions.",
+      "start": 32.61,
+      "end": 52.285,
+      "charStart": 416,
+      "charEnd": 671
+    },
+    {
+      "text": "Between 1860 and the early twenty-first century, total greenhouse-gas emissions rose dramatically. The increase was not linear. For decades, emissions remained relatively stable. The real acceleration came after the 1950s, with industrial growth, urbanization, transport and fossil-energy expansion.",
+      "start": 52.505,
+      "end": 74.905,
+      "charStart": 673,
+      "charEnd": 972
+    },
+    {
+      "text": "The composition changed as much as the level. In the nineteenth century, a large share of emissions came from agriculture, livestock and land-use change. Later, fossil fuels became dominant. Today, forests can act as carbon sinks, while energy, transport and industry carry much of the climate burden.",
+      "start": 75.125,
+      "end": 95.875,
+      "charStart": 974,
+      "charEnd": 1275
+    },
+    {
+      "text": "This matters because a short official baseline can mislead public debate. A decline relative to 1990 is important, but it is not the same as a decline relative to the full historical trajectory.",
+      "start": 96.095,
+      "end": 110.095,
+      "charStart": 1277,
+      "charEnd": 1471
+    },
+    {
+      "text": "The viewer allows the series to be read in several ways: annual emissions, accumulated emissions, intensity and components. Each metric answers a different question. Annual flows show the present pace; accumulated emissions show historical responsibility; intensity shows how production has changed.",
+      "start": 110.315,
+      "end": 131.54,
+      "charStart": 1473,
+      "charEnd": 1772
+    },
+    {
+      "text": "Spain's emissions have fallen significantly in recent decades. That is good news. But they are not at historical lows in the deeper sense, and they remain far above a level compatible with a safe climate space. The long-run record helps avoid confusing recent improvement with a solved problem.",
+      "start": 131.76,
+      "end": 151.36,
+      "charStart": 1774,
+      "charEnd": 2068
+    }
+  ]
+}

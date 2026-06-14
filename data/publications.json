@@ -1,0 +1,1062 @@
+{
+  "generatedFrom": "C:\\Users\\jinfa\\OneDrive\\02_admin\\cv\\datos\\CV_Datos_Maestro.xlsx",
+  "generatedBy": "build/generate_publications.py",
+  "curation": "Local CV master workbook; Spain-focused CAHE entries selected by conservative title/source rules, plus explicit recent Spain-world papers by Aguilera, Travieso and Infante-Amate.",
+  "tagMeta": {
+    "global": {
+      "label": "Perspectiva global",
+      "labelEn": "Global perspective",
+      "color": "#3a5e7a"
+    },
+    "crecimiento": {
+      "label": "Crecimiento",
+      "labelEn": "Growth",
+      "color": "#496f8f"
+    },
+    "emisiones": {
+      "label": "Emisiones",
+      "labelEn": "Emissions",
+      "color": "#c93324"
+    },
+    "energia": {
+      "label": "Energía",
+      "labelEn": "Energy",
+      "color": "#8f6338"
+    },
+    "materiales": {
+      "label": "Materiales",
+      "labelEn": "Materials",
+      "color": "#8b5a3c"
+    },
+    "tierra": {
+      "label": "Tierra",
+      "labelEn": "Land",
+      "color": "#6f7a3d"
+    },
+    "forestal": {
+      "label": "Forestal",
+      "labelEn": "Forestry",
+      "color": "#4f7a3d"
+    },
+    "cultivos": {
+      "label": "Cultivos",
+      "labelEn": "Crops",
+      "color": "#7f9d43"
+    },
+    "industria": {
+      "label": "Industria",
+      "labelEn": "Industry",
+      "color": "#3f596e"
+    },
+    "agua": {
+      "label": "Agua",
+      "labelEn": "Water",
+      "color": "#3a6d8a"
+    },
+    "nitrogeno": {
+      "label": "Nitrógeno",
+      "labelEn": "Nitrogen",
+      "color": "#c79a3b"
+    },
+    "comercio": {
+      "label": "Comercio",
+      "labelEn": "Trade",
+      "color": "#6d5a7f"
+    },
+    "olivo": {
+      "label": "Olivo",
+      "labelEn": "Olive",
+      "color": "#7b6f34"
+    }
+  },
+  "items": [
+    {
+      "year": 2026,
+      "authors": "Sanjuán-Ruiz, Á.",
+      "people": [
+        "Ángel Sanjuán-Ruiz"
+      ],
+      "title": "The long persistence: fossil fuels consumption, structural constraints and energy transition in Spanish industry, 1960-2021",
+      "venue": "Revista de Historia Económica - Journal of Iberian and Latin American Economic History",
+      "publisher": "",
+      "pages": "First View, 1-30",
+      "doi": "10.1017/S0212610926100974",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "industria"
+      ],
+      "sourceSheet": "manual",
+      "sourceFile": "Cambridge Core",
+      "url": "https://doi.org/10.1017/S0212610926100974",
+      "id": "2026-the-long-persistence-fossil-fuels-consumption-structural-constraints-and-energy-"
+    },
+    {
+      "id": "2026-the-climate-cost-of-lateness-decomposing-historical-drivers-of-co2-industrial-em",
+      "year": 2026,
+      "authors": "Sanjuán-Ruiz, Á., Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Ángel Sanjuán-Ruiz"
+      ],
+      "title": "The climate cost of lateness: decomposing historical drivers of CO2 industrial emissions during Spanish industrialization and deindustrialization, 1890-2021",
+      "venue": "Journal of Industrial Ecology",
+      "publisher": "",
+      "pages": "en prensa",
+      "doi": "10.1007/s44498-026-00077-1",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "industria"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx",
+      "url": "https://doi.org/10.1007/s44498-026-00077-1"
+    },
+    {
+      "id": "2025-the-history-of-a-3c-future-global-and-regional-drivers-of-greenhouse-gas-emissio",
+      "year": 2025,
+      "authors": "Infante-Amate, J., Aguilera, E. & Travieso, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Emiliano Travieso"
+      ],
+      "title": "The history of a +3°C future: Global and regional drivers of greenhouse gas emissions (1820-2050)",
+      "venue": "Global Environmental Change",
+      "publisher": "",
+      "pages": "92, 103009",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "global",
+        "emisiones"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2025-green-growth-in-the-mirror-of-history",
+      "year": 2025,
+      "authors": "Infante-Amate, J., Travieso, E. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Emiliano Travieso"
+      ],
+      "title": "Green growth in the mirror of history",
+      "venue": "Nature Communications",
+      "publisher": "",
+      "pages": "16(1), 3766",
+      "doi": "10.1038/s41467-025-58777-4",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "global",
+        "crecimiento"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx",
+      "url": "https://doi.org/10.1038/s41467-025-58777-4"
+    },
+    {
+      "id": "2024-unsustainable-prosperity-decoupling-wellbeing-economic-growth-and-greenhouse-gas",
+      "year": 2024,
+      "authors": "Infante-Amate, J., Aguilera, E. & Travieso, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Emiliano Travieso"
+      ],
+      "title": "Unsustainable prosperity? Decoupling wellbeing, economic growth, and greenhouse gas emissions over the past 150 years",
+      "venue": "World Development",
+      "publisher": "",
+      "pages": "184, 106754",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "global",
+        "crecimiento",
+        "emisiones"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-una-sintesis-sobre-los-impactos-ambientales-del-crecimiento-economico-espanol",
+      "year": 2024,
+      "authors": "Iriarte-Goñi, I. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Una síntesis sobre los impactos ambientales del crecimiento económico español",
+      "venue": "Iriarte-Goñi, I. & Infante-Amate, J. (eds.), Impactos ambientales del crecimiento económico en España",
+      "publisher": "Prensas Univ. Zaragoza",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "crecimiento"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-transicion-energetica-y-emisiones-de-co2-en-la-industria-espanola-entre-1959-y-2",
+      "year": 2024,
+      "authors": "Sanjuán, Á., Aguilera, E., Garrués-Irurzun, J.A., Rodríguez Mondéjar, J.A. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Ángel Sanjuán-Ruiz"
+      ],
+      "title": "Transición energética y emisiones de CO2 en la industria española entre 1959 y 2007",
+      "venue": "Iriarte-Goñi, I. & Infante-Amate, J. (eds.), Impactos ambientales del crecimiento económico en España",
+      "publisher": "Prensas Univ. Zaragoza",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "crecimiento",
+        "emisiones",
+        "industria"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-notes-for-a-socio-ecological-history-of-the-spanish-olive-grove",
+      "year": 2024,
+      "authors": "Infante-Amate, J., Guzmán, G., Soto, D. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "Notes for a Socio-ecological History of the Spanish Olive Grove",
+      "venue": "Muñoz-Rojas, J. & García-Ruiz, R. (eds.), The Olive Landscapes of the Mediterranean",
+      "publisher": "Springer",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "tierra",
+        "olivo"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-la-alargada-sombra-del-crecimiento-economico-en-perspectiva-historica",
+      "year": 2024,
+      "authors": "Iriarte-Goñi, I. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "La alargada sombra del crecimiento económico en perspectiva histórica",
+      "venue": "Iriarte-Goñi, I. & Infante-Amate, J. (eds.), Impactos ambientales del crecimiento económico en España",
+      "publisher": "Prensas Univ. Zaragoza",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "crecimiento"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-impactos-ambientales-del-crecimiento-economico-en-espana-una-perspectiva-histori",
+      "year": 2024,
+      "authors": "Iriarte-Goñi, I. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Impactos ambientales del crecimiento económico en España. Una perspectiva histórica",
+      "venue": "Prensas Universitarias de Zaragoza",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "book",
+      "typeLabel": "Libro",
+      "typeLabelEn": "Book",
+      "tags": [
+        "crecimiento"
+      ],
+      "sourceSheet": "5_Libros",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-crecimiento-economico-y-emisiones-de-gases-de-efecto-invernadero-en-espana-1860-",
+      "year": 2024,
+      "authors": "Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera"
+      ],
+      "title": "Crecimiento económico y emisiones de gases de efecto invernadero en España (1860-2017)",
+      "venue": "Iriarte-Goñi, I. & Infante-Amate, J. (eds.), Impactos ambientales del crecimiento económico en España",
+      "publisher": "Prensas Univ. Zaragoza",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "crecimiento",
+        "emisiones"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2024-beyond-fossil-fuels-considering-land-based-emissions-reshapes-the-carbon-intensi",
+      "year": 2024,
+      "authors": "Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera"
+      ],
+      "title": "Beyond fossil fuels: considering land-based emissions reshapes the carbon intensity of modern economic growth (Spain, 1860-2017)",
+      "venue": "Historical Methods",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "crecimiento",
+        "emisiones",
+        "tierra"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2023-historical-changes-in-biomass-carbon-stocks-in-the-mediterranean-spain-1860-2010",
+      "year": 2023,
+      "authors": "Infante-Amate, J., Iriarte-Goñi, I. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Historical changes in biomass carbon stocks in the Mediterranean (Spain, 1860-2010)",
+      "venue": "Anthropocene",
+      "publisher": "",
+      "pages": "44, 100416",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "tierra"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2022-the-close-relationship-between-biophysical-degradation-ecosystem-services-and-fa",
+      "year": 2022,
+      "authors": "Guzmán, G., Soto, D., Aguilera, E., Infante-Amate, J. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "The close relationship between biophysical degradation, ecosystem services and family farms decline in Spanish agriculture (1992-2017)",
+      "venue": "Ecosystem Services",
+      "publisher": "",
+      "pages": "56, 101456",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2022-from-woodfuel-to-industrial-wood-a-socio-metabolic-reading-of-the-forest-transit",
+      "year": 2022,
+      "authors": "Infante-Amate, J., Iriarte-Goñi, I. & Gingrich, S.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi",
+        "Simone Gingrich"
+      ],
+      "title": "From woodfuel to industrial wood: a socio-metabolic reading of the forest transition in Spain (1860-2010)",
+      "venue": "Ecological Economics",
+      "publisher": "",
+      "pages": "201, 107560",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "forestal",
+        "industria"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2022-disentangling-the-effect-of-climate-and-cropland-changes-on-the-water-performanc",
+      "year": 2022,
+      "authors": "Vila, J., González de Molina, M., Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Disentangling the effect of climate and cropland changes on the water performance of agroecosystems (Spain, 1922-2016)",
+      "venue": "Journal of Cleaner Production",
+      "publisher": "",
+      "pages": "344, 130811",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "tierra",
+        "cultivos",
+        "agua"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2021-una-aproximacion-biofisica-a-la-industrializacion-de-la-agricultura-espanola-des",
+      "year": 2021,
+      "authors": "González de Molina, M., Guzmán, G., Soto, D., Infante-Amate, J. & Carranza, G.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "Una aproximación biofísica a la industrialización de la agricultura española desde la historia aplicada",
+      "venue": "Historia Ambiental Latinoamericana y Caribeña (HALAC)",
+      "publisher": "",
+      "pages": "11(2), 19-42",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "cultivos",
+        "industria"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2021-las-bases-materiales-del-desarrollo-economico-en-espana-1860-2016",
+      "year": 2021,
+      "authors": "Infante-Amate, J., Vila-Traver, J., Aguilera, E., Sanjuán, Á., Oropesa, F. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Ángel Sanjuán-Ruiz",
+        "Manuel González de Molina",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Las bases materiales del desarrollo económico en España (1860-2016)",
+      "venue": "Información Comercial Española",
+      "publisher": "",
+      "pages": "101, 185-213",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "crecimiento",
+        "materiales"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2021-agricultural-crisis-and-food-crisis-in-early-francoism-hunger-seen-through-the-l",
+      "year": 2021,
+      "authors": "González de Molina, M., Soto, D., Infante-Amate, J. & Herrera, A.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina",
+        "David Soto"
+      ],
+      "title": "Agricultural crisis and food crisis in early Francoism: Hunger seen through the lens of biophysics",
+      "venue": "Del Arco Blanco, M.A. & Anderson, P. (eds.), Franco's Famine",
+      "publisher": "Bloomsbury",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "cultivos"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2020-the-social-metabolism-of-spanish-agriculture-1900-2008-the-mediterranean-way-tow",
+      "year": 2020,
+      "authors": "González de Molina, M., Soto, D., Guzmán, G., Infante-Amate, J., Aguilera, E., Vila, J. & García-Ruiz, R.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto",
+        "Júlia Vila-Traver"
+      ],
+      "title": "The Social Metabolism of Spanish Agriculture, 1900-2008. The Mediterranean way towards Industrialization",
+      "venue": "Springer",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "book",
+      "typeLabel": "Libro",
+      "typeLabelEn": "Book",
+      "tags": [
+        "materiales",
+        "cultivos",
+        "industria"
+      ],
+      "sourceSheet": "5_Libros",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2020-climate-change-and-industrialization-as-the-main-drivers-of-spanish-agricultural",
+      "year": 2020,
+      "authors": "Vila-Traver, J., Aguilera, E., Infante-Amate, J. & Guzmán, G.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Gloria Guzmán",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Climate change and industrialization as the main drivers of Spanish agricultural stress",
+      "venue": "Science of the Total Environment",
+      "publisher": "",
+      "pages": "760, 143339",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "cultivos",
+        "industria"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2019-methane-emissions-from-artificial-waterbodies-dominate-the-carbon-footprint-of-i",
+      "year": 2019,
+      "authors": "Aguilera, E., Vila Traver, J., Deemer, B., Infante-Amate, J., Guzmán, G. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Methane emissions from artificial waterbodies dominate the carbon footprint of irrigation (Spain, 1900-2014)",
+      "venue": "Environmental Research Letters",
+      "publisher": "",
+      "pages": "14(9), 094015",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "agua"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2019-historia-de-la-agricultura-espanola-desde-una-perspectiva-biofisica-1900-2010",
+      "year": 2019,
+      "authors": "González de Molina, M., Soto, D., Guzmán, G., Infante-Amate, J., Aguilera, E., Vila, J. & García-Ruiz, R.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Historia de la agricultura española desde una perspectiva biofísica, 1900-2010",
+      "venue": "Ministerio de Agricultura, Pesca y Alimentación",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "book",
+      "typeLabel": "Libro",
+      "typeLabelEn": "Book",
+      "tags": [
+        "cultivos"
+      ],
+      "sourceSheet": "5_Libros",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2019-from-animals-to-machines-the-impact-of-mechanization-on-the-carbon-footprint-of-",
+      "year": 2019,
+      "authors": "Aguilera, E., Guzmán, G., González de Molina, M., Soto, D. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "From animals to machines. The impact of mechanization on the carbon footprint of traction in Spanish agriculture: 1900-2014",
+      "venue": "Journal of Cleaner Production",
+      "publisher": "",
+      "pages": "221, 295-305",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "emisiones",
+        "energia",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2019-continuity-change-and-geographical-differences-in-spain-s-firewood-consumption-a",
+      "year": 2019,
+      "authors": "Iriarte-Goñi, I. & Infante-Amate, J.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Continuity, change, and geographical differences in Spain's firewood consumption: A new estimation (1860-2010)",
+      "venue": "Historia Agraria",
+      "publisher": "",
+      "pages": "77, 33-57",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "forestal"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2018-the-agrarian-metabolism-as-a-tool-for-assessing-agrarian-sustainability-spain-19",
+      "year": 2018,
+      "authors": "Guzmán, G., Aguilera, E., García-Ruiz, R., Torremocha, E., Soto, D., Infante-Amate, J. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "The agrarian metabolism as a tool for assessing agrarian sustainability (Spain, 1960-2008)",
+      "venue": "Ecology and Society",
+      "publisher": "",
+      "pages": "23(1), 2",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "materiales",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2018-land-embodied-in-spain-s-biomass-trade-and-consumption-1900-2008",
+      "year": 2018,
+      "authors": "Infante-Amate, J., Aguilera, E., Palmeri, F., Guzmán, G., Soto, D., García-Ruiz, R. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "Land embodied in Spain's biomass trade and consumption (1900-2008)",
+      "venue": "Land Use Policy",
+      "publisher": "",
+      "pages": "78, 493-502",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "materiales",
+        "tierra",
+        "comercio"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2018-energy-transition-in-agri-food-systems-spain-1960-2010",
+      "year": 2018,
+      "authors": "Infante-Amate, J., Aguilera, E. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina"
+      ],
+      "title": "Energy transition in Agri-food systems (Spain, 1960-2010)",
+      "venue": "Energy Policy",
+      "publisher": "",
+      "pages": "122, 570-579",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2018-a-historical-perspective-on-soil-organic-carbon-in-mediterranean-cropland-spain-",
+      "year": 2018,
+      "authors": "Aguilera, E., Guzmán, G., Álvaro-Fuentes, J., Infante-Amate, J., et al.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Gloria Guzmán"
+      ],
+      "title": "A historical perspective on soil organic carbon in Mediterranean cropland (Spain, 1900-2008)",
+      "venue": "Science of the Total Environment",
+      "publisher": "",
+      "pages": "621, 634-648",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "tierra",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2017-spanish-agriculture-from-1900-to-2008-a-long-term-perspective-on-agroecosystem-e",
+      "year": 2017,
+      "authors": "Guzmán, G., González de Molina, M., Soto, D., Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "Spanish agriculture from 1900 to 2008: a long-term perspective on agroecosystem energy efficiency",
+      "venue": "Regional Environmental Change",
+      "publisher": "",
+      "pages": "18(4), 995-1008",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2017-las-bioenergias-en-espana-una-serie-de-produccion-consumo-y-stocks-1860-2010",
+      "year": 2017,
+      "authors": "Infante-Amate, J. e Iriarte-Goñi, I.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Las bioenergías en España. Una serie de producción, consumo y stocks (1860-2010)",
+      "venue": "DT-SEHA 17-02, Sociedad Española de Historia Agraria",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "working-paper",
+      "typeLabel": "Documento de trabajo",
+      "typeLabelEn": "Working paper",
+      "tags": [
+        "energia"
+      ],
+      "sourceSheet": "14_WorkingPapers",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2017-diachronic-analysis-at-national-scale-the-spanish-agriculture-1900-2008",
+      "year": 2017,
+      "authors": "Guzmán, G., González de Molina, M., Infante-Amate, J. & Aguilera, E.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán"
+      ],
+      "title": "Diachronic Analysis at National Scale: The Spanish Agriculture, 1900-2008",
+      "venue": "Guzmán, G. y González de Molina, M. (eds.), Energy in Agroecosystems",
+      "publisher": "CRC Press",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "energia",
+        "cultivos"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2017-del-uso-multiple-al-uso-alimentario-una-vision-a-largo-plazo-de-la-ganaderia-esp",
+      "year": 2017,
+      "authors": "Soto, D., González de Molina, M., Infante-Amate, J. & Guzmán, G.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "Del uso múltiple al uso alimentario. Una visión a largo plazo de la ganadería española (1752-2012)",
+      "venue": "Comín, F. et al. (eds.), Instituciones políticas, comportamientos sociales y atraso económico en España",
+      "publisher": "Universidad de Salamanca",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "cultivos"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2017-decoupling-food-from-land-the-evolution-of-spanish-agriculture-from-1960-to-2010",
+      "year": 2017,
+      "authors": "González de Molina, M., Soto, D., Infante-Amate, J., Aguilera, E., Vila Traver, J. & Guzmán, G.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto",
+        "Júlia Vila-Traver"
+      ],
+      "title": "Decoupling food from land: the evolution of Spanish agriculture from 1960 to 2010",
+      "venue": "Sustainability",
+      "publisher": "",
+      "pages": "9(12), 2348",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "crecimiento",
+        "tierra",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2016-the-social-metabolism-of-biomass-in-spain-1900-2008",
+      "year": 2016,
+      "authors": "Soto, D., Infante-Amate, J., Guzmán, G., Cid, A., Aguilera, E., García-Ruiz, R. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "The Social Metabolism of Biomass in Spain, 1900-2008",
+      "venue": "Ecological Economics",
+      "publisher": "",
+      "pages": "128, 130-138",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "materiales"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2015-the-spanish-transition-to-industrial-metabolism-long-term-material-flow-analysis",
+      "year": 2015,
+      "authors": "Infante-Amate, J., Soto, D., Cid, A., Aguilera, E., Guzmán, G., García, R. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Eduardo Aguilera",
+        "Manuel González de Molina",
+        "Gloria Guzmán",
+        "David Soto"
+      ],
+      "title": "The Spanish Transition to Industrial Metabolism. Long Term Material Flow Analysis (1860-2010)",
+      "venue": "Journal of Industrial Ecology",
+      "publisher": "",
+      "pages": "19(5), 866-876",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "materiales",
+        "industria"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2014-reconciling-boserup-with-malthus-agrarian-change-and-soil-degradation-in-olive-o",
+      "year": 2014,
+      "authors": "Infante-Amate, J., González de Molina, M., Vanwalleghem, T., Soto, D. & Gómez, J.A.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina",
+        "David Soto"
+      ],
+      "title": "Reconciling Boserup with Malthus. Agrarian Change and Soil Degradation in Olive Orchards in Spain (1750-2000)",
+      "venue": "Fisher-Kowalski, M. (ed.), Ester Boserup's Legacy on Sustainability",
+      "publisher": "Springer",
+      "pages": "",
+      "doi": "",
+      "type": "chapter",
+      "typeLabel": "Capítulo de libro",
+      "typeLabelEn": "Book chapter",
+      "tags": [
+        "tierra",
+        "cultivos",
+        "olivo"
+      ],
+      "sourceSheet": "12_Capitulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2014-la-produccion-de-lena-en-espana-y-sus-implicaciones-en-la-transicion-energetica-",
+      "year": 2014,
+      "authors": "Infante-Amate, J., Soto, D., Iriarte, I., et al.",
+      "people": [
+        "Juan Infante-Amate",
+        "Iñaki Iriarte-Goñi",
+        "David Soto"
+      ],
+      "title": "La producción de leña en España y sus implicaciones en la transición energética (1900-2000)",
+      "venue": "DT-AEHE 1416, Asociación Española de Historia Económica",
+      "publisher": "",
+      "pages": "",
+      "doi": "",
+      "type": "working-paper",
+      "typeLabel": "Documento de trabajo",
+      "typeLabelEn": "Working paper",
+      "tags": [
+        "forestal"
+      ],
+      "sourceSheet": "14_WorkingPapers",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "id": "2013-sustainable-de-growth-in-agriculture-and-food-spain-year-2000",
+      "year": 2013,
+      "authors": "Infante-Amate, J. & González de Molina, M.",
+      "people": [
+        "Juan Infante-Amate",
+        "Manuel González de Molina"
+      ],
+      "title": "Sustainable De-growth in agriculture and food (Spain, year 2000)",
+      "venue": "Journal of Cleaner Production",
+      "publisher": "",
+      "pages": "38, 27-35",
+      "doi": "",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "crecimiento",
+        "cultivos"
+      ],
+      "sourceSheet": "6_Articulos",
+      "sourceFile": "CV_Datos_Maestro.xlsx"
+    },
+    {
+      "year": 2013,
+      "authors": "Iriarte-Goñi, I.",
+      "people": [
+        "Iñaki Iriarte-Goñi"
+      ],
+      "title": "Forests, Fuelwood, Pulpwood, and Lumber in Spain, 1860-2000: A Non-Declensionist Story",
+      "venue": "Environmental History",
+      "publisher": "",
+      "pages": "18(2), 333-359",
+      "doi": "10.1093/envhis/emt002",
+      "type": "article",
+      "typeLabel": "Artículo científico",
+      "typeLabelEn": "Scientific article",
+      "tags": [
+        "energia",
+        "forestal",
+        "industria"
+      ],
+      "sourceSheet": "manual",
+      "sourceFile": "Oxford Academic",
+      "url": "https://doi.org/10.1093/envhis/emt002",
+      "id": "2013-forests-fuelwood-pulpwood-and-lumber-in-spain-1860-2000-a-non-declensionist-stor"
+    }
+  ]
+}

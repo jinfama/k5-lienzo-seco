@@ -1,0 +1,87 @@
+{
+  "generator": "kokoro-onnx",
+  "format": "wav",
+  "voice": "kokoro:ef_dora",
+  "lang": "es",
+  "speed": 0.96,
+  "duration": 194.221,
+  "chunks": [
+    {
+      "start": 0.0,
+      "end": 4.352,
+      "charStart": 0,
+      "charEnd": 76,
+      "text": "¿Se puede crecer sin destruir? Lo que dicen (y no dicen) los datos de España"
+    },
+    {
+      "start": 4.572,
+      "end": 10.716,
+      "charStart": 78,
+      "charEnd": 182,
+      "text": "La eficiencia mejora, pero la pregunta decisiva es si esa mejora basta para reducir el impacto absoluto."
+    },
+    {
+      "start": 10.936,
+      "end": 41.101,
+      "charStart": 184,
+      "charEnd": 670,
+      "text": "Hay un gráfico que a los optimistas les encanta: el de la intensidad ambiental del producto interior bruto. Muestra cuántas emisiones, cuántos materiales o cuánta energía se necesitan para producir un euro de riqueza. Y la tendencia es inequívoca: cada vez menos. En España, la intensidad de emisiones por unidad de producto interior bruto ha caído un 86 % desde 1860. La de materiales, un 87 %. Cada euro que producimos hoy contamina y pesa una fracción de lo que pesaba hace un siglo."
+    },
+    {
+      "start": 41.321,
+      "end": 46.612,
+      "charStart": 672,
+      "charEnd": 765,
+      "text": "Si la historia acabara ahí, el crecimiento verde sería un hecho consumado. Pero no acaba ahí."
+    },
+    {
+      "start": 46.832,
+      "end": 74.267,
+      "charStart": 767,
+      "charEnd": 1183,
+      "text": "El problema es que la economía ha crecido mucho más rápido de lo que ha mejorado la eficiencia. Las emisiones por euro cayeron un 86 %, sí. Pero el producto interior bruto se multiplicó por 45. El resultado neto: las emisiones absolutas se multiplicaron por casi diez entre 1860 y su pico de 2005. Con los materiales el patrón es idéntico: la intensidad bajó un 87 %, pero el consumo total se multiplicó por catorce."
+    },
+    {
+      "start": 74.487,
+      "end": 93.623,
+      "charStart": 1185,
+      "charEnd": 1514,
+      "text": "Es lo que los economistas ecológicos llaman la paradoja de Jevons, o el efecto rebote a gran escala: las mejoras de eficiencia no reducen el consumo total, porque se reinvierten en más producción. Cada unidad pesa menos, pero hay muchas más unidades. El coche gasta menos por kilómetro, pero recorremos diez veces más kilómetros."
+    },
+    {
+      "start": 93.843,
+      "end": 117.288,
+      "charStart": 1516,
+      "charEnd": 1881,
+      "text": "España parece, a primera vista, un caso de éxito. Las emisiones per cápita han caído de 8,2 toneladas en 2007 a 4,8 en 2022. El consumo de materiales, de 20 a 9 toneladas. El consumo de energía, de 3,3 a 2,5 toneladas equivalentes de petróleo. En todos los indicadores, España consume hoy menos por persona que hace quince años. ¿No es eso desacoplamiento absoluto?"
+    },
+    {
+      "start": 117.508,
+      "end": 135.364,
+      "charStart": 1883,
+      "charEnd": 2169,
+      "text": "Sí, pero con letra pequeña. La caída no fue gradual: fue un desplome provocado por la crisis de 2008. Los materiales cayeron un 75 % en pocos años, arrastrados por el colapso de la construcción. No fue una transición planificada hacia la sostenibilidad; fue el estallido de una burbuja."
+    },
+    {
+      "start": 135.584,
+      "end": 155.851,
+      "charStart": 2171,
+      "charEnd": 2504,
+      "text": "Parte de la mejora reciente es real. La intensidad de emisiones en 2022 es la mitad de la de 2007. Las renovables, la mejora tecnológica y el cambio de estructura económica explican una parte significativa de esa caída. Pero no toda. Sin la crisis, sin la COVID y sin la desindustrialización parcial, las cifras serían muy distintas."
+    },
+    {
+      "start": 156.071,
+      "end": 173.521,
+      "charStart": 2506,
+      "charEnd": 2775,
+      "text": "Mientras España baja, el mundo sube. El consumo global de materiales per cápita pasó de 11 toneladas en 2007 a 12,6 en 2022. Las emisiones mundiales apenas se han movido. No hay desacoplamiento absoluto a escala global en ninguno de los grandes indicadores ambientales."
+    },
+    {
+      "start": 173.741,
+      "end": 194.221,
+      "charStart": 2777,
+      "charEnd": 3121,
+      "text": "España produce hoy cada euro con muchos menos materiales y emisiones que en 1860. Eso es un logro técnico enorme. Pero no ha sido suficiente para evitar que el impacto absoluto se multiplicara. Ser más eficiente es necesario. Pero la pregunta incómoda sigue en pie: ¿puede una economía crecer indefinidamente en un planeta con recursos finitos?"
+    }
+  ]
+}

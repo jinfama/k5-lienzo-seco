@@ -1,0 +1,73 @@
+{
+  "generator": "kokoro-onnx",
+  "format": "wav",
+  "voice": "kokoro:ef_dora",
+  "lang": "es",
+  "speed": 0.96,
+  "duration": 143.179,
+  "chunks": [
+    {
+      "start": 0.0,
+      "end": 3.797,
+      "charStart": 0,
+      "charEnd": 64,
+      "text": "Crecer contaminando menos: la buena noticia que no es suficiente"
+    },
+    {
+      "start": 4.017,
+      "end": 9.543,
+      "charStart": 66,
+      "charEnd": 166,
+      "text": "La intensidad ambiental cae, pero el crecimiento de escala puede anular buena parte de esa ganancia."
+    },
+    {
+      "start": 9.763,
+      "end": 29.624,
+      "charStart": 168,
+      "charEnd": 501,
+      "text": "La promesa del crecimiento verde es sencilla: que la economía siga creciendo mientras las emisiones bajan. En jerga académica se llama desacoplamiento. Pero ¿es algo que esté realmente ocurriendo en España? Y si es así, ¿basta con el ritmo actual? La serie histórica que hemos construido desde 1860 permite responder con perspectiva."
+    },
+    {
+      "start": 29.844,
+      "end": 52.329,
+      "charStart": 503,
+      "charEnd": 885,
+      "text": "La buena noticia es clara. Si comparamos la evolución del producto interior bruto y de las emisiones en España desde 1860, el producto interior bruto ha crecido mucho más rápido. Dicho de otro modo: la intensidad de carbono de la economía —las emisiones por euro producido— ha caído de forma casi continua. Hoy generamos mucha más riqueza con menos emisiones por unidad de producto."
+    },
+    {
+      "start": 52.549,
+      "end": 64.773,
+      "charStart": 887,
+      "charEnd": 1085,
+      "text": "Esto no es exclusivo de España. A escala global se observa la misma tendencia. Pero España ha sido particularmente intensa en esa mejora de eficiencia, especialmente desde la transición democrática."
+    },
+    {
+      "start": 64.993,
+      "end": 81.079,
+      "charStart": 1087,
+      "charEnd": 1362,
+      "text": "La eficiencia no basta cuando el pastel crece. Las emisiones absolutas han subido enormemente a lo largo del período, a pesar de la mejora en intensidad. Es como un coche que consume menos por kilómetro pero que recorre diez veces más distancia: al final, gasta más gasolina."
+    },
+    {
+      "start": 81.299,
+      "end": 103.891,
+      "charStart": 1364,
+      "charEnd": 1776,
+      "text": "El análisis de descomposición permite separar los factores que explican el cambio en las emisiones. En España, el crecimiento demográfico ha contribuido al aumento de emisiones de forma sostenida, pero el gran motor ha sido el enriquecimiento medido como producto interior bruto per cápita. El único factor que ha tirado para abajo es la intensidad de carbono, pero no lo suficiente para compensar los otros dos."
+    },
+    {
+      "start": 104.111,
+      "end": 123.737,
+      "charStart": 1778,
+      "charEnd": 2102,
+      "text": "Desde 2005, España ha reducido emisiones de forma significativa. Pero conviene descomponer esa caída. Por un lado, se han producido mejoras reales de eficiencia. Sin embargo, una parte importante de la reducción se explica por las crisis económicas. Y no es lo mismo reducir emisiones por eficiencia que por empobrecimiento."
+    },
+    {
+      "start": 123.957,
+      "end": 143.179,
+      "charStart": 2104,
+      "charEnd": 2437,
+      "text": "España es hoy mucho más eficiente que hace un siglo. Cada euro produce menos emisiones. Pero eso no ha bastado para frenar el crecimiento absoluto de las emisiones, que solo ha caído recientemente y en parte por razones poco deseables. El desacoplamiento existe, pero es frágil e insuficiente para cumplir los compromisos climáticos."
+    }
+  ]
+}

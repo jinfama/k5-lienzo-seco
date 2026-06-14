@@ -1,0 +1,76 @@
+{
+  "voice": "kokoro:af_heart",
+  "duration": 164.625,
+  "chunks": [
+    {
+      "text": "20 tonnes per person per year: Spain's material binge",
+      "start": 0.0,
+      "end": 4.325,
+      "charStart": 0,
+      "charEnd": 53
+    },
+    {
+      "text": "The 2007 material peak reads the housing bubble as a physical phenomenon, not only a financial one.",
+      "start": 4.545,
+      "end": 12.495,
+      "charStart": 55,
+      "charEnd": 154
+    },
+    {
+      "text": "In 2007, each person living in Spain consumed, directly or indirectly, around 20 tonnes of materials per year. Twenty tonnes: the weight of several large cars, or a loaded truck, per person and per year. This is not a metaphor. It is what material-flow accounting measures when it adds biomass, fossil fuels, metals, construction minerals and imported materials.",
+      "start": 12.715,
+      "end": 37.04,
+      "charStart": 156,
+      "charEnd": 518
+    },
+    {
+      "text": "That peak is one of the clearest physical signatures of Spain's development model. It shows that the housing bubble was not only a financial episode. It was also a material event, measured in hundreds of millions of tonnes of sand, gravel, cement, stone, fuels and imported goods.",
+      "start": 37.26,
+      "end": 56.26,
+      "charStart": 520,
+      "charEnd": 800
+    },
+    {
+      "text": "In 1860, the Spanish economy was mostly based on biomass. Crops, wood, pasture and other biological materials dominated the material profile. Non-metallic minerals existed, but their weight was still modest. Fossil fuels were only a small share of the total.",
+      "start": 56.48,
+      "end": 75.83,
+      "charStart": 802,
+      "charEnd": 1060
+    },
+    {
+      "text": "By the early twenty-first century, the picture had changed completely. Construction minerals had become central, fossil materials had become structurally important, and biomass had lost the relative weight it had in an agrarian economy.",
+      "start": 76.05,
+      "end": 91.8,
+      "charStart": 1062,
+      "charEnd": 1298
+    },
+    {
+      "text": "The most striking series is non-metallic minerals. Their growth during the second half of the twentieth century, and especially during the housing boom, dwarfs most other environmental indicators in the database. No reading of Spanish economic history is complete if it ignores this physical expansion.",
+      "start": 92.02,
+      "end": 111.495,
+      "charStart": 1300,
+      "charEnd": 1602
+    },
+    {
+      "text": "Trade also matters. Spain increasingly consumed materials that were not extracted inside its borders. The material balance therefore connects domestic development with external territories and supply chains.",
+      "start": 111.715,
+      "end": 126.49,
+      "charStart": 1604,
+      "charEnd": 1811
+    },
+    {
+      "text": "After 2007, total material use fell sharply. That fall matters, but it should not be romanticized. Much of it came from the collapse of construction after the financial crisis. It was not simply a deliberate transition toward lower material consumption.",
+      "start": 126.71,
+      "end": 144.96,
+      "charStart": 1813,
+      "charEnd": 2066
+    },
+    {
+      "text": "Putting Spain on a scale reveals a country that moved from an agrarian metabolism to a construction-heavy, fossil-dependent and trade-connected metabolism in a remarkably short period. The material binge is one of the best ways to read the physical history of modern Spain.",
+      "start": 145.18,
+      "end": 164.405,
+      "charStart": 2068,
+      "charEnd": 2341
+    }
+  ]
+}

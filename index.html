@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>CAHE — Contabilidad Ambiental Histórica de España</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=20260524d">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body class="home-page">
+
+<section class="portada mode-globo" id="portada">
+  <header class="portada-top">
+    <nav class="portada-mode-switch" aria-label="Modo">
+      <button data-mode="globo" class="active">Globo</button>
+      <button data-mode="franjas">Franjas climáticas</button>
+    </nav>
+    <button class="lang-toggle portada-lang" id="portada-lang" type="button" aria-label="Change language">EN</button>
+  </header>
+
+  <!-- Franjas climáticas (modo alternativo) -->
+  <div class="stripes-container" id="stripes-container">
+    <svg class="stripes-svg" id="stripes-svg" preserveAspectRatio="none"></svg>
+  </div>
+
+  <section class="portada-globe-hero">
+    <div class="portada-globe-text">
+      <div class="portada-kicker" id="hero-kicker">Atlas ambiental histórico · 1860 — hoy</div>
+      <h1 class="portada-globe-title" id="hero-title">Contabilidad ambiental <span class="accent">histórica</span> de España</h1>
+      <p class="portada-globe-subtitle" id="hero-sub">Series largas sobre uso de recursos, impactos ambientales y desarrollo económico en perspectiva histórica y global</p>
+    </div>
+
+    <div class="globe-container">
+      <canvas id="globe-canvas"></canvas>
+    </div>
+
+    <div class="hero-nav-grid">
+      <button class="hero-nav-card" data-section="visualizacion">
+        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <span>Visualización</span>
+      </button>
+      <button class="hero-nav-card" data-section="perspectivas">
+        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <span>Perspectivas</span>
+      </button>
+      <button class="hero-nav-card" data-section="publicaciones">
+        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg></div>
+        <span>Publicaciones</span>
+      </button>
+      <button class="hero-nav-card" data-section="datos">
+        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg></div>
+        <span>Datos y metodología</span>
+      </button>
+    </div>
+
+    <div class="hero-info-stack" id="hero-info">
+      <div class="hero-info-links">
+        <button class="hero-info-link highlight" data-section="acerca">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="info-label-acerca">Acerca</span>
+        </button>
+        <span class="hero-info-sep">·</span>
+        <button class="hero-info-link" data-section="novedades">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 5h11l-1 4 1 4H4"/><path d="M18 8h2"/><path d="M18 12h2"/><path d="M18 16h2"/></svg>
+          <span class="info-label-novedades">Novedades</span>
+        </button>
+      </div>
+      <div class="hero-info-foot" id="hero-foot">Anillo climático · anomalía global de temperatura, 1850 — 2024</div>
+    </div>
+  </section>
+</section>
+
+<iframe class="viewer-frame" id="viewer-frame" title="CAHE — explorador" loading="lazy"></iframe>
+
+<script src="js/globe.js?v=20260524d"></script>
+<script>
+/* ====== Idioma ES/EN portada + explorador ====== */
+(function(){
+  const I18N = {
+    es: {
+      title: "CAHE — Contabilidad Ambiental Histórica de España",
+      modeLabel: "Modo",
+      globe: "Globo",
+      stripes: "Franjas climáticas",
+      kicker: "Atlas ambiental histórico · 1860 — hoy",
+      hero: "Contabilidad ambiental <span class=\"accent\">histórica</span> de España",
+      sub: "Series largas sobre uso de recursos, impactos ambientales y desarrollo económico en perspectiva histórica y global",
+      visualizacion: "Visualización",
+      perspectivas: "Perspectivas",
+      publicaciones: "Publicaciones",
+      datos: "Datos y metodología",
+      equipo: "Equipo",
+      acerca: "Acerca",
+      novedades: "Novedades",
+      foot: "Anillo climático · anomalía global de temperatura, 1850 — 2024",
+      frame: "CAHE — explorador"
+    },
+    en: {
+      title: "CAHE — Historical Environmental Accounts of Spain",
+      modeLabel: "Mode",
+      globe: "Globe",
+      stripes: "Climate stripes",
+      kicker: "Historical environmental atlas · 1860 — today",
+      hero: "Historical <span class=\"accent\">environmental</span> accounts of Spain",
+      sub: "Long-run series on resource use, environmental impacts and economic development in historical and global perspective",
+      visualizacion: "Visualization",
+      perspectivas: "Perspectives",
+      publicaciones: "Publications",
+      datos: "Data and methods",
+      equipo: "Team",
+      acerca: "About",
+      novedades: "News",
+      foot: "Climate ring · global temperature anomaly, 1850 — 2024",
+      frame: "CAHE — explorer"
+    }
+  };
+  const langBtn = document.getElementById("portada-lang");
+  function setText(selector, text){
+    const el = document.querySelector(selector);
+    if(el) el.textContent = text;
+  }
+  function applyLang(lang){
+    const d = I18N[lang] || I18N.es;
+    document.documentElement.lang = lang;
+    document.title = d.title;
+    const modeNav = document.querySelector(".portada-mode-switch");
+    if(modeNav) modeNav.setAttribute("aria-label", d.modeLabel);
+    setText('.portada-mode-switch [data-mode="globo"]', d.globe);
+    setText('.portada-mode-switch [data-mode="franjas"]', d.stripes);
+    setText("#hero-kicker", d.kicker);
+    const heroTitle = document.getElementById("hero-title");
+    if(heroTitle) heroTitle.innerHTML = d.hero;
+    setText("#hero-sub", d.sub);
+    setText('.hero-nav-card[data-section="visualizacion"] span', d.visualizacion);
+    setText('.hero-nav-card[data-section="perspectivas"] span', d.perspectivas);
+    setText('.hero-nav-card[data-section="publicaciones"] span', d.publicaciones);
+    setText('.hero-nav-card[data-section="datos"] span', d.datos);
+    setText(".info-label-acerca", d.acerca);
+    setText(".info-label-novedades", d.novedades);
+    setText("#hero-foot", d.foot);
+    const frame = document.getElementById("viewer-frame");
+    if(frame) frame.setAttribute("title", d.frame);
+    if(langBtn){
+      langBtn.textContent = lang === "es" ? "EN" : "ES";
+      langBtn.setAttribute("aria-label", lang === "es" ? "Change language to English" : "Cambiar idioma a español");
+    }
+    try { localStorage.setItem("cahe_lang", lang); } catch(_){}
+  }
+  let lang = "es";
+  try { if(localStorage.getItem("cahe_lang") === "en") lang = "en"; } catch(_){}
+  applyLang(lang);
+  if(langBtn){
+    langBtn.addEventListener("click", function(){
+      lang = lang === "es" ? "en" : "es";
+      applyLang(lang);
+    });
+  }
+})();
+
+/* ====== Stripes — franjas finas (1 por año 1850-2024, anomalías reales) ====== */
+(function(){
+  // Anomalías HadCRUT5 anuales aproximadas 1850-2024 (vs 1961-1990)
+  const CLIMATE = [
+    -0.42,-0.23,-0.23,-0.27,-0.29,-0.27,-0.31,-0.46,-0.41,-0.28,
+    -0.32,-0.41,-0.51,-0.31,-0.43,-0.25,-0.27,-0.33,-0.31,-0.31,
+    -0.31,-0.35,-0.30,-0.34,-0.37,-0.37,-0.32,-0.10,-0.14,-0.26,
+    -0.24,-0.20,-0.30,-0.31,-0.40,-0.45,-0.38,-0.41,-0.32,-0.31,
+    -0.46,-0.41,-0.49,-0.45,-0.50,-0.45,-0.27,-0.29,-0.27,-0.17,
+    -0.13,-0.22,-0.40,-0.41,-0.37,-0.43,-0.42,-0.42,-0.48,-0.55,
+    -0.46,-0.46,-0.47,-0.41,-0.27,-0.35,-0.46,-0.39,-0.33,-0.29,
+    -0.30,-0.22,-0.30,-0.30,-0.28,-0.15,-0.21,-0.29,-0.31,-0.30,
+    -0.20,-0.14,-0.15,-0.19,-0.22,-0.20,-0.04,-0.05,-0.10, 0.01,
+    -0.06,-0.10,-0.20,-0.05,-0.07,-0.08, 0.00,-0.08,-0.04,-0.07,
+    -0.14,-0.15,-0.07,-0.04,-0.07,-0.09, 0.05, 0.03, 0.02, 0.10,
+     0.06,-0.13,-0.11,-0.18,-0.06,-0.02,-0.07, 0.03, 0.06,-0.20,
+    -0.07,-0.10,-0.05, 0.06,-0.20,-0.12, 0.06,-0.08, 0.05, 0.03,
+     0.13, 0.27, 0.12, 0.14, 0.31, 0.16, 0.13, 0.18, 0.42, 0.28,
+     0.21, 0.42, 0.23, 0.24, 0.32, 0.45, 0.33, 0.48, 0.61, 0.39,
+     0.40, 0.55, 0.62, 0.54, 0.68, 0.64, 0.67, 0.55, 0.62, 0.69,
+     0.55, 0.62, 0.75, 0.91, 1.01, 0.92, 0.85, 0.98, 1.02, 1.16,
+     1.18, 1.45
+  ];
+  function tempColor(v){
+    const t = Math.max(0, Math.min(1, (v + 0.6) / 2.0));
+    let r,g,b;
+    if(t < 0.5){
+      const s = t * 2;
+      r = Math.round(20 + s * 235); g = Math.round(50 + s * 205); b = Math.round(180 + s * 75);
+    } else {
+      const s = (t - 0.5) * 2;
+      r = 255; g = Math.round(255 - s * 220); b = Math.round(255 - s * 240);
+    }
+    return `rgb(${r},${g},${b})`;
+  }
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("stripes-svg");
+  if(!svg) return;
+  const N = CLIMATE.length;  // ~175 años
+  svg.setAttribute("viewBox", "0 0 1000 600");
+  svg.setAttribute("preserveAspectRatio", "none");
+  const w = 1000 / N;
+  for(let i = 0; i < N; i++){
+    const r = document.createElementNS(ns, "rect");
+    r.setAttribute("x", i * w);
+    r.setAttribute("y", 0);
+    r.setAttribute("width", w + 0.3);
+    r.setAttribute("height", 600);
+    r.setAttribute("fill", tempColor(CLIMATE[i]));
+    r.setAttribute("opacity", 0);
+    r.style.transition = "opacity 1.2s ease";
+    svg.appendChild(r);
+  }
+  function show(){
+    const rects = svg.querySelectorAll("rect");
+    rects.forEach((r, i) => {
+      setTimeout(() => { r.setAttribute("opacity", 1); }, i * 8);
+    });
+    setTimeout(() => {
+      let t = 0;
+      function tick(){
+        t += 0.012;
+        rects.forEach((r, i) => {
+          const op = 0.88 + Math.sin(t + i * 0.04) * 0.10;
+          r.setAttribute("opacity", op.toFixed(3));
+        });
+        requestAnimationFrame(tick);
+      }
+      tick();
+    }, N * 8 + 600);
+  }
+  let started = false;
+  window.addEventListener("portada-mode", e => {
+    if(e.detail === "franjas" && !started){ started = true; show(); }
+  });
+})();
+
+/* ====== Portada mode switcher ====== */
+(function(){
+  const portada = document.getElementById("portada");
+  const btns = document.querySelectorAll(".portada-mode-switch button");
+  function apply(mode){
+    portada.classList.toggle("mode-globo", mode === "globo");
+    portada.classList.toggle("mode-franjas", mode === "franjas");
+    btns.forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
+    try { localStorage.setItem("cahe_portada_mode", mode); } catch(_){}
+    window.dispatchEvent(new CustomEvent("portada-mode", { detail: mode }));
+  }
+  btns.forEach(b => b.addEventListener("click", () => apply(b.dataset.mode)));
+  let initial = "globo";
+  apply(initial);
+})();
+
+setTimeout(function(){
+  ['hero-kicker','hero-title','hero-sub','hero-info'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.classList.add('visible');
+  });
+  var cards = document.querySelectorAll('.hero-nav-card');
+  cards.forEach(function(c, i){ setTimeout(function(){ c.classList.add('visible'); }, 600 + i * 120); });
+}, 400);
+
+(function(){
+  var frame = document.getElementById('viewer-frame');
+  function openSection(section){
+    if(!frame.src) frame.src = 'explorer.html?v=20260524d#' + section;
+    else { try { frame.contentWindow.location.hash = section; } catch(_){} }
+    document.body.classList.add('viewer-open');
+    setTimeout(function(){ try { frame.contentWindow && frame.contentWindow.focus(); } catch(_){} }, 60);
+  }
+  document.querySelectorAll('[data-section]').forEach(function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); openSection(el.dataset.section); });
+  });
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && document.body.classList.contains('viewer-open')){
+      document.body.classList.remove('viewer-open');
+    }
+  });
+  window.addEventListener('message', function(e){
+    if(e.data && e.data.type === 'cahe-back') document.body.classList.remove('viewer-open');
+  });
+})();
+</script>
+</body>
+</html>

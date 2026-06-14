@@ -1,0 +1,80 @@
+{
+  "generator": "kokoro-onnx",
+  "format": "wav",
+  "voice": "kokoro:ef_dora",
+  "lang": "es",
+  "speed": 0.96,
+  "duration": 161.852,
+  "chunks": [
+    {
+      "start": 0.0,
+      "end": 4.032,
+      "charStart": 0,
+      "charEnd": 68,
+      "text": "Las emisiones en España no están en mínimos históricos (ni de lejos)"
+    },
+    {
+      "start": 4.252,
+      "end": 12.039,
+      "charStart": 70,
+      "charEnd": 164,
+      "text": "La serie desde 1860 cambia la lectura de los titulares basados solo en inventarios desde 1990."
+    },
+    {
+      "start": 12.259,
+      "end": 32.76,
+      "charStart": 166,
+      "charEnd": 473,
+      "text": "A finales de 2023 el diario El País titulaba: \"Las emisiones de efecto invernadero caen a mínimos históricos en España\". A las pocas líneas se aclaraba que las emisiones de CO dos habían alcanzado su nivel más bajo desde 1990. Salvo que la historia de España empiece en 1990, el titular merece una revisión."
+    },
+    {
+      "start": 32.98,
+      "end": 52.671,
+      "charStart": 475,
+      "charEnd": 781,
+      "text": "La imprecisión no es solo periodística. El Inventario Nacional de Emisiones arranca en 1990. Antes de esa fecha, simplemente no hay datos oficiales. Por eso hemos construido una serie histórica que se remonta a 1860, disponible en abierto en esta web. Los resultados cuentan una historia bastante distinta."
+    },
+    {
+      "start": 52.891,
+      "end": 72.027,
+      "charStart": 783,
+      "charEnd": 1025,
+      "text": "Entre 1860 y 2017, las emisiones totales de gases de efecto invernadero en España casi se multiplicaron por diez: de 31 a 272 millones de toneladas de CO dos equivalente, con un máximo de 376 millones en 2005, justo antes de la Gran Recesión."
+    },
+    {
+      "start": 72.247,
+      "end": 93.601,
+      "charStart": 1027,
+      "charEnd": 1349,
+      "text": "Pero el crecimiento no fue lineal. Durante casi un siglo, entre mediados del XIX y mediados del XX, los niveles fueron relativamente estables. La verdadera aceleración llegó con el despegue económico de los años 50: entre 1950 y 2005 las emisiones crecieron al 3,5 % anual, más del doble que la media del período completo."
+    },
+    {
+      "start": 93.821,
+      "end": 111.016,
+      "charStart": 1351,
+      "charEnd": 1613,
+      "text": "Habitualmente asociamos el cambio climático con las fábricas y el carbón. Pero en 1860, el 92 % de las emisiones españolas procedían de actividades agrarias: el metano del ganado y el CO dos de la deforestación, que avanzaba para abrir nuevas tierras de cultivo."
+    },
+    {
+      "start": 111.236,
+      "end": 128.452,
+      "charStart": 1615,
+      "charEnd": 1917,
+      "text": "La transición hacia las emisiones fósiles fue progresiva: primero el carbón, luego el petróleo y más recientemente el gas natural. Hoy las emisiones agrarias tienen un peso mucho menor y, paradójicamente, los bosques españoles se han convertido en sumideros netos de carbono gracias a la reforestación."
+    },
+    {
+      "start": 128.672,
+      "end": 144.416,
+      "charStart": 1919,
+      "charEnd": 2171,
+      "text": "España comparte con el mundo la aceleración de mediados del siglo XX y la transición de emisiones agrarias a fósiles. Pero con matices: hasta 1950 nuestras emisiones crecieron más lento que la media global; después, las oscilaciones fueron más bruscas."
+    },
+    {
+      "start": 144.636,
+      "end": 161.852,
+      "charStart": 2173,
+      "charEnd": 2467,
+      "text": "Las emisiones en España no están en mínimos históricos. Han caído significativamente en dos décadas, sí, pero siguen muy por encima de los niveles que marcarían un espacio seguro para el clima. Entender la trayectoria larga es fundamental para no confundir una mejora relativa con una solución."
+    }
+  ]
+}

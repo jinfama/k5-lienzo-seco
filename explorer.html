@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>CAHE — Contabilidad Ambiental Histórica de España</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=20260524d">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <a class="brand" href="index.html">
+      <img src="img/logo-color.png" alt="CAHE">
+      <span class="brand-name">
+        <span class="main">CAHE</span>
+        <span class="sub">Contabilidad Ambiental Histórica de España</span>
+      </span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <button class="nav-btn active" type="button" data-section="visualizacion">Visualización</button>
+      <button class="nav-btn" type="button" data-section="datos">Datos y metodología</button>
+      <button class="nav-btn" type="button" data-section="perspectivas">Perspectivas</button>
+      <button class="nav-btn" type="button" data-section="publicaciones">Publicaciones</button>
+      <button class="nav-btn" type="button" data-section="equipo">Equipo</button>
+      <button class="nav-btn" type="button" data-section="acerca">Acerca</button>
+    </nav>
+    <span class="mobile-nav-cue" aria-hidden="true">&rsaquo;</span>
+    <nav class="header-group-nav" id="header-group-nav" aria-label="Paneles de visualización"></nav>
+    <div class="right">
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Change language">EN</button>
+    </div>
+  </header>
+
+  <nav class="group-bar" id="group-bar" style="display:none"></nav>
+
+  <main class="workspace" id="workspace">
+    <div class="loading">
+      <span class="spinner"></span>
+      <strong>Cargando atlas CAHE</strong>
+    </div>
+  </main>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-panel">
+      <button class="modal-close" data-modal-close type="button" aria-label="Cerrar">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js?v=20260524d"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "voice": "kokoro:af_heart",
+  "duration": 182.825,
+  "chunks": [
+    {
+      "text": "How much does Spain owe the planet? The accumulated footprint over 160 years",
+      "start": 0.0,
+      "end": 6.05,
+      "charStart": 0,
+      "charEnd": 76
+    },
+    {
+      "text": "Historical responsibility changes depending on whether we measure accumulated emissions, materials or the speed of transformation.",
+      "start": 6.27,
+      "end": 15.745,
+      "charStart": 78,
+      "charEnd": 208
+    },
+    {
+      "text": "In climate debates, a country's responsibility is not measured only by what it emits today. It is also measured by what it has emitted over time. Carbon dioxide remains in the atmosphere for centuries, so cumulative emissions are a central measure of historical responsibility.",
+      "start": 15.965,
+      "end": 34.84,
+      "charStart": 210,
+      "charEnd": 487
+    },
+    {
+      "text": "CAHE makes it possible to calculate that long-run balance for Spain from 1860. The result is more nuanced than a simple rich-country story. In cumulative per-capita greenhouse-gas emissions, Spain remains below the world average for much of the historical period because it industrialized later than the major early emitters.",
+      "start": 35.06,
+      "end": 57.91,
+      "charStart": 489,
+      "charEnd": 814
+    },
+    {
+      "text": "For almost a century, between 1860 and 1950, Spain was still largely agrarian and its fossil emissions were relatively low. While Britain, Germany or the United States accumulated large amounts of carbon through coal-based industrialization, Spain was only beginning its own fossil-energy transition.",
+      "start": 58.13,
+      "end": 80.08,
+      "charStart": 816,
+      "charEnd": 1116
+    },
+    {
+      "text": "The acceleration came later. From the 1950s to the housing-bubble years, Spain's per-capita emissions rose quickly and in some years moved above the global average. But the late start still matters in the cumulative count. Historical responsibility depends not only on intensity, but also on when the acceleration begins.",
+      "start": 80.3,
+      "end": 102.55,
+      "charStart": 1118,
+      "charEnd": 1439
+    },
+    {
+      "text": "Materials tell a different story. When we look at accumulated material use, Spain is much closer to the world average. The housing boom was crucial here: sand, gravel, cement and other construction materials weigh enormously, even when their direct emissions do not rise in the same proportion.",
+      "start": 102.77,
+      "end": 122.27,
+      "charStart": 1441,
+      "charEnd": 1735
+    },
+    {
+      "text": "This contrast is the point of the entry. Spain can appear relatively modest in cumulative emissions while looking much less modest in cumulative material use. The country did not only carbonize; it also built, extracted, imported and consumed a vast physical stock in a short period.",
+      "start": 122.49,
+      "end": 142.29,
+      "charStart": 1737,
+      "charEnd": 2020
+    },
+    {
+      "text": "The accumulated footprint therefore has to be read in phases: agrarian low metabolism, late industrial acceleration, the post-1975 sprint, and the fall after 2008. Each phase changes the volume, the rhythm and the composition of environmental pressure.",
+      "start": 142.51,
+      "end": 162.16,
+      "charStart": 2022,
+      "charEnd": 2274
+    },
+    {
+      "text": "The long-run record does not offer a single verdict. It shows that responsibility depends on what is measured. For emissions, Spain arrived late. For materials, the country caught up dramatically. Both readings are necessary to understand Spain's place in the global environmental transition.",
+      "start": 162.38,
+      "end": 182.605,
+      "charStart": 2276,
+      "charEnd": 2568
+    }
+  ]
+}

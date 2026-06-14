@@ -1,0 +1,69 @@
+{
+  "voice": "kokoro:af_heart",
+  "duration": 129.405,
+  "chunks": [
+    {
+      "text": "Growing while polluting less: the good news that is not enough",
+      "start": 0.0,
+      "end": 4.1,
+      "charStart": 0,
+      "charEnd": 62
+    },
+    {
+      "text": "Environmental intensity falls, but growth in scale can cancel much of that gain.",
+      "start": 4.32,
+      "end": 10.345,
+      "charStart": 64,
+      "charEnd": 144
+    },
+    {
+      "text": "The promise of green growth is simple: the economy keeps growing while emissions fall. In academic terms, this is decoupling. Spain's long-run series make it possible to ask whether that promise is visible in the historical record.",
+      "start": 10.565,
+      "end": 26.54,
+      "charStart": 146,
+      "charEnd": 377
+    },
+    {
+      "text": "The good news is clear. GDP has grown much faster than many environmental pressures. Carbon intensity, material intensity and energy intensity have all declined over the long run. Spain produces far more economic value with less impact per unit of output than in the past.",
+      "start": 26.76,
+      "end": 47.11,
+      "charStart": 379,
+      "charEnd": 651
+    },
+    {
+      "text": "This is a real achievement. It reflects technological change, a different economic structure, more efficient energy use and, in recent decades, the expansion of renewables. The relationship between growth and impact has changed.",
+      "start": 47.33,
+      "end": 63.455,
+      "charStart": 653,
+      "charEnd": 881
+    },
+    {
+      "text": "But the bivariate view also shows the limits of that achievement. For much of the period, absolute emissions and material use still increased. The economy became cleaner per unit while becoming much larger overall.",
+      "start": 63.675,
+      "end": 78.35,
+      "charStart": 883,
+      "charEnd": 1097
+    },
+    {
+      "text": "The problem is scale. A car that uses less fuel per kilometre can still consume more fuel in total if it travels many more kilometres. The same logic applies to an economy. Efficiency reduces pressure per unit; it does not automatically reduce total pressure.",
+      "start": 78.57,
+      "end": 96.945,
+      "charStart": 1099,
+      "charEnd": 1358
+    },
+    {
+      "text": "Since the mid-2000s, Spain shows more signs of absolute decline in some indicators. Yet part of that decline is linked to crisis, slower growth and structural change rather than to efficiency alone.",
+      "start": 97.165,
+      "end": 111.44,
+      "charStart": 1360,
+      "charEnd": 1558
+    },
+    {
+      "text": "The historical record therefore offers a balanced message. Spain is much more efficient than it used to be. But the improvement has not been strong enough, for most of the period, to offset the growth in scale. Decoupling exists, but it remains fragile and incomplete.",
+      "start": 111.66,
+      "end": 129.185,
+      "charStart": 1560,
+      "charEnd": 1828
+    }
+  ]
+}
