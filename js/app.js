@@ -26,12 +26,12 @@ const state = {
   ind_variable: null, ind_tipoMulti: null, ind_tipo2: null,
   ind_scale: "linear", ind_display: "linea",
   ind_view: "tendencia", ind_mapCombo: null,
-  ind_optionsOpen: true, componentMenuOpen: false,
+  ind_optionsOpen: true, componentMenuOpen: false, indTimelineKey: null,
   /* Filtros global */
   trendIndicator: "Emisiones de CO₂", trendVariable: "Per cápita", trendArea: "Both",
   trendMA: "none", trendShowR2: false, trendShowLine: false,
   trendShowMax: false, trendShowToday: false, trendShowBreaks: false, trendPeriodWindow: null, trendPeriodWindows: [],
-  globalOptionsOpen: true,
+  controlsCollapsed: false,
   corrXInd: "PIB", corrXVar: "Per cápita", corrXScale: "linear",
   corrYInd: "Emisiones de CO₂", corrYVar: "Per cápita", corrYScale: "linear",
   corrArea: "Both",
@@ -47,9 +47,6 @@ const state = {
   mapMiniOpen: true, mapMiniUserSet: false,
   lang: localStorage.getItem("cahe_lang") || "es",
 };
-if(window.matchMedia && window.matchMedia("(max-width: 640px)").matches){
-  state.globalOptionsOpen = false;
-}
 function isCompactViewport(){
   return typeof window !== "undefined" && window.matchMedia?.("(max-width: 640px)").matches;
 }
@@ -73,16 +70,15 @@ function lineChartMargins(kind = "indicator"){
     : { top: 18, right: 84, bottom: 31, left: 58 };
 }
 
-const IS_BETA_HUB = (location.hostname === "jinfama.github.io" && location.pathname.includes("/lab-fig-46aprgpa/")) || location.pathname.includes("/k5-lienzo-seco/");
-const V1_SITE_BASE = IS_BETA_HUB ? "../x9-bruma-cobre" : "../web_cahe/site";
-const V1_VIZ = `${V1_SITE_BASE}/visualizaciones`;
-const V1_DOCS = `${V1_SITE_BASE}/assets/docs`;
-const V1_IMG = `${V1_SITE_BASE}/assets/img`;
-const V1_ICONS = `${V1_IMG}/icons`;
-const V1_RAW = IS_BETA_HUB ? "data/global" : "../web_cahe/web_graficas/data_raw";
+// Assets inherited from CAHE v1, internalised in v3 on 2026-09-05: this viewer
+// no longer reads anything from ../web_cahe or ../x9-bruma-cobre.
+const V1_DOCS = "data/downloads/docs";
+const V1_IMG = "img/team";
+const V1_ICONS = "img/icons";
+const V1_RAW = "data/global";
 const ZENODO_CAHE_URL = "https://zenodo.org/search?q=Contabilidad%20Ambiental%20Hist%C3%B3rica%20de%20Espa%C3%B1a";
 const GITHUB_CAHE_URL = "https://github.com/jinfama";
-const APP_VERSION = "20260524d";
+const APP_VERSION = "20260905b";
 const ZENODO_LOGO_SRC = "img/logos/zenodo.png";
 const GITHUB_LOGO_SRC = "img/logos/github-invertocat.svg";
 let perspectiveAudioRuntime = { audioEl: null, entry: null, frame: null, dragging: false, speed: 1, viewportCleanup: null };
@@ -544,6 +540,118 @@ const MODAL_INFO = {
 const COLOR_SPAIN = "#1e6091";
 const COLOR_WORLD = "#e63946";
 const FALLBACK_PALETTE = ["#c93324","#3a6d8a","#6f7a3d","#c79a3b","#8b5a3c","#4f8a64","#a44c2c","#5e6871","#2c5d3e","#e6892b"];
+const INDICATOR_STYLES = {
+  energia: {
+    typeOrder: ["Carb\u00f3n","Petr\u00f3leo","Gas","Electricidad","Hidr\u00e1ulica y e\u00f3lica","Le\u00f1a","Alimentos y forraje","Total"],
+    colorMap: {
+      "Carb\u00f3n":"#0d1b2a",
+      "Petr\u00f3leo":"#415a77",
+      "Gas":"#778da9",
+      "Electricidad":"#81b29a",
+      "Hidr\u00e1ulica y e\u00f3lica":"#219ebc",
+      "Le\u00f1a":"#ffc971",
+      "Alimentos y forraje":"#fe7f2d",
+      "Total":"#000000",
+    },
+  },
+  emisiones: {
+    tipo2Order: ["Total","Por gas","Por actividad","CO\u2082 por fuente","Fuente original"],
+    typeOrder: ["Total","CO\u2082","CH\u2084","N\u2082O","F-gases y otros","Bio / AFOLU","Energ\u00eda e industria","Total CO\u2082","Uso del suelo","Carb\u00f3n","Petr\u00f3leo","Gas","CO\u2082 uso del suelo","CH\u2084 Bio","N\u2082O Bio","CH\u2084 energ\u00eda/industria","N\u2082O energ\u00eda/industria","CO\u2082 f\u00f3siles","Otros"],
+    colorMap: {
+      "Total":"#000000",
+      "Total GEI":"#000000",
+      "Total CO\u2082":"#000000",
+      "CO\u2082":"#1b263b",
+      "CH\u2084":"#e76f51",
+      "N\u2082O":"#f4a261",
+      "F-gases y otros":"#dee2e6",
+      "Bio / AFOLU":"#84a98c",
+      "Energ\u00eda e industria":"#415a77",
+      "Uso del suelo":"#84a98c",
+      "Carb\u00f3n":"#0d1b2a",
+      "Petr\u00f3leo":"#99582a",
+      "Gas":"#778da9",
+      "Cemento":"#696969",
+      "Quema de gas":"#ff6347",
+      "CO\u2082 uso del suelo":"#84a98c",
+      "CH\u2084 Bio":"#e76f51",
+      "N\u2082O Bio":"#f4a261",
+      "CH\u2084 energ\u00eda/industria":"#415a77",
+      "N\u2082O energ\u00eda/industria":"#778da9",
+      "CO\u2082 f\u00f3siles":"#1b263b",
+      "Otros":"#dee2e6",
+    },
+  },
+  materiales: {
+    tipo2Order: ["Consumo aparente","Extracci\u00f3n","Importaciones","Exportaciones"],
+    typeOrder: ["Biomasa","Materiales f\u00f3siles","Minerales met\u00e1licos","Minerales no met\u00e1licos","Total"],
+    colorMap: {
+      "Biomasa":"#f4a261",
+      "Materiales f\u00f3siles":"#1b263b",
+      "Minerales met\u00e1licos":"#d62828",
+      "Minerales no met\u00e1licos":"#aec3b0",
+      "Total":"#000000",
+    },
+  },
+  tierra: {
+    typeOrder: ["Total","Cultivo herb\u00e1ceo","Cultivo le\u00f1oso","Pastizal y matorral","Dehesa","Monte bajo","Monte alto","Otros"],
+    colorMap: {
+      "Otros":"#6f1d1b",
+      "Monte alto":"#344e41",
+      "Monte bajo":"#588157",
+      "Dehesa":"#dad7cd",
+      "Pastizal y matorral":"#bb9457",
+      "Cultivo le\u00f1oso":"#0a9396",
+      "Cultivo herb\u00e1ceo":"#e9c46a",
+      "Total":"#000000",
+    },
+  },
+  bosques: {
+    tipo2Order: ["Superficie","Stock de C","Densidad de C"],
+    typeOrder: ["Monte abierto","Monte alto","Monte bajo","Total"],
+    colorMap: {
+      "Monte abierto":"#dad7cd",
+      "Monte alto":"#344e41",
+      "Monte bajo":"#588157",
+      "Total":"#000000",
+    },
+  },
+  cultivos: {
+    typeOrder: ["Barbecho","Cereales y granos","Olivos","Frutas y frutos secos","Hortalizas y tub\u00e9rculos","Industriales y otros","Total"],
+    colorMap: {
+      "Barbecho":"#deb887",
+      "Cereales y granos":"#ffd700",
+      "Olivos":"#6a994e",
+      "Frutas y frutos secos":"#f2e8cf",
+      "Hortalizas y tub\u00e9rculos":"#bc4749",
+      "Industriales y otros":"#590d22",
+      "Total":"#000000",
+    },
+  },
+  industria: {
+    typeOrder: ["Total","Alimentaci\u00f3n","Textil y cuero","Madera","Pasta, papel y cart\u00f3n","Qu\u00edmica y petroqu\u00edmica","Minerales no met\u00e1licos y construcci\u00f3n","Cemento, cal y yeso","Ladrillos, piedra y vidrio","Metalurgia","Siderurgia","Metales no f\u00e9rreos","Maquinaria y bienes met\u00e1licos","Bienes de equipo","Material de transporte","Bienes de consumo","Otras industrias"],
+    flowOrder: ["Total","Carb\u00f3n","Petr\u00f3leo","Gas","Electricidad","Biomasa","Le\u00f1a","Coque","Coque de petr\u00f3leo","Coque y gases manufacturados","Fuel\u00f3leo","Gas\u00f3leo","Gasolina","GLP","Otros carbones","Hidr\u00e1ulica","Hidr\u00e1ulica directa","E\u00f3lica","Nuclear","Solar"],
+    colorMap: {
+      "Total":"#000000",
+      "Alimentaci\u00f3n":"#27ae60",
+      "Textil y cuero":"#e67e22",
+      "Madera":"#95a5a6",
+      "Pasta, papel y cart\u00f3n":"#3498db",
+      "Qu\u00edmica y petroqu\u00edmica":"#9b59b6",
+      "Minerales no met\u00e1licos y construcci\u00f3n":"#16a085",
+      "Cemento, cal y yeso":"#696969",
+      "Ladrillos, piedra y vidrio":"#11806a",
+      "Metalurgia":"#c0392b",
+      "Siderurgia":"#e74c3c",
+      "Metales no f\u00e9rreos":"#f39c12",
+      "Maquinaria y bienes met\u00e1licos":"#607d8b",
+      "Bienes de equipo":"#546a7b",
+      "Material de transporte":"#7f8c8d",
+      "Bienes de consumo":"#a569bd",
+      "Otras industrias":"#34495e",
+    },
+  },
+};
 const TAPIO_META = {
   AD: { label: "Absolute decoupling", color: "#2a9d8f" },
   WD: { label: "Weak decoupling", color: "#8ecae6" },
@@ -734,7 +842,7 @@ function buildUnifiedEmissionsDataset(datasets, item){
   if(!gei) return null;
   const years = gei.years || co2?.years || [];
   const variables = gei.variables || co2?.variables || [];
-  const color = key => item?.colorMap?.[key] || colorFor(key);
+  const color = key => itemColorMap(item)[key] || colorFor(key);
   const geiTotalAbs = sourceSeries(gei, "Total", "Absoluto")?.values || [];
   const co2TotalAbs = sourceSeries(co2, "Total", "Absoluto")?.values || [];
   const series = [];
@@ -806,12 +914,101 @@ function buildUnifiedEmissionsDataset(datasets, item){
 }
 
 async function loadIndicatorDataset(item){
+  let data = null;
   if(item?.dataSources?.length){
     const datasets = await Promise.all(item.dataSources.map(slug => loadJson(`data/national/${slug}.json`)));
-    return buildUnifiedEmissionsDataset(datasets.filter(Boolean), item);
+    data = buildUnifiedEmissionsDataset(datasets.filter(Boolean), item);
+  }else{
+    data = await loadJson(`data/national/${item.dataSlug}.json`);
   }
-  return loadJson(`data/national/${item.dataSlug}.json`);
+  return applyItemDatasetStyle(data, item);
 }
+function indicatorStyle(item){
+  return INDICATOR_STYLES[item?.id] || {};
+}
+
+function itemColorMap(item){
+  return { ...(item?.colorMap || {}), ...(indicatorStyle(item).colorMap || {}) };
+}
+
+function orderRank(value, preferred){
+  const idx = preferred.indexOf(value);
+  return idx === -1 ? Number.POSITIVE_INFINITY : idx;
+}
+
+function compareByPreferred(a, b, preferred, ai = 0, bi = 0){
+  const ra = orderRank(a, preferred);
+  const rb = orderRank(b, preferred);
+  if(ra !== rb) return ra - rb;
+  return ai - bi;
+}
+
+function orderValues(values = [], preferred = []){
+  if(!preferred?.length) return values.slice();
+  return values.map((value, i) => ({ value, i }))
+    .sort((a, b) => compareByPreferred(a.value, b.value, preferred, a.i, b.i))
+    .map(d => d.value);
+}
+
+function orderCompoundValues(values = [], preferredHeads = [], preferredTails = []){
+  let ordered = orderValues(values, preferredHeads);
+  if(!preferredTails?.length) return ordered;
+  const firstHeadIndex = new Map();
+  ordered.forEach((value, i) => {
+    const head = splitCompoundOption(value).head;
+    if(!firstHeadIndex.has(head)) firstHeadIndex.set(head, i);
+  });
+  return ordered.map((value, i) => ({ value, i, parts: splitCompoundOption(value) }))
+    .sort((a, b) => {
+      const headDelta = (firstHeadIndex.get(a.parts.head) ?? a.i) - (firstHeadIndex.get(b.parts.head) ?? b.i);
+      if(headDelta) return headDelta;
+      return compareByPreferred(a.parts.tail, b.parts.tail, preferredTails, a.i, b.i);
+    })
+    .map(d => d.value);
+}
+
+function styleSeriesSortDelta(a, b, style, ai = 0, bi = 0){
+  const tipo2Order = style.tipo2Order || [];
+  const flowOrder = style.flowOrder || [];
+  if(tipo2Order.length || flowOrder.length){
+    const pa = splitCompoundOption(a.tipo2);
+    const pb = splitCompoundOption(b.tipo2);
+    if(tipo2Order.length && pa.head !== pb.head){
+      const headDelta = compareByPreferred(pa.head, pb.head, tipo2Order, ai, bi);
+      if(headDelta) return headDelta;
+    }else if(pa.head !== pb.head){
+      return ai - bi;
+    }
+    if(flowOrder.length && pa.tail !== pb.tail){
+      const tailDelta = compareByPreferred(pa.tail, pb.tail, flowOrder, ai, bi);
+      if(tailDelta) return tailDelta;
+    }
+  }
+  const typeDelta = compareByPreferred(a.tipo, b.tipo, style.typeOrder || [], ai, bi);
+  if(typeDelta) return typeDelta;
+  return ai - bi;
+}
+
+function applyItemDatasetStyle(data, item){
+  if(!data) return data;
+  const style = indicatorStyle(item);
+  const colorMap = itemColorMap(item);
+  const styled = { ...data };
+  if(Array.isArray(data.tipos)) styled.tipos = orderValues(data.tipos, style.typeOrder || []);
+  if(Array.isArray(data.tipo2s)){
+    styled.tipo2s = orderCompoundValues(data.tipo2s, style.tipo2Order || [], style.flowOrder || []);
+  }
+  if(Array.isArray(data.series)){
+    styled.series = data.series.map((series, i) => ({
+      ...series,
+      _sourceIndex: i,
+      color: colorMap[series.tipo] || series.color,
+    })).sort((a, b) => styleSeriesSortDelta(a, b, style, a._sourceIndex, b._sourceIndex))
+      .map(({ _sourceIndex, ...series }) => series);
+  }
+  return styled;
+}
+
 const INDICATORS = ["Emisiones de CO₂","Emisiones GEI","Energía","Materiales","Tierras de cultivo","Agua","Nitrógeno"];
 const INDICATORS_WITH_GDP = ["PIB","Población","IDH","IDH-A", ...INDICATORS];
 const VARIABLES_G = ["Absoluto","Per cápita","Intensidad"];
@@ -825,7 +1022,8 @@ function colorFor(key, idx = 0, customMap = null){
   return FALLBACK_PALETTE[Math.abs(h) % FALLBACK_PALETTE.length];
 }
 function seriesColor(series, idx = 0, item = null){
-  return series?.color || colorFor(series?.tipo, idx, item?.colorMap);
+  const colorMap = itemColorMap(item);
+  return colorMap[series?.tipo] || series?.color || colorFor(series?.tipo, idx, colorMap);
 }
 function typeColorFromData(data, tipo, item = null){
   const series = data?.series?.find(s => s.tipo === tipo && s.color) || null;
@@ -872,15 +1070,15 @@ function shortSeriesName(value){
   const replacements = [
     [/minerales no met/i, "Min. no met."],
     [/minerales met/i, "Min. met."],
-    [/materiales f/i, "Mat. fosiles"],
+    [/materiales f/i, "Mat. fósiles"],
     [/biomasa/i, "Biomasa"],
     [/alimentos/i, "Alim. y forraje"],
-    [/hid/i, "Hidr. y eolica"],
+    [/hid/i, "Hidr. y eólica"],
     [/electricidad/i, "Electricidad"],
-    [/pet/i, "Petroleo"],
-    [/carb/i, "Carbon"],
+    [/pet/i, "Petróleo"],
+    [/carb/i, "Carbón"],
     [/uso del suelo/i, "Uso suelo"],
-    [/energ/i, "Energia"],
+    [/energ/i, "Energía"],
     [/industr/i, "Industria"],
     [/monte abierto/i, "Monte abierto"],
     [/monte alto/i, "Monte alto"],
@@ -1351,6 +1549,30 @@ function bindSpeedMenu(root, getSpeed, setSpeed, onChange){
   refresh();
 }
 
+function syncViewportHeight(){
+  const viewport = window.visualViewport;
+  const height = Math.round(viewport?.height || window.innerHeight || 0);
+  if(height > 0) document.documentElement.style.setProperty("--cahe-viewport-height", `${height}px`);
+}
+
+function bindViewportHeight(){
+  let raf = null;
+  const schedule = () => {
+    if(raf != null) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      syncViewportHeight();
+    });
+  };
+  syncViewportHeight();
+  window.addEventListener("resize", schedule, { passive: true });
+  window.addEventListener("orientationchange", schedule, { passive: true });
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize", schedule, { passive: true });
+    window.visualViewport.addEventListener("scroll", schedule, { passive: true });
+  }
+}
+
 function miniSelectMarkup(id, label, value, options){
   return `<div class="field mini-select-field">
     <label>${tx(label)}</label>
@@ -1359,6 +1581,7 @@ function miniSelectMarkup(id, label, value, options){
         <span>${tx(value)}</span><span class="mini-chevron"></span>
       </button>
       <div class="mini-select-menu" role="listbox">
+        <button class="select-menu-close" type="button" data-select-close aria-label="${escAttr(t("close"))}"></button>
         ${options.map(opt => `<button type="button" role="option" data-value="${escAttr(opt)}" class="${opt === value ? "active" : ""}">${tx(opt)}</button>`).join("")}
       </div>
     </div>
@@ -1382,6 +1605,7 @@ function componentMultiSelectMarkup(id, label, options, selected, colorFn){
         <span>${summary}</span><span class="mini-chevron"></span>
       </button>
       <div class="comp-select-menu" role="listbox" aria-multiselectable="true">
+        <button class="select-menu-close" type="button" data-select-close aria-label="${escAttr(t("close"))}"></button>
         <div class="comp-menu-actions">
           <button type="button" data-component-action="all">${state.lang === "en" ? "All" : "Todos"}</button>
           <button type="button" data-component-action="clear">${state.lang === "en" ? "Clear" : "Limpiar"}</button>
@@ -1396,6 +1620,17 @@ function componentMultiSelectMarkup(id, label, options, selected, colorFn){
   </div>`;
 }
 
+function closeSelectElement(box){
+  if(!box) return;
+  box.classList.remove("open");
+  box.querySelector(".mini-select-btn,.comp-select-btn")?.setAttribute("aria-expanded", "false");
+}
+
+function closeFloatingSelects(root = document){
+  root.querySelectorAll("[data-mini-select],[data-comp-select]").forEach(closeSelectElement);
+  state.componentMenuOpen = false;
+}
+
 function bindMiniSelect(root, id, onChange){
   const box = root.querySelector(`#${id}`);
   if(!box) return;
@@ -1403,15 +1638,15 @@ function bindMiniSelect(root, id, onChange){
   const menu = box.querySelector(".mini-select-menu");
   btn.addEventListener("click", () => {
     stopPlayback();
-    root.querySelectorAll("[data-mini-select]").forEach(x => {
-      if(x !== box){
-        x.classList.remove("open");
-        x.querySelector(".mini-select-btn")?.setAttribute("aria-expanded", "false");
-      }
-    });
-    const open = !box.classList.contains("open");
+    const wasOpen = box.classList.contains("open");
+    closeFloatingSelects(root);
+    const open = !wasOpen;
     box.classList.toggle("open", open);
     btn.setAttribute("aria-expanded", String(open));
+  });
+  menu.querySelector("[data-select-close]")?.addEventListener("click", event => {
+    event.stopPropagation();
+    closeFloatingSelects(root);
   });
   menu.querySelectorAll("[data-value]").forEach(option => option.addEventListener("click", () => {
     stopPlayback();
@@ -1426,18 +1661,19 @@ function bindComponentSelect(root, id){
   const box = root.querySelector(`#${id}`);
   if(!box) return;
   const btn = box.querySelector(".comp-select-btn");
+  const menu = box.querySelector(".comp-select-menu");
   btn.addEventListener("click", () => {
     stopPlayback();
-    root.querySelectorAll("[data-mini-select],[data-comp-select]").forEach(x => {
-      if(x !== box){
-        x.classList.remove("open");
-        x.querySelector(".mini-select-btn,.comp-select-btn")?.setAttribute("aria-expanded", "false");
-      }
-    });
-    const open = !box.classList.contains("open");
+    const wasOpen = box.classList.contains("open");
+    closeFloatingSelects(root);
+    const open = !wasOpen;
     state.componentMenuOpen = open;
     box.classList.toggle("open", open);
     btn.setAttribute("aria-expanded", String(open));
+  });
+  menu?.querySelector("[data-select-close]")?.addEventListener("click", event => {
+    event.stopPropagation();
+    closeFloatingSelects(root);
   });
 }
 
@@ -1541,17 +1777,21 @@ function setupIndicatorTimeline(timeline, years, onTick){
     onTick(state.year);
   });
   play.addEventListener("click", () => {
-    state.playing = !state.playing;
-    setPlayButtonState(play, state.playing);
     const activeYears = getTimelineRange("indicator", years).years;
-    if(state.playing) startIndicatorTimer(activeYears, y => {
-      updateReadout(y);
-      onTick(y);
-    }, () => setPlayButtonState(play, false));
-    else {
-      clearIndicatorTimer();
-      setPlayButtonState(play, false);
+    if(!state.playing){
+      if(!activeYears.length) return;
+      state.year = activeYears[0];
+      state.playing = true;
+      setPlayButtonState(play, true);
+      startIndicatorTimer(activeYears, y => {
+        updateReadout(y);
+        onTick(y);
+      }, () => setPlayButtonState(play, false));
+      return;
     }
+    state.playing = false;
+    clearIndicatorTimer();
+    setPlayButtonState(play, false);
   });
   bindSpeedMenu(timeline, () => state.speed, v => { state.speed = v; }, () => {
     if(state.playing) startIndicatorTimer(getTimelineRange("indicator", years).years, y => {
@@ -1648,13 +1888,34 @@ function githubLogo(cls = "brand-logo github-logo"){
   return logoImg(GITHUB_LOGO_SRC, cls, t("github"));
 }
 
-function renderPanelTools(dataLink, methodLink, info = true, zenodoLink = null, citation = null){
-  if(!dataLink && !info && !citation) return "";
+function settingsGearIcon(){
+  return `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+function renderPanelTools(dataLink, methodLink, info = true, zenodoLink = null, citation = null, controlsToggle = false){
+  if(!dataLink && !info && !citation && !controlsToggle) return "";
   return `<div class="tools panel-tools">
     ${dataLink ? `<a class="btn-download" href="${dataLink}" target="_blank" rel="noopener" title="${t("dataXlsx")}" aria-label="${t("dataXlsx")}"><span class="arr">↓</span><span class="tool-text">${t("dataXlsx")}</span></a>` : ""}
     ${citation ? `<button class="btn-cite" id="btn-cite" type="button" title="${t("howToCite")}" aria-label="${t("howToCite")}"><span class="quote-icon" aria-hidden="true"><span>“</span><span>”</span></span><span class="tool-text">${t("cite")}</span></button>` : ""}
     ${info ? `<button class="btn-info" id="btn-info" type="button" title="${t("infoMethod")}" aria-label="${t("infoMethod")}" data-method-link="${methodLink || ""}"><span class="icon">i</span><span class="tool-text">${t("infoMethod")}</span></button>` : ""}
+    ${controlsToggle ? `<button class="btn-settings${state.controlsCollapsed ? " active" : ""}" id="btn-controls-toggle" type="button" title="${state.lang === "en" ? "Show or hide controls" : "Mostrar u ocultar controles"}" aria-label="${state.lang === "en" ? "Show or hide controls" : "Mostrar u ocultar controles"}" aria-pressed="${state.controlsCollapsed ? "true" : "false"}">${settingsGearIcon()}<span class="tool-text">${state.lang === "en" ? "Controls" : "Controles"}</span></button>` : ""}
   </div>`;
+}
+
+function bindControlsToggle(root){
+  const btn = root.querySelector("#btn-controls-toggle");
+  const viz = root.querySelector(".viz");
+  if(!btn || !viz) return;
+  const sync = () => {
+    viz.classList.toggle("controls-collapsed", state.controlsCollapsed);
+    btn.classList.toggle("active", state.controlsCollapsed);
+    btn.setAttribute("aria-pressed", state.controlsCollapsed ? "true" : "false");
+  };
+  btn.addEventListener("click", () => {
+    state.controlsCollapsed = !state.controlsCollapsed;
+    sync();
+  });
+  sync();
 }
 
 function renderMain(){
@@ -1824,31 +2085,46 @@ function renderSidebar(){
   const pickerTitle = state.lang === "en" ? "Choose view" : "Elegir vista";
 
   sidebar.className = `viz-sidebar sidebar-${state.group}`;
-  const groupSwitch = LANDING_GROUPS.map(g => `
-    <button class="side-group-btn ${g.cls || ""}${g.group === state.group ? " active" : ""}" data-side-group="${g.group}" type="button">
-      <span class="side-group-icon">${g.icon ? `<img src="${g.icon}" alt="">` : ""}</span>
-      <span>${tx(g.label)}</span>
-    </button>`).join("");
+  const groupItems = groupId => groupId === "global" ? GLOBAL_ANALYSES : (CATALOG_OTHER[groupId] || []);
+  const groupEyebrow = groupId => {
+    if(groupId === "global") return t("analysis");
+    if(groupId === "macro") return t("macroEyebrow");
+    if(groupId === "sectorial") return t("sectorEyebrow");
+    return t("commodities");
+  };
+  const groupSwitch = LANDING_GROUPS.map(g => {
+    const activeGroup = g.group === state.group;
+    const childItems = activeGroup ? groupItems(g.group) : [];
+    return `<div class="side-group-block${activeGroup ? " open" : ""}">
+      <button class="side-group-btn ${g.cls || ""}${activeGroup ? " active" : ""}" data-side-group="${g.group}" type="button" aria-expanded="${activeGroup ? "true" : "false"}">
+        <span class="side-group-icon">${g.icon ? `<img src="${g.icon}" alt="">` : ""}</span>
+        <span>${tx(g.label)}</span>
+      </button>
+      ${activeGroup ? `<div class="side-group-children" aria-label="${escAttr(groupEyebrow(g.group))}">
+        ${childItems.map(it => {
+          const meta = g.group === "global" ? "" : (it.sub || it.meta || "");
+          return `<button class="viz-side-item side-child-item${it.id === state.vizId ? " active" : ""}${it.comingSoon ? " coming-soon" : ""}" data-id="${it.id}" type="button">
+            <span class="icon-box">${it.icon ? `<img src="${it.icon}" alt="">` : ""}</span>
+            <span class="label">
+              <span class="name">${itemTitle(it)}</span>
+              ${meta ? `<span class="meta">${tx(meta)}</span>` : ""}
+            </span>
+          </button>`;
+        }).join("")}
+      </div>` : ""}
+    </div>`;
+  }).join("");
   sidebar.innerHTML = `
     <div class="mobile-sidebar-head">
       <div><span>${pickerTitle}</span><strong>${escHtml(activeItem ? itemTitle(activeItem) : eyebrow)}</strong></div>
       <button class="mobile-sidebar-close" type="button" data-mobile-viz-close aria-label="${escAttr(t("close"))}">×</button>
     </div>
-    <div class="side-group-switcher">${groupSwitch}</div>
-    <div class="side-section-label">${eyebrow}</div>
-  ` + items.map(it => {
-    const meta = state.group === "global" ? "" : (it.sub || it.meta || "");
-    return `
-    <button class="viz-side-item${it.id === state.vizId ? " active" : ""}${it.comingSoon ? " coming-soon" : ""}" data-id="${it.id}">
-      <span class="icon-box">${it.icon ? `<img src="${it.icon}" alt="">` : ""}</span>
-      <span class="label">
-        <span class="name">${itemTitle(it)}</span>
-        ${meta ? `<span class="meta">${tx(meta)}</span>` : ""}
-      </span>
-    </button>`;
-  }).join("");
+    <div class="side-group-switcher">${groupSwitch}</div>`;
   sidebar.querySelectorAll("[data-side-group]").forEach(btn => {
-    btn.addEventListener("click", () => switchGroup(btn.dataset.sideGroup));
+    btn.addEventListener("click", () => {
+      if(btn.dataset.sideGroup === state.group) return;
+      switchGroup(btn.dataset.sideGroup);
+    });
   });
   sidebar.querySelectorAll("[data-id]").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1907,11 +2183,12 @@ function industryIndicatorOptions(data){
   return Array.from(new Set((data.tipo2s || []).map(tipo2 => splitCompoundOption(tipo2).head))).filter(Boolean);
 }
 
-function industryFlowOptions(data, indicator){
+function industryFlowOptions(data, indicator, item = null){
   const values = Array.from(new Set((data.tipo2s || [])
     .filter(tipo2 => splitCompoundOption(tipo2).head === indicator)
     .map(tipo2 => splitCompoundOption(tipo2).tail))).filter(Boolean);
-  return values.includes("Total") ? ["Total", ...values.filter(value => value !== "Total")] : values;
+  const ordered = orderValues(values, indicatorStyle(item).flowOrder || []);
+  return ordered.includes("Total") ? ["Total", ...ordered.filter(value => value !== "Total")] : ordered;
 }
 
 function industryTipo2FromParts(data, indicator, flow){
@@ -1954,6 +2231,14 @@ async function renderIndicatorViz(){
     main.innerHTML = `<div class="error">No se pudo cargar ${sourceLabel}</div>`;
     return;
   }
+  const latestYear = data.years?.at(-1);
+  const timelineKey = `${item.id}:${data.years?.[0] || ""}-${latestYear || ""}`;
+  if(timelineKey !== state.indTimelineKey){
+    state.indTimelineKey = timelineKey;
+    state.yearStart = null;
+    state.yearEnd = null;
+    state.year = latestYear;
+  }
   let mapData = null;
   if(item.mapSlug){
     mapData = await loadJson(`data/provincial/${item.mapSlug}.json`);
@@ -1985,10 +2270,10 @@ async function renderIndicatorViz(){
   const dataLink = dataLinkForItem(item);
   const methodLink = item.method ? `${V1_DOCS}/${item.method}` : null;
   const citation = citationForItem(item);
-  const toolsHtml = renderPanelTools(dataLink, methodLink, true, item.zenodo || null, citation);
+  const toolsHtml = renderPanelTools(dataLink, methodLink, true, item.zenodo || null, citation, true);
 
   main.innerHTML = `
-    <div class="viz">
+    <div class="viz${state.controlsCollapsed ? " controls-collapsed" : ""}">
       <div class="indicator-head with-tools">
         <div class="meta">
           <div class="indicator-titleline"><h1>${itemTitle(item)}</h1><span>${itemDescription(item)}</span></div>
@@ -2023,6 +2308,7 @@ async function renderIndicatorViz(){
   if(bi) bi.addEventListener("click", () => openIndicatorModal(item, data));
   const bc = main.querySelector("#btn-cite");
   if(bc) bc.addEventListener("click", () => openCitationModal(itemTitle(item), citation));
+  bindControlsToggle(main);
 
   if(view === "tendencia") renderIndicatorTendencia(item, data);
   else renderIndicatorMapa(item, mapData);
@@ -2030,6 +2316,8 @@ async function renderIndicatorViz(){
 
 function renderIndicatorTendencia(item, data){
   const ctrls = document.getElementById("ind-controls");
+  // A newer async render may have replaced #main already; bail out instead of throwing.
+  if(!ctrls) return;
   const tipo2s = data.tipo2s || [];
   const isIndustry = item.id === "industria";
   if(tipo2s.length && !data.series.some(s => s.variable === state.ind_variable && s.tipo2 === state.ind_tipo2)){
@@ -2046,11 +2334,11 @@ function renderIndicatorTendencia(item, data){
       state.ind_tipo2 = industryTipo2FromParts(data, industryParts.head, "Total");
       industryParts = splitCompoundOption(state.ind_tipo2);
     }
-    industryFlows = industryFlowOptions(data, industryParts.head);
+    industryFlows = industryFlowOptions(data, industryParts.head, item);
     if(!industryFlows.includes(industryParts.tail)){
       state.ind_tipo2 = industryTipo2FromParts(data, industryParts.head, industryFlows.includes("Total") ? "Total" : industryFlows[0]);
       industryParts = splitCompoundOption(state.ind_tipo2);
-      industryFlows = industryFlowOptions(data, industryParts.head);
+      industryFlows = industryFlowOptions(data, industryParts.head, item);
     }
   }
   const tipos = tipo2s.length
@@ -2370,6 +2658,8 @@ function mapCategoryLabel(item){
 function renderIndicatorMapa(item, mapData){
   document.getElementById("ind-canvas")?.classList.add("map-canvas");
   const ctrls = document.getElementById("ind-controls");
+  // A newer async render may have replaced #main already; bail out instead of throwing.
+  if(!ctrls) return;
   const combos = mapData.combos;
   const activeCombo = combos.find(c => c.id === state.ind_mapCombo) || combos[0];
   const indicators = uniqueMapValues(combos, "indicator");
@@ -2628,31 +2918,58 @@ function drawMapMiniChart(container, mapData, combo){
   return { update };
 }
 
+function shortList(values = [], max = 7){
+  const clean = values.filter(Boolean).map(v => tx(v));
+  if(clean.length <= max) return clean.join(", ");
+  const rest = clean.length - max;
+  return `${clean.slice(0, max).join(", ")} ${state.lang === "en" ? `and ${rest} more` : `y ${rest} más`}`;
+}
+
+function countLabel(n, singular, plural){
+  return `${n} ${n === 1 ? singular : plural}`;
+}
+
+function indicatorCoverageText(data){
+  if(!data?.years?.length) return "";
+  const first = data.years[0];
+  const last = data.years.at(-1);
+  const seriesCount = data.series?.length || 0;
+  const componentCount = data.tipos?.length || 0;
+  const indicatorCount = data.tipo2s?.length || data.variables?.length || 0;
+  const indicatorName = data.tipo2s?.length
+    ? (state.lang === "en" ? ["indicator", "indicators"] : ["indicador", "indicadores"])
+    : (state.lang === "en" ? ["metric", "metrics"] : ["métrica", "métricas"]);
+  if(state.lang === "en"){
+    return `<p><strong>Coverage.</strong> ${first}-${last}; ${countLabel(seriesCount, "series", "series")}; ${countLabel(componentCount, "component", "components")}; ${countLabel(indicatorCount, indicatorName[0], indicatorName[1])}.</p>`;
+  }
+  return `<p><strong>Cobertura.</strong> ${first}-${last}; ${countLabel(seriesCount, "serie", "series")}; ${countLabel(componentCount, "componente", "componentes")}; ${countLabel(indicatorCount, indicatorName[0], indicatorName[1])}.</p>`;
+}
+
+function indicatorStructureText(item, data){
+  const componentList = shortList(data?.tipos || []);
+  const dimensionList = shortList((data?.tipo2s?.length ? data.tipo2s : data?.variables) || []);
+  const hasMap = !!item?.mapSlug;
+  if(state.lang === "en"){
+    return `<p><strong>What it measures.</strong> ${componentList ? `Components or categories: ${componentList}. ` : ""}${dimensionList ? `${data?.tipo2s?.length ? "Indicators" : "Metrics"}: ${dimensionList}. ` : ""}${hasMap ? "It also includes provincial maps." : "It is presented as national series."}</p>`;
+  }
+  return `<p><strong>Qué mide.</strong> ${componentList ? `Componentes o categorías: ${componentList}. ` : ""}${dimensionList ? `${data?.tipo2s?.length ? "Indicadores" : "Métricas"}: ${dimensionList}. ` : ""}${hasMap ? "Incluye también mapas provinciales." : "Se presenta como serie nacional."}</p>`;
+}
+
 function openIndicatorModal(item, data){
-  const dataLink = dataLinkForItem(item);
-  const methodLink = item.method ? `${V1_DOCS}/${item.method}` : null;
   const intro = state.lang === "en"
     ? "This viewer shows long-run historical series built from the CAHE databases. It combines trend charts, area views, tables and provincial maps when spatial data are available. The controls change the measured variable, the component or category, the scale and the year shown in the timeline."
     : "Este visor muestra series históricas de largo plazo construidas a partir de las bases CAHE. Combina tendencias, áreas, tablas y mapas provinciales cuando existe información espacial. Los controles permiten cambiar la variable medida, el componente o categoría, la escala y el año mostrado en la línea temporal.";
   const readingGuide = state.lang === "en"
     ? "Values should be read as comparable annual series within each selected unit and category. When several components are active, the chart compares their trajectories; in maps, the color scale is fixed for the selected indicator so that changes through time are comparable."
     : "Los valores deben leerse como series anuales comparables dentro de cada unidad y categoría seleccionada. Cuando se activan varios componentes, la figura compara sus trayectorias; en los mapas, la escala de color queda fijada para el indicador elegido para que el cambio temporal sea comparable.";
-  const lastYear = data?.years?.length ? data.years[data.years.length - 1] : "";
-  const coverage = data ? (state.lang === "en"
-    ? `<p><strong>Coverage.</strong> ${data.years?.[0] || ""}-${lastYear}; ${data.series?.length || 0} series; ${(data.tipos || []).length} components; ${(data.tipo2s || []).length} indicators. Source file: ${data.sourceFile || "dataset"}.</p>`
-    : `<p><strong>Cobertura.</strong> ${data.years?.[0] || ""}-${lastYear}; ${data.series?.length || 0} series; ${(data.tipos || []).length} componentes; ${(data.tipo2s || []).length} indicadores. Archivo fuente: ${data.sourceFile || "base de datos"}.</p>`) : "";
   els.modalContent.innerHTML = `
     <span class="modal-eyebrow">${t("infoMethod")} — ${tx(item.meta)}</span>
     <h2>${itemTitle(item)}</h2>
     <p>${itemDescription(item)}</p>
+    ${indicatorStructureText(item, data)}
     <p>${intro}</p>
     <p>${readingGuide}</p>
-    ${coverage}
-    <div class="cta-row">
-      ${dataLink ? `<a class="cta" href="${dataLink}" target="_blank" rel="noopener">${t("dataXlsx")} <span>↓</span></a>` : ""}
-      ${methodLink ? `<a class="cta cta-ghost" href="${methodLink}" target="_blank" rel="noopener">${state.lang === "en" ? "Methodology" : "Metodología"}</a>` : ""}
-      ${item.zenodo ? `<a class="cta cta-zenodo" href="${item.zenodo}" target="_blank" rel="noopener">${zenodoBrand()}</a>` : ""}
-    </div>`;
+    ${indicatorCoverageText(data)}`;
   els.modal.classList.add("open");
 }
 
@@ -2688,9 +3005,9 @@ async function renderGlobalViz(){
   clearIndicatorTimer();
   clearGlobalTimer();
   const globalCitation = citationForGlobal();
-  const globalTools = renderPanelTools(`${V1_DOCS}/cahe_datos_integrados.xlsx`, `${V1_DOCS}/globales_metodologia.pdf`, true, ZENODO_CAHE_URL, globalCitation);
+  const globalTools = renderPanelTools(`${V1_DOCS}/cahe_datos_integrados.xlsx`, `${V1_DOCS}/globales_metodologia.pdf`, true, ZENODO_CAHE_URL, globalCitation, true);
   main.innerHTML = `
-    <div class="viz">
+    <div class="viz${state.controlsCollapsed ? " controls-collapsed" : ""}">
       <div class="indicator-head with-tools global-head">
         <div class="meta global-titleline">
           <h1>${tx(analysis.label)}</h1>
@@ -2706,6 +3023,7 @@ async function renderGlobalViz(){
   if(infoBtn) infoBtn.addEventListener("click", () => openGlobalModal(analysis.id));
   const citeBtn = main.querySelector("#btn-cite");
   if(citeBtn) citeBtn.addEventListener("click", () => openCitationModal(tx(analysis.label), globalCitation));
+  bindControlsToggle(main);
 
   await loadGlobalData();
   const body = main.querySelector("#viz-body");
@@ -2752,15 +3070,10 @@ function openGlobalModal(id){
   els.modalContent.innerHTML = `
     <span class="modal-eyebrow">${state.lang === "en" ? "Information" : "Información"}</span>
     <h2>${tx(m.titulo || "—")}</h2>
-    ${m.datos ? `<h3>${t("dataXlsx")}</h3><p>${m.datos}</p>` : ""}
-    ${m.fuentes ? `<h3>${state.lang === "en" ? "Methods and sources" : "Metodología y fuentes"}</h3><p>${m.fuentes}</p>` : ""}
-    ${m.interpretacion ? `<h3>${state.lang === "en" ? "Interpretation" : "Claves para la interpretación"}</h3><p>${m.interpretacion}</p>` : ""}
-    ${m.referencias ? `<h3>${state.lang === "en" ? "References" : "Referencias"}</h3><ul>${m.referencias.map(ref => `<li>${ref}</li>`).join("")}</ul>` : ""}
-    <p style="margin-top:14px;font-style:italic;color:var(--ink-mute);font-size:12px">${state.lang === "en" ? "Updated" : "Actualización"}: ${m.actualizacion || "—"}</p>
-    <div class="cta-row">
-      <a class="cta cta-ghost" href="${V1_DOCS}/globales_metodologia.pdf" target="_blank" rel="noopener">${t("fullMethod")} <span>↗</span></a>
-      <a class="cta cta-zenodo" href="${ZENODO_CAHE_URL}" target="_blank" rel="noopener">${zenodoBrand()}</a>
-    </div>`;
+    ${m.datos ? `<h3>${state.lang === "en" ? "What it shows" : "Qué muestra"}</h3><p>${m.datos}</p>` : ""}
+    ${m.fuentes ? `<h3>${state.lang === "en" ? "How it is built" : "Cómo se construye"}</h3><p>${m.fuentes}</p>` : ""}
+    ${m.interpretacion ? `<h3>${state.lang === "en" ? "How to read it" : "Cómo leerlo"}</h3><p>${m.interpretacion}</p>` : ""}
+    <p style="margin-top:14px;font-style:italic;color:var(--ink-mute);font-size:12px">${state.lang === "en" ? "Updated" : "Actualización"}: ${m.actualizacion || "—"}</p>`;
   els.modal.classList.add("open");
 }
 function closeModal(){ els.modal.classList.remove("open"); }
@@ -2909,7 +3222,7 @@ function renderTendencias(body){
   }
   const v = state.trendVariable, a = state.trendArea;
   body.innerHTML = `
-    <div class="controls-shell${state.globalOptionsOpen ? " open" : ""}" id="global-controls-shell">
+    <div class="controls-shell" id="global-controls-shell">
       <div class="filter-bar compact-controls global-controls">
         ${miniSelectMarkup("t-ind-select", t("indicator"), i, INDICATORS)}
         ${miniSelectMarkup("t-var-select", t("metric"), v, variableOptions)}
@@ -2921,16 +3234,8 @@ function renderTendencias(body){
             <button data-area="Mundo" class="${a === "Mundo" ? "active" : ""}">${tx("Mundo")}</button>
           </div>
         </div>
-        <div class="spacer"></div>
-        <button class="options-toggle${state.globalOptionsOpen ? " active" : ""}" id="global-options-toggle" type="button" aria-expanded="${state.globalOptionsOpen}">
-          <strong>${state.lang === "en" ? "Settings" : "Ajustes"}</strong>
-        </button>
         <div class="controls-drawer global-drawer" id="global-options-drawer" aria-label="${state.lang === "en" ? "Global perspective options" : "Opciones de perspectiva global"}">
         <button class="drawer-info" type="button" tabindex="-1" title="${state.lang === "en" ? "Moving average smooths the series. Trend shows R² and a fitted line. Explore marks maximum/minimum, today's level and structural changes. Growth highlights the strongest 5-, 10- and 25-year periods." : "Media móvil suaviza la serie. Tendencia muestra R² y recta ajustada. Explorar marca máximo/mínimo, relación con el valor actual y cambios estructurales. Crecimiento señala los periodos de 5, 10 y 25 años con mayor subida o caída."}" aria-label="${state.lang === "en" ? "Settings information" : "Información de ajustes"}">i</button>
-        <div class="drawer-head">
-          <div><span>Ajustes</span></div>
-          <button class="drawer-close" id="global-drawer-close" type="button" aria-label="${t("close")}">×</button>
-        </div>
         <div class="drawer-section">
           <label>${state.lang === "en" ? "Moving average" : "Media móvil"}</label>
           <div class="analysis-buttons">
@@ -2963,16 +3268,6 @@ function renderTendencias(body){
     </div>
     <div class="canvas"><div class="chart-area" id="t-chart"></div><div class="chart-legend" id="t-legend"></div></div>
     ${globalTimelineMarkup()}`;
-  const shell = body.querySelector("#global-controls-shell");
-  const toggle = body.querySelector("#global-options-toggle");
-  function setGlobalOptionsOpen(open){
-    state.globalOptionsOpen = open;
-    shell.classList.toggle("open", open);
-    toggle.classList.toggle("active", open);
-    toggle.setAttribute("aria-expanded", String(open));
-  }
-  toggle.addEventListener("click", () => setGlobalOptionsOpen(!state.globalOptionsOpen));
-  body.querySelector("#global-drawer-close").addEventListener("click", () => setGlobalOptionsOpen(false));
   bindMiniSelect(body, "t-ind-select", value => { state.trendIndicator = value; renderTendencias(body); });
   bindMiniSelect(body, "t-var-select", value => { state.trendVariable = value; renderTendencias(body); });
   body.querySelectorAll("[data-area]").forEach(btn => btn.addEventListener("click", () => { stopPlayback(); state.trendArea = btn.dataset.area; renderTendencias(body); }));
@@ -4314,7 +4609,7 @@ function perspectiveAudio(entry){
   if(!meta) return null;
   const base = `assets/audio/perspectives/${audioLang}/${entry.id}`;
   return {
-    src: `${base}.wav`,
+    src: `${base}.mp3`,
     timing: `${base}.json`,
     text: `${base}-cleaned.txt`,
     voice: audioLang === "en" ? "kokoro:af_heart" : "kokoro:ef_dora",
@@ -4829,11 +5124,11 @@ function renderPerspectivas(){
     return b.date.localeCompare(a.date);
   });
   const aiProtocolSub = state.lang === "en" ? "Editorial protocol" : "Protocolo editorial";
+  const aiProtocolTitle = state.lang === "en" ? "AI-assisted<br>entry" : "Entrada asistida<br>por IA";
   els.workspace.innerHTML = `<div class="page perspective-index-page"><div class="page-head perspective-page-head"><div class="perspective-head-copy"><div class="eyebrow">${t("perspectivas")}</div><h1>${t("perspectivesTitle")}</h1><p>${t("perspectivesIntro")}</p></div>
       <button class="perspective-ai-protocol perspective-ai-protocol-head" type="button" data-ai-protocol aria-label="${perspectiveAiProtocolLabel()}">
         <span class="ai-mark" aria-hidden="true">IA</span>
-        <span class="ai-label-stack"><strong>${perspectiveAiLabel()}</strong><small>${aiProtocolSub}</small></span>
-        <span class="ai-info-dot" aria-hidden="true">i</span>
+        <span class="ai-label-stack"><strong>${aiProtocolTitle}</strong><small>${aiProtocolSub}</small></span>
       </button>
     </div>
     <div class="filter-bar perspective-toolbar">
@@ -5038,7 +5333,9 @@ function teamCardsMarkup(items = TEAM){
     const photo = photoSrc
       ? `<img class="photo" src="${photoSrc}" alt="${member.name}" onerror="this.style.display='none'">`
       : `<div class="photo team-avatar" aria-hidden="true">${member.initials || member.name.split(/\s+/).map(p => p[0]).slice(0,2).join("")}</div>`;
-    const role = member.role ? `<div class="role">${state.lang === "en" ? (member.role_en || member.role) : member.role}</div>` : "";
+    const role = member.role
+      ? `<div class="role">${state.lang === "en" ? (member.role_en || member.role) : member.role}</div>`
+      : `<div class="role role-placeholder" aria-hidden="true"></div>`;
     const links = member.links.map(link => `<a href="${link.href}" target="_blank" rel="noopener" title="${link.title}" aria-label="${link.title}">${link.icon ? `<img src="${V1_IMG}/${link.icon}" alt="">` : `<span>${link.text || link.title}</span>`}</a>`).join("");
     return `<div class="team-card team-card-round">${photo}<div class="body">${role}<div class="name">${member.name}</div><div class="aff">${member.aff}</div><div class="links">${links}</div></div></div>`;
   }).join("");
@@ -5224,12 +5521,28 @@ function bindHome(){
   });
 }
 function bindModal(){ document.querySelectorAll("[data-modal-close]").forEach(el => el.addEventListener("click", closeModal)); window.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); }); }
+function bindFloatingSelectDismissal(){
+  document.addEventListener("pointerdown", event => {
+    const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+    if(target?.closest("[data-mini-select],[data-comp-select]")) return;
+    closeFloatingSelects(document);
+  }, { capture: true });
+  window.addEventListener("keydown", event => {
+    if(event.key === "Escape") closeFloatingSelects(document);
+  });
+}
 
 function applyHashRoute(){
   const hash = resolveVizId(window.location.hash.replace("#",""));
   if(!hash){
     state.section = "visualizacion";
     state.subsection = "landing";
+    return true;
+  }
+  if(hash === "visualizacion"){
+    state.section = "visualizacion";
+    state.subsection = "landing";
+    state.perspectiveEntry = null;
     return true;
   }
   if(["perspectivas","publicaciones","datos","novedades","equipo","acerca"].includes(hash)){
@@ -5260,7 +5573,7 @@ function applyHashRoute(){
 }
 
 function init(){
-  bindNav(); bindLanguage(); bindHome(); bindModal(); updateChrome();
+  bindViewportHeight(); bindNav(); bindLanguage(); bindHome(); bindModal(); bindFloatingSelectDismissal(); updateChrome();
   applyHashRoute();
   window.addEventListener("hashchange", () => {
     if(applyHashRoute()){ setNavActive(state.section); renderMain(); }

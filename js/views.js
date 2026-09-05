@@ -426,7 +426,7 @@ export async function renderTapio(container, state){
   container.appendChild(wrap);
   const { area, legend } = chartShell(wrap);
   area.innerHTML = `<div class="loading"><span class="spinner"></span><strong>Cargando análisis Tapio</strong></div>`;
-  const rows = await loadCsv("../web_cahe/web_graficas/data_raw/web_todos_analysis_csv.csv");
+  const rows = await loadCsv("data/global/web_todos_analysis_csv.csv");
   if(!rows.length){ empty(area, "No se pudo cargar el CSV de v1."); return; }
 
   const indicator = state.tapioIndicator || "Emisiones GEI";
@@ -540,7 +540,7 @@ export async function renderLMDI(container, state){
   container.appendChild(wrap);
   const { area, legend } = chartShell(wrap);
   area.innerHTML = `<div class="loading"><span class="spinner"></span><strong>Cargando descomposición LMDI</strong></div>`;
-  const rows = await loadCsv("../web_cahe/web_graficas/data_raw/web_todos_analysis_csv.csv");
+  const rows = await loadCsv("data/global/web_todos_analysis_csv.csv");
   if(!rows.length){ empty(area, "No se pudo cargar el CSV."); return; }
 
   const indicator = state.lmdiIndicator || "Emisiones GEI";
@@ -663,7 +663,7 @@ export async function renderScatter(container, state){
   container.appendChild(wrap);
   const { area, legend } = chartShell(wrap);
   area.innerHTML = `<div class="loading"><span class="spinner"></span><strong>Cargando scatter</strong></div>`;
-  const rows = await loadCsv("../web_cahe/web_graficas/data_raw/web_todos_analysis_csv.csv");
+  const rows = await loadCsv("data/global/web_todos_analysis_csv.csv");
   if(!rows.length){ empty(area, "No se pudo cargar el CSV."); return; }
 
   const xKey = state.scatterX || "PIB";

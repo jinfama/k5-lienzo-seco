@@ -1,0 +1,139 @@
+[
+  {
+    "id": "emisiones-historicas",
+    "lang": "es",
+    "title": "Emisiones históricas en España. Un balance general",
+    "summary": "Una lectura larga de la transformación del perfil de emisiones español desde la industrialización hasta la transición energética reciente.",
+    "date": "2025-09-02",
+    "authors": [
+      "Juan Infante Amate",
+      "Eduardo Aguilera"
+    ],
+    "topic": "Emisiones",
+    "viz": "emisiones",
+    "source": "content/perspectives/es/emisiones-historicas/index.md",
+    "audioText": "content/perspectives/audio/es/emisiones-historicas.txt",
+    "webAudioText": "assets/audio/perspectives/es/emisiones-historicas.txt",
+    "audio": "assets/audio/perspectives/es/emisiones-historicas.mp3",
+    "timing": "assets/audio/perspectives/es/emisiones-historicas.json",
+    "duration": 136.837,
+    "words": 351
+  },
+  {
+    "id": "huella-acumulada",
+    "lang": "es",
+    "title": "¿Cuánto le debe España al planeta? La huella acumulada en 160 años",
+    "summary": "La responsabilidad histórica cambia según midamos emisiones acumuladas, materiales o velocidad de la transformación.",
+    "date": "2026-03-01",
+    "authors": [
+      "Juan Infante Amate"
+    ],
+    "topic": "Huella acumulada",
+    "viz": "tendencias",
+    "source": "content/perspectives/es/huella-acumulada/index.md",
+    "audioText": "content/perspectives/audio/es/huella-acumulada.txt",
+    "webAudioText": "assets/audio/perspectives/es/huella-acumulada.txt",
+    "audio": "assets/audio/perspectives/es/huella-acumulada.mp3",
+    "timing": "assets/audio/perspectives/es/huella-acumulada.json",
+    "duration": 230.196,
+    "words": 603
+  },
+  {
+    "id": "desacoplamiento-mito-realidad",
+    "lang": "es",
+    "title": "¿Se puede crecer sin destruir? Lo que dicen (y no dicen) los datos de España",
+    "summary": "La eficiencia mejora, pero la pregunta decisiva es si esa mejora basta para reducir el impacto absoluto.",
+    "date": "2026-03-01",
+    "authors": [
+      "Juan Infante Amate"
+    ],
+    "topic": "Desacoplamiento",
+    "viz": "desacoplamiento",
+    "source": "content/perspectives/es/desacoplamiento-mito-realidad/index.md",
+    "audioText": "content/perspectives/audio/es/desacoplamiento-mito-realidad.txt",
+    "webAudioText": "assets/audio/perspectives/es/desacoplamiento-mito-realidad.txt",
+    "audio": "assets/audio/perspectives/es/desacoplamiento-mito-realidad.mp3",
+    "timing": "assets/audio/perspectives/es/desacoplamiento-mito-realidad.json",
+    "duration": 194.221,
+    "words": 531
+  },
+  {
+    "id": "huella-material",
+    "lang": "es",
+    "title": "20 toneladas por persona y año: el atracón material de España",
+    "summary": "El pico material de 2007 permite leer la burbuja inmobiliaria como un fenómeno físico, no solo financiero.",
+    "date": "2026-03-15",
+    "authors": [
+      "Juan Infante Amate",
+      "Ángel Sanjuán Ruiz"
+    ],
+    "topic": "Materiales",
+    "viz": "materiales",
+    "source": "content/perspectives/es/huella-material/index.md",
+    "audioText": "content/perspectives/audio/es/huella-material.txt",
+    "webAudioText": "assets/audio/perspectives/es/huella-material.txt",
+    "audio": "assets/audio/perspectives/es/huella-material.mp3",
+    "timing": "assets/audio/perspectives/es/huella-material.json",
+    "duration": 180.845,
+    "words": 484
+  },
+  {
+    "id": "transicion-forestal",
+    "lang": "es",
+    "title": "España tiene más bosques que nunca (y eso no es solo una buena noticia)",
+    "summary": "La recuperación forestal combina más superficie, más biomasa, cambios de uso y nuevos riesgos de incendio.",
+    "date": "2026-03-15",
+    "authors": [
+      "Iñaki Iriarte Goñi",
+      "Juan Infante Amate"
+    ],
+    "topic": "Forestal",
+    "viz": "bosques",
+    "source": "content/perspectives/es/transicion-forestal/index.md",
+    "audioText": "content/perspectives/audio/es/transicion-forestal.txt",
+    "webAudioText": "assets/audio/perspectives/es/transicion-forestal.txt",
+    "audio": "assets/audio/perspectives/es/transicion-forestal.mp3",
+    "timing": "assets/audio/perspectives/es/transicion-forestal.json",
+    "duration": 204.803,
+    "words": 537
+  },
+  {
+    "id": "crecimiento-eficiencia",
+    "lang": "es",
+    "title": "Crecer contaminando menos: la buena noticia que no es suficiente",
+    "summary": "La intensidad ambiental cae, pero el crecimiento de escala puede anular buena parte de esa ganancia.",
+    "date": "2026-03-15",
+    "authors": [
+      "Juan Infante Amate"
+    ],
+    "topic": "Crecimiento",
+    "viz": "correlacion",
+    "source": "content/perspectives/es/crecimiento-eficiencia/index.md",
+    "audioText": "content/perspectives/audio/es/crecimiento-eficiencia.txt",
+    "webAudioText": "assets/audio/perspectives/es/crecimiento-eficiencia.txt",
+    "audio": "assets/audio/perspectives/es/crecimiento-eficiencia.mp3",
+    "timing": "assets/audio/perspectives/es/crecimiento-eficiencia.json",
+    "duration": 143.179,
+    "words": 388
+  },
+  {
+    "id": "balance-emisiones",
+    "lang": "es",
+    "title": "Las emisiones en España no están en mínimos históricos (ni de lejos)",
+    "summary": "La serie desde 1860 cambia la lectura de los titulares basados solo en inventarios desde 1990.",
+    "date": "2026-03-15",
+    "authors": [
+      "Juan Infante Amate",
+      "Eduardo Aguilera"
+    ],
+    "topic": "Emisiones",
+    "viz": "emisiones",
+    "source": "content/perspectives/es/balance-emisiones/index.md",
+    "audioText": "content/perspectives/audio/es/balance-emisiones.txt",
+    "webAudioText": "assets/audio/perspectives/es/balance-emisiones.txt",
+    "audio": "assets/audio/perspectives/es/balance-emisiones.mp3",
+    "timing": "assets/audio/perspectives/es/balance-emisiones.json",
+    "duration": 161.852,
+    "words": 406
+  }
+]

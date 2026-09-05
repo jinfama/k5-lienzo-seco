@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>CAHE — Contabilidad Ambiental Histórica de España</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260524d">
+<link rel="stylesheet" href="css/styles.css?v=20260905b">
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body class="home-page">
@@ -77,8 +77,32 @@
 
 <iframe class="viewer-frame" id="viewer-frame" title="CAHE — explorador" loading="lazy"></iframe>
 
-<script src="js/globe.js?v=20260524d"></script>
+<script src="js/globe.js?v=20260905b"></script>
 <script>
+/* ====== Altura visible en navegadores moviles ====== */
+(function(){
+  function syncViewportHeight(){
+    var vv = window.visualViewport;
+    var height = Math.round((vv && vv.height) || window.innerHeight || 0);
+    if(height > 0) document.documentElement.style.setProperty("--cahe-viewport-height", height + "px");
+  }
+  var raf = null;
+  function schedule(){
+    if(raf != null) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(function(){
+      raf = null;
+      syncViewportHeight();
+    });
+  }
+  syncViewportHeight();
+  window.addEventListener("resize", schedule, { passive: true });
+  window.addEventListener("orientationchange", schedule, { passive: true });
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize", schedule, { passive: true });
+    window.visualViewport.addEventListener("scroll", schedule, { passive: true });
+  }
+})();
+
 /* ====== Idioma ES/EN portada + explorador ====== */
 (function(){
   const I18N = {
@@ -266,7 +290,7 @@ setTimeout(function(){
 (function(){
   var frame = document.getElementById('viewer-frame');
   function openSection(section){
-    if(!frame.src) frame.src = 'explorer.html?v=20260524d#' + section;
+    if(!frame.src) frame.src = 'explorer.html?v=20260905b#' + section;
     else { try { frame.contentWindow.location.hash = section; } catch(_){} }
     document.body.classList.add('viewer-open');
     setTimeout(function(){ try { frame.contentWindow && frame.contentWindow.focus(); } catch(_){} }, 60);

@@ -1,15 +1,18 @@
-# Basura de sistema / entornos — NUNCA versionar
-.venv/
-venv/
-__pycache__/
-node_modules/
-.DS_Store
-Thumbs.db
+# Build tooling and QA screenshots: not part of the deployed site.
+/build/
 
-# Conflictos de sincronización de OneDrive
+# Authoring notes for the Perspectives protocol (not read at runtime).
+# Anchored so it does NOT match data/downloads/docs/, which IS deployed.
+/docs/
+
+# Alternative Spanish voice samples: not referenced by the app.
+/assets/audio/perspectives/es_alt/
+
+# Master audio. The site ships the 64 kbps mono MP3 rendered from these WAVs
+# with: ffmpeg -i <wav> -ac 1 -ar 24000 -codec:a libmp3lame -b:a 64k <mp3>
+*.wav
+
+# OneDrive conflict copies and OS noise.
 *-jinfama.*
-
-# Carpetas de build / datos intermedios regenerables (no inflar el historial)
-build/
-.cache/
-*.tmp
+Thumbs.db
+.DS_Store
