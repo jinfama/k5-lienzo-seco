@@ -1,4 +1,4 @@
-import DataLoader from "./data-loader.js";
+import DataLoader from "./data-loader.js?v=20260906f";
 
 /* ---------- Colores ---------- */
 const TIPO_COLORS = {

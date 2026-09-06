@@ -78,14 +78,14 @@ const V1_ICONS = "img/icons";
 const V1_RAW = "data/global";
 const ZENODO_CAHE_URL = "https://zenodo.org/search?q=Contabilidad%20Ambiental%20Hist%C3%B3rica%20de%20Espa%C3%B1a";
 const GITHUB_CAHE_URL = "https://github.com/jinfama";
-const APP_VERSION = "20260905b";
+const APP_VERSION = "20260905d";
 const ZENODO_LOGO_SRC = "img/logos/zenodo.png";
 const GITHUB_LOGO_SRC = "img/logos/github-invertocat.svg";
 let perspectiveAudioRuntime = { audioEl: null, entry: null, frame: null, dragging: false, speed: 1, viewportCleanup: null };
 
 const UI = {
   es: {
-    visualizacion: "Visualización", datos: "Datos y metodología", perspectivas: "Perspectivas", publicaciones: "Publicaciones", equipo: "Equipo", acerca: "Acerca", portada: "Portada",
+    visualizacion: "Visualización", datos: "Datos y metodología", metodos: "Cómo trabajamos", perspectivas: "Perspectivas", publicaciones: "Publicaciones", equipo: "Equipo", acerca: "Acerca", portada: "Portada",
     brandSub: "Contabilidad Ambiental Histórica de España", loadingAtlas: "Cargando atlas CAHE", loadingData: "Cargando datos",
     dataXlsx: "Datos", method: "Método", infoMethod: "Información y metodología", cite: "Citar", howToCite: "Cómo citar", zenodo: "Zenodo", github: "GitHub", pending: "Pendiente",
     choosePanel: "Visor de datos", landingIntro: "Explora series históricas ambientales de España con mapas, tendencias, áreas, tablas y herramientas comparativas por indicador, escala territorial y periodo.", openViewer: "Abrir visor", comingSoon: "Próximamente",
@@ -94,8 +94,9 @@ const UI = {
     area: "Área", window: "Ventana", category: "Categoría", crop: "Cultivo", component: "Componente", map: "Mapa", trend: "Tend.", table: "Tabla",
     lineal: "Lineal", log: "Log", play: "Reproducir timelapse", pause: "Pausar timelapse", speed: "Velocidad", year: "Año",
     nationalSeries: "Serie nacional", variables: "Variables", types: "Tipos", coverage: "Cobertura", fullMethod: "Metodología",
-    dataPageTitle: "Datos y metodología", dataPageIntro: "Zenodo reúne los datos, documentos metodológicos y depósitos completos. GitHub reúne los paquetes de replicación y el código asociado a cada serie a medida que se publican.",
-    dataSeriesTitle: "Series — Zenodo y GitHub", zenodoDeposits: "Depósitos Zenodo", community: "Comunidad",
+    dataPageTitle: "Datos y metodología", dataPageIntro: "Cada serie se descarga aquí directamente, junto con su documento metodológico. Zenodo y GitHub reunirán los depósitos completos y los paquetes de replicación a medida que se publiquen.",
+    dataSeriesTitle: "Series y descargas", zenodoDeposits: "Depósitos Zenodo", community: "Comunidad",
+    dataDownload: "Descargar datos", doiPending: "DOI pendiente de depósito",
     perspectivesTitle: "Perspectivas", perspectivesIntro: "Análisis breves y divulgativos en texto y audio, con autoría revisada y apoyo de IA cuando se indica.",
     topic: "Tema", author: "Autor", orderBy: "Orden", allTopics: "Todos los temas", allAuthors: "Todos los autores",
     newest: "Más recientes", oldest: "Más antiguas", titleOrder: "Título A-Z", noEntries: "Sin entradas para este filtro.",
@@ -107,7 +108,7 @@ const UI = {
     native: "Visor interactivo", close: "Cerrar", copied: "Copiado",
   },
   en: {
-    visualizacion: "Visualization", datos: "Data and methods", perspectivas: "Perspectives", publicaciones: "Publications", equipo: "Team", acerca: "About", portada: "Home",
+    visualizacion: "Visualization", datos: "Data and methods", metodos: "How we work", perspectivas: "Perspectives", publicaciones: "Publications", equipo: "Team", acerca: "About", portada: "Home",
     brandSub: "Historical Environmental Accounts of Spain", loadingAtlas: "Loading CAHE atlas", loadingData: "Loading data",
     dataXlsx: "Data", method: "Method", infoMethod: "Information and methods", cite: "Cite", howToCite: "How to cite", zenodo: "Zenodo", github: "GitHub", pending: "Pending",
     choosePanel: "Data viewer", landingIntro: "Explore Spain's long-run environmental series through maps, trends, area charts, tables and comparative tools by indicator, territorial scale and period.", openViewer: "Open viewer", comingSoon: "Coming soon",
@@ -116,8 +117,9 @@ const UI = {
     area: "Area", window: "Window", category: "Category", crop: "Crop", component: "Component", map: "Map", trend: "Trend", table: "Table",
     lineal: "Linear", log: "Log", play: "Play timelapse", pause: "Pause timelapse", speed: "Speed", year: "Year",
     nationalSeries: "National series", variables: "Variables", types: "Types", coverage: "Coverage", fullMethod: "Methodology",
-    dataPageTitle: "Data and methods", dataPageIntro: "Zenodo contains the complete data, methodology documents and deposits. GitHub gathers the replication packages and code associated with each series as they are published.",
-    dataSeriesTitle: "Series — Zenodo and GitHub", zenodoDeposits: "Zenodo deposits", community: "Community",
+    dataPageTitle: "Data and methods", dataPageIntro: "Every series can be downloaded here directly, together with its methodology document. Zenodo and GitHub will hold the full deposits and replication packages as they are published.",
+    dataSeriesTitle: "Series and downloads", zenodoDeposits: "Zenodo deposits", community: "Community",
+    dataDownload: "Download data", doiPending: "DOI pending deposit",
     perspectivesTitle: "Perspectives", perspectivesIntro: "Short public-facing analyses in text and audio, reviewed by their authors and AI-assisted when indicated.",
     topic: "Topic", author: "Author", orderBy: "Order", allTopics: "All topics", allAuthors: "All authors",
     newest: "Newest", oldest: "Oldest", titleOrder: "Title A-Z", noEntries: "No entries for this filter.",
@@ -1919,6 +1921,10 @@ function bindControlsToggle(root){
 }
 
 function renderMain(){
+  /* The SVG under the pointer can vanish without ever firing mouseleave (hash
+     navigation, back button, timelapse, a tap on a phone), so the tooltip stayed
+     pinned over the next section. Clear it on every render. */
+  hideTooltip();
   renderGroupBar();
   if(state.section === "visualizacion"){
     if(state.subsection === "landing") renderLanding();
@@ -1927,6 +1933,7 @@ function renderMain(){
   } else if(state.section === "perspectivas") renderPerspectivas();
   else if(state.section === "publicaciones") renderPublicaciones();
   else if(state.section === "datos") renderDatos();
+  else if(state.section === "metodos") renderComoTrabajamos();
   else if(state.section === "novedades") renderNovedades();
   else if(state.section === "equipo") renderEquipo();
   else if(state.section === "acerca") renderAcerca();
@@ -5290,15 +5297,26 @@ function renderPublicaciones(){
 }
 
 const DATASETS = [
-  { label: "Dataset integrado", file: "cahe_datos_integrados.xlsx", desc: "Base longitudinal completa con las principales series de energía, materiales, emisiones, usos del suelo, bosques y cultivos, preparada para reproducir las visualizaciones.", scope: "Integrado" },
+  { label: "Dataset integrado", file: "cahe_datos_integrados.xlsx", desc: "Base longitudinal completa con las principales series de energía, materiales, emisiones, usos del suelo, bosques y cultivos, preparada para reproducir las visualizaciones.", scope: "Integrado", method: "globales_metodologia.pdf" },
   { label: "Consumo de energía", file: "cahe_datos_energía.xlsx", desc: "Consumo de energía primaria: fuentes modernas (petróleo, gas, electricidad) y tradicionales (leña, alimentos y forraje).", scope: "Nacional", method: "energia_metodologia.pdf" },
   { label: "Emisiones", file: "cahe_datos_emisiones_gei.xlsx", desc: "Gases de efecto invernadero y CO₂: total, gases, grandes actividades, combustibles fósiles y usos del suelo.", scope: "Nacional", method: "emisiones_metodologia.pdf" },
   { label: "Flujos materiales", file: "cahe_datos_materiales.xlsx", desc: "Extracción, comercio y consumo aparente de biomasa, fósiles, minerales metálicos y minerales no metálicos.", scope: "Nacional · comercio", method: "materiales_metodologia.pdf" },
   { label: "Usos del suelo", file: "cahe_datos_uso_suelo.xlsx", desc: "Grandes coberturas del territorio español y reconstrucción de usos del suelo en perspectiva histórica.", scope: "Nacional · provincial", method: "uso_suelo_metodos_esp.docx" },
   { label: "Bosques", file: "cahe_datos_bosques.xlsx", desc: "Superficie forestal por categorías de monte, densidad y stock de carbono, con lectura nacional y provincial.", scope: "Nacional · provincial", method: "bosques_metodologia.pdf" },
   { label: "Cultivos", file: "cahe_datos_cultivos.xlsx", desc: "Superficie cultivada y principales grupos de cultivos, incluyendo cereales, frutales, leguminosas, industriales y olivar.", scope: "Nacional · provincial", method: "cultivos_metodos_esp.docx" },
-  { label: "Industria", file: "FinalDB_1860_2021.csv", desc: "Base industrial 1860-2021 con energía final y primaria, emisiones, gasto energético, valor añadido, fábricas y trabajadores por ramas industriales.", scope: "Nacional" },
+  /* La base industrial no vive en docs/: se internalizó un nivel más arriba. */
+  { label: "Industria", file: "FinalDB_1860_2021.csv", dataHref: "data/downloads/FinalDB_1860_2021.csv", desc: "Base industrial 1860-2021 con energía final y primaria, emisiones, gasto energético, valor añadido, fábricas y trabajadores por ramas industriales.", scope: "Nacional" },
 ];
+/* «Cómo trabajamos»: qué cifras se contaron y cuáles construimos nosotros.
+   El JSON de procedencia pesa cientos de KB, así que se carga la primera vez que se abre
+   la sección, no al arrancar. El módulo se importa en diferido por lo mismo. */
+function renderComoTrabajamos(){
+  els.workspace.innerHTML = '<div id="pv-root"></div>';
+  import("./methods/como-trabajamos.js?v=20260906f").then(m => {
+    m.default.render(document.getElementById("pv-root"), state.lang);
+  });
+}
+
 function renderDatos(){
   const zenodoAction = href => href
     ? `<a class="link zenodo-link" href="${href}" target="_blank" rel="noopener" title="${t("zenodo")}" aria-label="${t("zenodo")}">${zenodoBrand()}</a>`
@@ -5306,8 +5324,22 @@ function renderDatos(){
   const githubAction = href => href
     ? `<a class="link github-link" href="${href}" target="_blank" rel="noopener" title="${t("github")}" aria-label="${t("github")}">${githubLogo("brand-logo github-logo")}<span>${t("github")}</span></a>`
     : `<span class="link github-link disabled" aria-disabled="true" title="${t("github")}" aria-label="${t("github")}"><span class="action-main">${githubLogo("brand-logo github-logo")}<span>${t("github")}</span></span></span>`;
+  /* Los 24 documentos están internalizados en data/downloads/. Antes esta página solo
+     ofrecía dos botones apagados por serie (Zenodo/GitHub, sin depósito todavía), así que
+     un revisor no tenía de dónde bajar nada. Ahora la descarga directa es la acción
+     principal y Zenodo/GitHub quedan como secundarios hasta que existan los DOI. */
+  const fileHref = d => d.dataHref || (d.file ? `${V1_DOCS}/${encodeURIComponent(d.file)}` : null);
+  const ext = name => (name.split(".").pop() || "").toUpperCase();
+  const downloadAction = d => {
+    const href = fileHref(d);
+    if(!href) return "";
+    return `<a class="link data-download" href="${href}" download title="${escAttr(`${t("dataDownload")} — ${tx(d.label)}`)}" aria-label="${escAttr(`${t("dataDownload")} — ${tx(d.label)}`)}"><span class="arr">↓</span><span>${t("dataDownload")} ${ext(d.file)}</span></a>`;
+  };
+  const methodAction = d => d.method
+    ? `<a class="link data-method" href="${V1_DOCS}/${encodeURIComponent(d.method)}" target="_blank" rel="noopener" title="${escAttr(`${t("fullMethod")} — ${tx(d.label)}`)}" aria-label="${escAttr(`${t("fullMethod")} — ${tx(d.label)}`)}">${t("fullMethod")} ${ext(d.method)}</a>`
+    : "";
   els.workspace.innerHTML = `<div class="page"><div class="page-head"><h1>${t("dataPageTitle")}</h1><p>${t("dataPageIntro")}</p></div>
-    <section class="section-block"><h2>${t("dataSeriesTitle")}</h2><div class="data-list">${DATASETS.map(d => `<div class="data-row"><div class="data-main"><div class="label">${tx(d.label)}</div><div class="desc">${tx(d.desc)}</div></div><div class="meta">${tx(d.scope || "Repositorio")}</div>${zenodoAction(d.zenodo || null)}${githubAction(d.github || null)}</div>`).join("")}</div></section></div>`;
+    <section class="section-block"><h2>${t("dataSeriesTitle")}</h2><div class="data-list">${DATASETS.map(d => `<div class="data-row"><div class="data-main"><div class="label">${tx(d.label)}</div><div class="desc">${tx(d.desc)}</div></div><div class="meta">${tx(d.scope || "Repositorio")}</div><div class="data-actions">${downloadAction(d)}${methodAction(d)}</div><div class="data-actions data-actions-repo">${d.zenodo ? zenodoAction(d.zenodo) : `<span class="meta doi-pending">${t("doiPending")}</span>`}${githubAction(d.github || null)}</div></div>`).join("")}</div></section></div>`;
 }
 
 function renderNovedades(){
@@ -5463,6 +5495,7 @@ function updateChrome(){
   if(brandSub) brandSub.textContent = t("brandSub");
   els.nav.querySelector('[data-section="visualizacion"]').textContent = t("visualizacion");
   els.nav.querySelector('[data-section="datos"]').textContent = t("datos");
+  els.nav.querySelector('[data-section="metodos"]').textContent = t("metodos");
   els.nav.querySelector('[data-section="perspectivas"]').textContent = t("perspectivas");
   els.nav.querySelector('[data-section="publicaciones"]').textContent = t("publicaciones");
   els.nav.querySelector('[data-section="equipo"]').textContent = t("equipo");
@@ -5521,9 +5554,26 @@ function bindHome(){
   });
 }
 function bindModal(){ document.querySelectorAll("[data-modal-close]").forEach(el => el.addEventListener("click", closeModal)); window.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); }); }
+/* Escape volvía a la portada solo si el foco seguía en la página padre; al abrir el
+   visor el iframe se lleva el foco, así que la tecla no llegaba a ningún sitio.
+   Aquí se atiende dentro del explorer y se reenvía como "cahe-back". */
+function bindEscapeToHome(){
+  window.addEventListener("keydown", event => {
+    if(event.key !== "Escape") return;
+    const active = document.activeElement;                            // no sacar al lector de un campo
+    if(active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable)) return;
+    if(document.querySelector(".modal.open")) return;                 // el modal se cierra solo
+    if(document.querySelector("[data-mini-select].open,[data-comp-select].open")) return;
+    if(document.querySelector(".viz-container.mobile-picker-open")) return;
+    goHome();
+  });
+}
 function bindFloatingSelectDismissal(){
   document.addEventListener("pointerdown", event => {
     const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+    /* On a touch screen there is no mouseleave, so a tap on a chart left the tooltip
+       pinned. Any pointer press outside an SVG dismisses it. */
+    if(!target?.closest("svg")) hideTooltip();
     if(target?.closest("[data-mini-select],[data-comp-select]")) return;
     closeFloatingSelects(document);
   }, { capture: true });
@@ -5533,6 +5583,7 @@ function bindFloatingSelectDismissal(){
 }
 
 function applyHashRoute(){
+  hideTooltip();
   const hash = resolveVizId(window.location.hash.replace("#",""));
   if(!hash){
     state.section = "visualizacion";
@@ -5573,7 +5624,9 @@ function applyHashRoute(){
 }
 
 function init(){
-  bindViewportHeight(); bindNav(); bindLanguage(); bindHome(); bindModal(); bindFloatingSelectDismissal(); updateChrome();
+  /* bindEscapeToHome va primero: los otros oyentes de Escape cierran modal y selects,
+     así que si se registrase después ya no vería nada abierto y saldría a la portada. */
+  bindViewportHeight(); bindNav(); bindLanguage(); bindHome(); bindEscapeToHome(); bindModal(); bindFloatingSelectDismissal(); updateChrome();
   applyHashRoute();
   window.addEventListener("hashchange", () => {
     if(applyHashRoute()){ setNavActive(state.section); renderMain(); }

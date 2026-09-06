@@ -1,310 +1,749 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>CAHE — Contabilidad Ambiental Histórica de España</title>
-<link rel="icon" type="image/png" href="img/favicon.png">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0A1B2C">
+<title>CAHE · Contabilidad Ambiental Histórica de España</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20260905b">
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-</head>
-<body class="home-page">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
+<style>
+:root{
+  /* Azul de Prusia · cobre · cardenillo */
+  --prusia:#0A1B2C; --prusia2:#0E2438; --prusia3:#13314A;
+  --cal:#EFE8D8; --cal2:#D6CDBA; --muted:#8AA0B4; --hair:rgba(214,205,186,.20); --hair2:rgba(214,205,186,.34);
+  --cobre:#C4753C; --cobre-hi:#E39A5B; --cobre-d:#7E3F1A;
+  --verd:#4F9C82; --verd-hi:#8FCBB0;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:Geist,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --display:Fraunces,"Bodoni MT",Didot,Georgia,serif;
+  --pad:clamp(18px,3vw,46px);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--prusia);color:var(--cal);font-family:var(--sans);font-size:15px;line-height:1.45;
+     -webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.page{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(300px,30vw) 1fr;
+      grid-template-rows:auto 1fr;grid-template-areas:"head stage" "nav stage"}
+.head,.nav{padding-left:var(--pad);padding-right:var(--pad);position:relative;z-index:2}
+.head{grid-area:head;padding-top:clamp(16px,3.2vh,34px)}
+.nav{grid-area:nav;display:flex;flex-direction:column;min-height:0;padding-top:clamp(14px,2.6vh,28px);
+     padding-bottom:max(clamp(14px,2.4vh,26px),env(safe-area-inset-bottom))}
+.stage{grid-area:stage;position:relative;border-left:1px solid var(--hair);min-height:0;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-<section class="portada mode-globo" id="portada">
-  <header class="portada-top">
-    <nav class="portada-mode-switch" aria-label="Modo">
-      <button data-mode="globo" class="active">Globo</button>
-      <button data-mode="franjas">Franjas climáticas</button>
-    </nav>
-    <button class="lang-toggle portada-lang" id="portada-lang" type="button" aria-label="Change language">EN</button>
+.eyebrow{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.eyebrow i{font-style:normal;color:var(--cobre-hi)}
+h1{font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 144;
+   font-size:clamp(58px,7.4vw,112px);line-height:.86;letter-spacing:-.02em;margin:.14em 0 .16em;color:var(--cal)}
+.sub{margin:0;font-family:var(--display);font-weight:400;font-variation-settings:"opsz" 40;
+     font-size:clamp(16px,1.34vw,22px);line-height:1.18;letter-spacing:-.005em;color:var(--cobre-hi)}
+.lede{margin:.85em 0 0;color:var(--cal2);max-width:none;font-size:clamp(13.5px,.99vw,15px);text-wrap:pretty}
+
+.navlabel{margin:0 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+/* the way in weighs more than the rest: a real button, and thin links under it */
+.enterbtn{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;text-decoration:none;color:var(--cal);
+          border:1px solid rgba(196,117,60,.55);border-left:3px solid var(--cobre);background:rgba(19,49,74,.62);
+          padding:clamp(12px,1.8vh,19px) clamp(13px,1.4vw,19px);min-height:clamp(66px,10vh,98px);
+          transition:background .17s,border-color .17s}
+.enterbtn b{display:block;font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 72;
+            font-size:clamp(21px,1.78vw,28px);line-height:1.04;letter-spacing:-.015em;color:var(--cal)}
+.enterbtn s{display:block;text-decoration:none;margin-top:5px;font-family:var(--mono);
+            font-size:clamp(10.4px,.76vw,11.8px);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.enterbtn i{font-style:normal;font-family:var(--mono);font-size:20px;line-height:1;color:var(--cobre-hi);transition:transform .17s}
+.enterbtn:hover,.enterbtn:focus-visible{background:rgba(28,66,98,.8);border-color:var(--cobre-hi);outline:none}
+.enterbtn:hover i,.enterbtn:focus-visible i{transform:translateX(4px)}
+.enterbtn:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
+/* the reading card: it lives inside the plate, never over the way in */
+.tip{position:absolute;z-index:4;pointer-events:none;opacity:0;transform:translateY(3px);
+     transition:opacity .13s ease,transform .13s ease;
+     background:rgba(9,23,38,.94);border:1px solid rgba(196,117,60,.5);border-left:3px solid var(--cobre);
+     padding:9px 13px 10px;max-width:min(64vw,272px);box-shadow:0 3px 18px rgba(0,0,0,.42)}
+.tip.on{opacity:1;transform:none}
+.tip .k{display:block;font-family:var(--display);font-weight:560;font-size:17.5px;line-height:1.1;color:var(--cal)}
+.tip .p{display:block;margin-top:3px;font-family:var(--mono);font-size:9.6px;letter-spacing:.13em;
+        text-transform:uppercase;color:var(--muted)}
+.tip .v{display:block;margin-top:7px;font-family:var(--mono);font-size:12.6px;color:var(--cal2);line-height:1.34}
+.tip .v em{font-style:normal;color:var(--cobre-hi)}
+.tip.verd{border-left-color:var(--verd-hi);border-color:rgba(143,203,176,.42)}
+.tip.verd .v em{color:var(--verd-hi)}
+.index{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.index{margin-top:clamp(10px,1.8vh,20px)}
+.index li{display:flex;flex:1 1 auto;min-height:44px;max-height:94px;border-top:1px solid var(--hair2)}
+.index li:last-child{border-bottom:1px solid var(--hair2)}
+.index a{flex:1;display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--cal);
+         font-size:14px;letter-spacing:-.006em;line-height:1.15;transition:color .16s}
+.index a svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--cobre-hi);fill:none;stroke-width:1.5;
+             stroke-linecap:round;stroke-linejoin:round;transition:stroke .16s}
+.index a .ar{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--hair2);
+             transition:transform .16s,color .16s}
+.index a.q{color:var(--muted);font-size:13px}
+.index a.q svg{stroke:var(--muted)}
+.index a:hover,.index a:focus-visible{color:var(--cobre-hi)}
+.index a:hover svg,.index a:focus-visible svg{stroke:var(--cobre-hi)}
+.index a:hover .ar,.index a:focus-visible .ar{color:var(--cobre-hi);transform:translateX(3px)}
+.index a:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:-2px}
+.enter{opacity:0;transform:translateY(5px);transition:opacity .34s ease,transform .42s cubic-bezier(.2,.7,.2,1)}
+body.on .enter{opacity:1;transform:none}
+body.on .enter.d1{transition-delay:.05s}
+body.on .enter.d2{transition-delay:.10s}
+body.on .enter.d3{transition-delay:.14s}
+
+@media (max-width:919px) and (orientation:portrait){
+  .page{grid-template-columns:1fr;grid-template-rows:auto minmax(216px,1fr) auto;grid-template-areas:"head" "stage" "nav"}
+  .stage{border-left:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .head{padding-bottom:11px}
+  .nav{padding-top:10px}
+  h1{font-size:clamp(48px,15vw,76px)}
+  .sub{font-size:clamp(14px,4vw,18px)}
+  .lede{font-size:12.8px;line-height:1.4}
+  .index{flex:0 0 auto;margin-top:9px}
+  .index li{flex:0 0 auto;max-height:none;min-height:46px}
+  .enterbtn{min-height:58px;padding:11px 13px}
+  .enterbtn b{font-size:20px}
+  .enterbtn s{font-size:10px;margin-top:3px}
+  .tip{max-width:min(70vw,226px);padding:8px 11px 9px}
+  .tip .k{font-size:15.5px}
+  .tip .v{font-size:11.8px;margin-top:5px}
+}
+@media (max-height:540px) and (orientation:landscape){
+  :root{--pad:clamp(13px,2.2vw,22px)}
+  .head{padding-top:11px}
+  h1{font-size:clamp(38px,10.5vh,56px);margin:.08em 0 .1em}
+  .sub{font-size:14px}
+  .lede{font-size:12px;margin-top:.5em;max-width:46ch}
+  .eyebrow{display:none}
+  .lede{font-size:11px;line-height:1.34;margin-top:.45em}
+  .navlabel{display:none}
+  .index li{min-height:30px;max-height:36px}
+  .enterbtn{min-height:44px;padding:7px 11px}
+  .enterbtn b{font-size:17px}
+  .enterbtn s{display:none}
+  .index{margin-top:7px}
+  .index a{font-size:12.5px;gap:8px}
+  .index a svg{width:14px;height:14px}
+  .nav{padding-top:6px;padding-bottom:8px}
+}
+@media (prefers-reduced-motion:reduce){ .enter{transition:none;opacity:1;transform:none}
+  .index a,.index a .ar,.enterbtn,.enterbtn i,.tip{transition:none} }
+
+/* Language switch. CAHE is bilingual and the door has to be too: without this, an English
+   reader meets a Spanish page and only finds the switch once already inside the explorer. */
+.lang-toggle{position:fixed;top:18px;right:18px;z-index:40;border-radius:0;cursor:pointer;
+  font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;
+  padding:7px 11px;background:rgba(255,255,255,.10);color:#e8eef2;
+  border:1px solid rgba(255,255,255,.34);transition:background .18s,border-color .18s}
+.lang-toggle:hover{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.62)}
+.lang-toggle:focus-visible{outline:2px solid #8FCBB0;outline-offset:2px}
+@media (max-width:700px){.lang-toggle{top:10px;right:10px;padding:6px 9px}}
+</style>
+</head>
+<body>
+  <button class="lang-toggle" id="lang-toggle" type="button"
+          aria-label="Cambiar idioma / Change language">EN</button>
+<main class="page">
+  <header class="head">
+    <p class="eyebrow enter" data-en="Historical environmental atlas · Spain">Atlas ambiental histórico <i>·</i> España</p>
+    <h1 class="enter">CAHE</h1>
+    <p class="sub enter d1" data-en="Spain's Historical Environmental Accounts">Contabilidad Ambiental Histórica de España</p>
+    <p class="lede enter d2" data-en="CAHE reconstructs what the Spanish economy has moved since 1860: the energy and materials it consumes, what it emits, and how its land and forests have changed. It is an atlas of long series for reading growth by what it costs in resources, province by province and against the rest of the world.">CAHE reconstruye lo que la economía española ha movido desde 1860: la energía y los materiales que consume, lo que emite, y cómo han cambiado su suelo y sus bosques. Es un atlas de series largas para leer el crecimiento por lo que cuesta en recursos, provincia a provincia y frente al resto del mundo.</p>
   </header>
 
-  <!-- Franjas climáticas (modo alternativo) -->
-  <div class="stripes-container" id="stripes-container">
-    <svg class="stripes-svg" id="stripes-svg" preserveAspectRatio="none"></svg>
-  </div>
+  <nav class="nav" aria-label="Secciones del visor" data-en-label="Viewer sections">
+    <a class="enterbtn enter d2" href="explorer.html#macro">
+      <span><b data-en="Enter the viewer">Entrar al visor</b><s data-en="Series 1860 &rarr; 2023 &middot; 52 provinces">Series 1860 &rarr; 2023 &middot; 52 provincias</s></span>
+      <i aria-hidden="true">&rarr;</i>
+    </a>
+    <ul class="index enter d3">
+      <li><a class="idx" href="explorer.html#perspectivas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span data-en="Perspectives">Perspectivas</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+      <li><a class="idx" href="explorer.html#publicaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg><span data-en="Publications">Publicaciones</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+      <li><a class="idx" href="explorer.html#datos"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg><span data-en="Data &amp; methodology">Datos y metodología</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+      <li><a class="idx q" href="explorer.html#acerca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-en="About">Acerca</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+      <li><a class="idx q" href="explorer.html#novedades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 5h11l-1 4 1 4H4"/><path d="M18 8h2"/><path d="M18 12h2"/><path d="M18 16h2"/></svg><span data-en="What&rsquo;s new">Novedades</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+    </ul>
+  </nav>
 
-  <section class="portada-globe-hero">
-    <div class="portada-globe-text">
-      <div class="portada-kicker" id="hero-kicker">Atlas ambiental histórico · 1860 — hoy</div>
-      <h1 class="portada-globe-title" id="hero-title">Contabilidad ambiental <span class="accent">histórica</span> de España</h1>
-      <p class="portada-globe-subtitle" id="hero-sub">Series largas sobre uso de recursos, impactos ambientales y desarrollo económico en perspectiva histórica y global</p>
-    </div>
+  <div class="stage" id="stage"><canvas id="c" aria-hidden="true"></canvas>
+    <div class="tip" id="tip" role="status" aria-live="polite"></div></div>
+</main>
 
-    <div class="globe-container">
-      <canvas id="globe-canvas"></canvas>
-    </div>
-
-    <div class="hero-nav-grid">
-      <button class="hero-nav-card" data-section="visualizacion">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
-        <span>Visualización</span>
-      </button>
-      <button class="hero-nav-card" data-section="perspectivas">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-        <span>Perspectivas</span>
-      </button>
-      <button class="hero-nav-card" data-section="publicaciones">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg></div>
-        <span>Publicaciones</span>
-      </button>
-      <button class="hero-nav-card" data-section="datos">
-        <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg></div>
-        <span>Datos y metodología</span>
-      </button>
-    </div>
-
-    <div class="hero-info-stack" id="hero-info">
-      <div class="hero-info-links">
-        <button class="hero-info-link highlight" data-section="acerca">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span class="info-label-acerca">Acerca</span>
-        </button>
-        <span class="hero-info-sep">·</span>
-        <button class="hero-info-link" data-section="novedades">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 5h11l-1 4 1 4H4"/><path d="M18 8h2"/><path d="M18 12h2"/><path d="M18 16h2"/></svg>
-          <span class="info-label-novedades">Novedades</span>
-        </button>
-      </div>
-      <div class="hero-info-foot" id="hero-foot">Anillo climático · anomalía global de temperatura, 1850 — 2024</div>
-    </div>
-  </section>
-</section>
-
-<iframe class="viewer-frame" id="viewer-frame" title="CAHE — explorador" loading="lazy"></iframe>
-
-<script src="js/globe.js?v=20260905b"></script>
+<script src="portada/spain.js"></script>
+<script src="portada/cahe.js"></script>
 <script>
-/* ====== Altura visible en navegadores moviles ====== */
+'use strict';
+/* Provincial forest carbon density (tonnes of C per hectare of woodland, 2021) - the reservoir side
+   of the material account. Read off the CAHE viewer's own provincial file
+   06_dev/visores/web_cahe_v3/data/provincial/bosques.json, combo "densidad-de-c__total", year 2021
+   (source spain_forest_geodata.csv). Inlined so the cover stays one self-contained HTML file. */
+window.CAHE_PROV_CARBON = {
+"Albacete":16.4,"Alicante":17.7,"Almería":16.3,"Asturias":76.1,"Badajoz":11.8,"Baleares":15.6,
+"Barcelona":53.9,"Bizkaia":94.5,"Burgos":51.7,"Cantabria":60.7,"Castellón":25.8,"Ciudad Real":12.3,
+"Cuenca":31.0,"Cáceres":15.2,"Cádiz":21.2,"Córdoba":18.2,"Gerona":79.0,"Gipuzkoa":125.2,"Granada":18.7,
+"Guadalajara":25.7,"Huelva":15.1,"Huesca":39.7,"Jaén":27.3,"La Coruña":117.0,"La Rioja":64.5,"León":40.5,
+"Lugo":94.8,"Lérida":56.0,"Madrid":25.1,"Murcia":23.9,"Málaga":18.3,"Navarra":88.8,"Orense":74.8,
+"Palencia":50.0,"Pontevedra":121.2,"Salamanca":11.3,"Segovia":43.5,"Sevilla":10.9,"Soria":51.3,
+"Tarragona":29.0,"Teruel":30.3,"Toledo":12.1,"Valencia":21.3,"Valladolid":35.3,"Zamora":28.2,
+"Zaragoza":21.0,"Álava":86.2,"Ávila":28.6
+};
+</script>
+<script>
 (function(){
-  function syncViewportHeight(){
-    var vv = window.visualViewport;
-    var height = Math.round((vv && vv.height) || window.innerHeight || 0);
-    if(height > 0) document.documentElement.style.setProperty("--cahe-viewport-height", height + "px");
-  }
-  var raf = null;
-  function schedule(){
-    if(raf != null) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(function(){
-      raf = null;
-      syncViewportHeight();
-    });
-  }
-  syncViewportHeight();
-  window.addEventListener("resize", schedule, { passive: true });
-  window.addEventListener("orientationchange", schedule, { passive: true });
-  if(window.visualViewport){
-    window.visualViewport.addEventListener("resize", schedule, { passive: true });
-    window.visualViewport.addEventListener("scroll", schedule, { passive: true });
-  }
-})();
+'use strict';
+var S=window.SPAIN, C=window.CAHE, CARB=window.CAHE_PROV_CARBON||{};
+var canvas=document.getElementById('c'), stage=document.getElementById('stage'), tipEl=document.getElementById('tip');
+var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var COARSE=!!(window.matchMedia&&window.matchMedia('(pointer: coarse)').matches);
+requestAnimationFrame(function(){document.body.classList.add('on');});
+if(!S||!C||!canvas.getContext) return;
+var ctx=canvas.getContext('2d');
 
-/* ====== Idioma ES/EN portada + explorador ====== */
-(function(){
-  const I18N = {
-    es: {
-      title: "CAHE — Contabilidad Ambiental Histórica de España",
-      modeLabel: "Modo",
-      globe: "Globo",
-      stripes: "Franjas climáticas",
-      kicker: "Atlas ambiental histórico · 1860 — hoy",
-      hero: "Contabilidad ambiental <span class=\"accent\">histórica</span> de España",
-      sub: "Series largas sobre uso de recursos, impactos ambientales y desarrollo económico en perspectiva histórica y global",
-      visualizacion: "Visualización",
-      perspectivas: "Perspectivas",
-      publicaciones: "Publicaciones",
-      datos: "Datos y metodología",
-      equipo: "Equipo",
-      acerca: "Acerca",
-      novedades: "Novedades",
-      foot: "Anillo climático · anomalía global de temperatura, 1850 — 2024",
-      frame: "CAHE — explorador"
-    },
-    en: {
-      title: "CAHE — Historical Environmental Accounts of Spain",
-      modeLabel: "Mode",
-      globe: "Globe",
-      stripes: "Climate stripes",
-      kicker: "Historical environmental atlas · 1860 — today",
-      hero: "Historical <span class=\"accent\">environmental</span> accounts of Spain",
-      sub: "Long-run series on resource use, environmental impacts and economic development in historical and global perspective",
-      visualizacion: "Visualization",
-      perspectivas: "Perspectives",
-      publicaciones: "Publications",
-      datos: "Data and methods",
-      equipo: "Team",
-      acerca: "About",
-      novedades: "News",
-      foot: "Climate ring · global temperature anomaly, 1850 — 2024",
-      frame: "CAHE — explorer"
-    }
-  };
-  const langBtn = document.getElementById("portada-lang");
-  function setText(selector, text){
-    const el = document.querySelector(selector);
-    if(el) el.textContent = text;
-  }
-  function applyLang(lang){
-    const d = I18N[lang] || I18N.es;
-    document.documentElement.lang = lang;
-    document.title = d.title;
-    const modeNav = document.querySelector(".portada-mode-switch");
-    if(modeNav) modeNav.setAttribute("aria-label", d.modeLabel);
-    setText('.portada-mode-switch [data-mode="globo"]', d.globe);
-    setText('.portada-mode-switch [data-mode="franjas"]', d.stripes);
-    setText("#hero-kicker", d.kicker);
-    const heroTitle = document.getElementById("hero-title");
-    if(heroTitle) heroTitle.innerHTML = d.hero;
-    setText("#hero-sub", d.sub);
-    setText('.hero-nav-card[data-section="visualizacion"] span', d.visualizacion);
-    setText('.hero-nav-card[data-section="perspectivas"] span', d.perspectivas);
-    setText('.hero-nav-card[data-section="publicaciones"] span', d.publicaciones);
-    setText('.hero-nav-card[data-section="datos"] span', d.datos);
-    setText(".info-label-acerca", d.acerca);
-    setText(".info-label-novedades", d.novedades);
-    setText("#hero-foot", d.foot);
-    const frame = document.getElementById("viewer-frame");
-    if(frame) frame.setAttribute("title", d.frame);
-    if(langBtn){
-      langBtn.textContent = lang === "es" ? "EN" : "ES";
-      langBtn.setAttribute("aria-label", lang === "es" ? "Change language to English" : "Cambiar idioma a español");
-    }
-    try { localStorage.setItem("cahe_lang", lang); } catch(_){}
-  }
-  let lang = "es";
-  try { if(localStorage.getItem("cahe_lang") === "en") lang = "en"; } catch(_){}
-  applyLang(lang);
-  if(langBtn){
-    langBtn.addEventListener("click", function(){
-      lang = lang === "es" ? "en" : "es";
-      applyLang(lang);
-    });
-  }
-})();
+/* ---------- palette: Prussian blue, copper, verdigris ---------- */
+var PRUSIA='#0A1B2C', PRUSIA2='#0E2438',
+    CAL='#EFE8D8', CAL2='#D6CDBA', MUTED='#8AA0B4', HAIR='#3A5570',
+    COBRE='#C4753C', COBRE_HI='#E39A5B', COBRE_D='#7E3F1A', COBRE_WET='#D98A4A',
+    VERD_LO='#255A4C', VERD_HI='#8FCBB0', SLATE='#5C7690';
+function mix(a,b,t){var pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);
+  var r=Math.round(((pa>>16)&255)+((((pb>>16)&255)-((pa>>16)&255))*t)),
+      g2=Math.round(((pa>>8)&255)+((((pb>>8)&255)-((pa>>8)&255))*t)),
+      b2=Math.round((pa&255)+(((pb&255)-(pa&255))*t));
+  return 'rgb('+r+','+g2+','+b2+')';}
 
-/* ====== Stripes — franjas finas (1 por año 1850-2024, anomalías reales) ====== */
-(function(){
-  // Anomalías HadCRUT5 anuales aproximadas 1850-2024 (vs 1961-1990)
-  const CLIMATE = [
-    -0.42,-0.23,-0.23,-0.27,-0.29,-0.27,-0.31,-0.46,-0.41,-0.28,
-    -0.32,-0.41,-0.51,-0.31,-0.43,-0.25,-0.27,-0.33,-0.31,-0.31,
-    -0.31,-0.35,-0.30,-0.34,-0.37,-0.37,-0.32,-0.10,-0.14,-0.26,
-    -0.24,-0.20,-0.30,-0.31,-0.40,-0.45,-0.38,-0.41,-0.32,-0.31,
-    -0.46,-0.41,-0.49,-0.45,-0.50,-0.45,-0.27,-0.29,-0.27,-0.17,
-    -0.13,-0.22,-0.40,-0.41,-0.37,-0.43,-0.42,-0.42,-0.48,-0.55,
-    -0.46,-0.46,-0.47,-0.41,-0.27,-0.35,-0.46,-0.39,-0.33,-0.29,
-    -0.30,-0.22,-0.30,-0.30,-0.28,-0.15,-0.21,-0.29,-0.31,-0.30,
-    -0.20,-0.14,-0.15,-0.19,-0.22,-0.20,-0.04,-0.05,-0.10, 0.01,
-    -0.06,-0.10,-0.20,-0.05,-0.07,-0.08, 0.00,-0.08,-0.04,-0.07,
-    -0.14,-0.15,-0.07,-0.04,-0.07,-0.09, 0.05, 0.03, 0.02, 0.10,
-     0.06,-0.13,-0.11,-0.18,-0.06,-0.02,-0.07, 0.03, 0.06,-0.20,
-    -0.07,-0.10,-0.05, 0.06,-0.20,-0.12, 0.06,-0.08, 0.05, 0.03,
-     0.13, 0.27, 0.12, 0.14, 0.31, 0.16, 0.13, 0.18, 0.42, 0.28,
-     0.21, 0.42, 0.23, 0.24, 0.32, 0.45, 0.33, 0.48, 0.61, 0.39,
-     0.40, 0.55, 0.62, 0.54, 0.68, 0.64, 0.67, 0.55, 0.62, 0.69,
-     0.55, 0.62, 0.75, 0.91, 1.01, 0.92, 0.85, 0.98, 1.02, 1.16,
-     1.18, 1.45
-  ];
-  function tempColor(v){
-    const t = Math.max(0, Math.min(1, (v + 0.6) / 2.0));
-    let r,g,b;
-    if(t < 0.5){
-      const s = t * 2;
-      r = Math.round(20 + s * 235); g = Math.round(50 + s * 205); b = Math.round(180 + s * 75);
-    } else {
-      const s = (t - 0.5) * 2;
-      r = 255; g = Math.round(255 - s * 220); b = Math.round(255 - s * 240);
+/* ---------- real data: the material curve, 1860-2023 ---------- */
+var ser=C.series.materiales, YR=ser.years, N=YR.length;
+var V=ser.values.map(function(v){return v/1e6;});
+var vMax=-Infinity,iMax=0,i;for(i=0;i<N;i++)if(V[i]>vMax){vMax=V[i];iMax=i;}
+var Y0=YR[0], Y1=YR[N-1];
+
+/* ---------- deterministic noise ---------- */
+function hash(n){var s=Math.sin(n*12.9898+78.233)*43758.5453;return s-Math.floor(s);}
+function smooth(t){return t*t*(3-2*t);}
+function noise(x,seed){var i0=Math.floor(x),f=x-i0,a=hash(i0+seed*131.7),b=hash(i0+1+seed*131.7);return (a+(b-a)*smooth(f))*2-1;}
+function fbm(x,seed){return noise(x,seed)*0.62+noise(x*2.31,seed+7)*0.26+noise(x*4.7,seed+19)*0.12;}
+
+/* ---------- projection (Lambert conformal conic, as in the CAHE kit) ---------- */
+var RAD=Math.PI/180,P1=37*RAD,P2=43*RAD,L0=-3*RAD,P0=40*RAD;
+var cn=Math.log(Math.cos(P1)/Math.cos(P2))/Math.log(Math.tan(Math.PI/4+P2/2)/Math.tan(Math.PI/4+P1/2));
+var cF=Math.cos(P1)*Math.pow(Math.tan(Math.PI/4+P1/2),cn)/cn;
+var cR0=cF/Math.pow(Math.tan(Math.PI/4+P0/2),cn);
+function raw(p){var r=cF/Math.pow(Math.tan(Math.PI/4+p[1]*RAD/2),cn),th=cn*(p[0]*RAD-L0);return [r*Math.sin(th),cR0-r*Math.cos(th)];}
+function cent(r){var x=0,y=0;for(var j=0;j<r.length;j++){x+=r[j][0];y+=r[j][1];}return [x/r.length,y/r.length];}
+function bboxOf(rs){var b=[Infinity,Infinity,-Infinity,-Infinity];rs.forEach(function(r){r.forEach(function(p){if(p[0]<b[0])b[0]=p[0];if(p[1]<b[1])b[1]=p[1];if(p[0]>b[2])b[2]=p[0];if(p[1]>b[3])b[3]=p[1];});});return b;}
+
+var rings=S.outline,mainRings=[],canRings=[],fitRings=[];
+rings.forEach(function(r){var c=cent(r);if(c[0]<-10)canRings.push(r);else{mainRings.push(r);if(c[1]>35.95)fitRings.push(r);}});
+var mainRaw=mainRings.map(function(r){return r.map(raw);}),canRaw=canRings.map(function(r){return r.map(raw);});
+var fitB=bboxOf(fitRings.map(function(r){return r.map(raw);})),canB=bboxOf(canRaw);
+var provRaw=S.provinces.map(function(p){return {name:p.name,can:p.c[0]<-10,c:raw(p.c),rings:p.rings.map(function(r){return r.map(raw);})};});
+
+/* Levante coast (Tarifa -> Cap de Creus) and the Atlantic remainder */
+var lev=S.levante,pen=S.peninsula,PL=pen.length;
+function eq(a,b){return Math.abs(a[0]-b[0])<1e-9&&Math.abs(a[1]-b[1])<1e-9;}
+var iCap=-1,iTar=-1;for(i=0;i<PL;i++){if(iCap<0&&eq(pen[i],lev[0]))iCap=i;if(iTar<0&&eq(pen[i],lev[lev.length-1]))iTar=i;}
+var rest=[];
+if(iCap>=0&&iTar>=0){var k2=iCap;rest.push(pen[k2]);var g0=0;while(k2!==iTar&&g0++<PL+2){k2=(k2-1+PL)%PL;if(k2===PL-1&&eq(pen[PL-1],pen[0]))continue;rest.push(pen[k2]);}}
+else rest=pen.slice();
+var levRaw=lev.slice().reverse().map(raw),restRaw=rest.map(raw);
+
+/* ---------- polyline helpers ---------- */
+function clamp(x){return x<0?0:x>1?1:x;}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function cumLen(p){var c=[0];for(var j=1;j<p.length;j++){var dx=p[j][0]-p[j-1][0],dy=p[j][1]-p[j-1][1];c[j]=c[j-1]+Math.sqrt(dx*dx+dy*dy);}return c;}
+function resample(p,MM){var c=cumLen(p),L=c[c.length-1],out=[],j=0;for(var q=0;q<MM;q++){var s=L*q/(MM-1);while(j<c.length-2&&c[j+1]<s)j++;var sg=c[j+1]-c[j],u=sg>0?(s-c[j])/sg:0;out.push([lerp(p[j][0],p[j+1][0],u),lerp(p[j][1],p[j+1][1],u)]);}return out;}
+function normals(p){var n=p.length,out=new Array(n);for(var j=0;j<n;j++){var a=p[Math.max(0,j-2)],b=p[Math.min(n-1,j+2)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.sqrt(dx*dx+dy*dy)||1;out[j]=[-dy/l,dx/l];}return out;}
+
+/* ---------- brush: a tapered ribbon plus bristle hairs ---------- */
+function ribbon(g,pts,nrm,hw,col,alpha,from,to){
+  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a)return;
+  g.globalAlpha=alpha;g.fillStyle=col;g.beginPath();
+  var j,p,n,w;
+  for(j=a;j<=b;j++){p=pts[j];n=nrm[j];w=hw[j];if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);}
+  for(j=b;j>=a;j--){p=pts[j];n=nrm[j];w=hw[j];g.lineTo(p[0]-n[0]*w,p[1]-n[1]*w);}
+  g.closePath();g.fill();g.globalAlpha=1;
+}
+function bristles(g,pts,nrm,hw,col,alpha,seed,count,from,to){
+  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a+1)return;
+  g.strokeStyle=col;g.lineWidth=0.85;g.lineCap='round';
+  for(var h=0;h<count;h++){
+    var u=(h+0.5)/count*2-1,sd=seed+h*3.7;
+    g.globalAlpha=alpha*(0.35+0.5*hash(sd));
+    g.beginPath();
+    for(var j=a;j<=b;j++){
+      var w=hw[j]*(u*0.72+fbm(j*0.09,sd)*0.22),p=pts[j],n=nrm[j];
+      if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);
     }
-    return `rgb(${r},${g},${b})`;
+    g.stroke();
   }
-  const ns = "http://www.w3.org/2000/svg";
-  const svg = document.getElementById("stripes-svg");
-  if(!svg) return;
-  const N = CLIMATE.length;  // ~175 años
-  svg.setAttribute("viewBox", "0 0 1000 600");
-  svg.setAttribute("preserveAspectRatio", "none");
-  const w = 1000 / N;
-  for(let i = 0; i < N; i++){
-    const r = document.createElementNS(ns, "rect");
-    r.setAttribute("x", i * w);
-    r.setAttribute("y", 0);
-    r.setAttribute("width", w + 0.3);
-    r.setAttribute("height", 600);
-    r.setAttribute("fill", tempColor(CLIMATE[i]));
-    r.setAttribute("opacity", 0);
-    r.style.transition = "opacity 1.2s ease";
-    svg.appendChild(r);
+  g.globalAlpha=1;
+}
+
+/* ---------- layout ---------- */
+var W,H,dpr,mobile,pad,k,ox,oy,xL,xR,yB,yT,M=240,inset;
+var chartRes,chartNrm,coastRes,coastNrm,restRes,restNrm,hwProf,hwRest,mainScr,canScr,provScr;
+var groundPat,groundLayer,glazeLayer,chartLayer,coastLayer,tickAt,accW,monoFont,yearFont;
+var finalLayer=null,building=false,provBB=null;
+function sx(p){return [ox+(p[0]-fitB[0])*k,oy+(fitB[3]-p[1])*k];}
+function sxc(p){return [inset.x0+(p[0]-canB[0])*inset.k,inset.y0+(canB[3]-p[1])*inset.k];}
+function xs(y){return xL+(y-Y0)/(Y1-Y0)*(xR-xL);}
+function xsInv(x){return Y0+(x-xL)/(xR-xL)*(Y1-Y0);}
+function ys(v){return yB+(v/vMax)*(yT-yB);}
+
+/* dark primed canvas: a woven ground, not paper */
+function makeGroundTile(){
+  var t=document.createElement('canvas'),TS=168;t.width=TS;t.height=TS;
+  var g=t.getContext('2d');g.fillStyle=PRUSIA2;g.fillRect(0,0,TS,TS);
+  var im=g.getImageData(0,0,TS,TS),d=im.data,j;
+  for(j=0;j<d.length;j+=4){var n=(hash(j*0.37)-0.5)*22+(hash(j*0.041)-0.5)*15;
+    d[j]=Math.max(0,Math.min(255,d[j]+n*0.7));d[j+1]=Math.max(0,Math.min(255,d[j+1]+n*0.9));d[j+2]=Math.max(0,Math.min(255,d[j+2]+n));}
+  g.putImageData(im,0,0);
+  /* canvas weave */
+  g.lineWidth=1;
+  for(j=0;j<TS;j+=3){
+    g.strokeStyle='rgba(196,215,232,'+(0.020+hash(j*1.7)*0.024).toFixed(3)+')';
+    g.beginPath();g.moveTo(0,j+0.5);g.lineTo(TS,j+0.5);g.stroke();
+    g.strokeStyle='rgba(4,12,22,'+(0.05+hash(j*2.9)*0.06).toFixed(3)+')';
+    g.beginPath();g.moveTo(j+0.5,0);g.lineTo(j+0.5,TS);g.stroke();
   }
-  function show(){
-    const rects = svg.querySelectorAll("rect");
-    rects.forEach((r, i) => {
-      setTimeout(() => { r.setAttribute("opacity", 1); }, i * 8);
+  return t;
+}
+
+/* the verdigris glaze: forest carbon density per province */
+var cvMin=Infinity,cvMax=-Infinity;
+for(var ck in CARB){if(!Object.prototype.hasOwnProperty.call(CARB,ck))continue;
+  if(CARB[ck]<cvMin)cvMin=CARB[ck];if(CARB[ck]>cvMax)cvMax=CARB[ck];}
+function carbT(v){return clamp((v-cvMin)/(cvMax-cvMin));}
+
+function buildGlaze(){
+  glazeLayer=document.createElement('canvas');glazeLayer.width=canvas.width;glazeLayer.height=canvas.height;
+  var g=glazeLayer.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.lineJoin='round';
+  provScr.forEach(function(p,pi){
+    var val=CARB[p.name];
+    var has=(typeof val==='number');
+    var t=has?Math.pow(carbT(val),0.78):0;
+    var tone=has?mix(VERD_LO,VERD_HI,t):SLATE;
+    /* wobbly, non-vectorial province edge */
+    var wr=p.scr.map(function(r,ri){
+      return r.map(function(q,qi){var d=fbm(qi*0.55+ri*13+pi*3.1,pi+ri)*1.1;var d2=fbm(qi*0.19+pi*2.7,pi+41)*1.4;return [q[0]+d+d2,q[1]-d*0.8+d2*0.6];});
     });
-    setTimeout(() => {
-      let t = 0;
-      function tick(){
-        t += 0.012;
-        rects.forEach((r, i) => {
-          const op = 0.88 + Math.sin(t + i * 0.04) * 0.10;
-          r.setAttribute("opacity", op.toFixed(3));
-        });
-        requestAnimationFrame(tick);
+    g.save();
+    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});
+    g.clip();
+    var b=[Infinity,Infinity,-Infinity,-Infinity];
+    wr.forEach(function(r){r.forEach(function(q){if(q[0]<b[0])b[0]=q[0];if(q[1]<b[1])b[1]=q[1];if(q[0]>b[2])b[2]=q[0];if(q[1]>b[3])b[3]=q[1];});});
+    /* flat wash */
+    g.globalAlpha=has?(0.20+0.56*t):0.10;g.fillStyle=tone;g.fillRect(b[0]-3,b[1]-3,b[2]-b[0]+6,b[3]-b[1]+6);
+    /* two or three loose brush passes so the wash is not flat */
+    var bw=b[2]-b[0],bh=b[3]-b[1],passes=bw*bh>1400?3:2;
+    var cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2,ang=(hash(pi*17.3)-0.5)*1.5;
+    g.translate(cx,cy);g.rotate(ang);g.translate(-cx,-cy);
+    b=[cx-(bw+bh)*0.55,cy-(bw+bh)*0.55,cx+(bw+bh)*0.55,cy+(bw+bh)*0.55];bw=b[2]-b[0];bh=b[3]-b[1];
+    for(var s=0;s<passes;s++){
+      g.globalAlpha=(0.05+0.17*t)*(0.5+0.5*hash(pi*9.4+s));
+      g.fillStyle=s%2?mix(VERD_LO,PRUSIA,0.42):tone;
+      g.beginPath();
+      var y0=b[1]+bh*(s+0.15)/passes,hgt=bh/passes*0.95;
+      g.moveTo(b[0]-4,y0);
+      for(var q=0;q<=10;q++){var xx=b[0]-4+(bw+8)*q/10;g.lineTo(xx,y0+fbm(q*0.7+s*5+pi,pi+s)*hgt*0.34);}
+      for(q=10;q>=0;q--){var xb=b[0]-4+(bw+8)*q/10;g.lineTo(xb,y0+hgt+fbm(q*0.6+s*9+pi*1.3,pi+s+3)*hgt*0.34);}
+      g.closePath();g.fill();
+    }
+    g.setTransform(dpr,0,0,dpr,0,0);
+    /* pigment gathering at the rim */
+    g.globalAlpha=has?(0.14+0.40*t):0.08;g.strokeStyle=mix(tone,CAL,0.16);g.lineWidth=5.5;
+    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});g.stroke();
+    g.globalAlpha=1;g.restore();
+    /* dry pen line of the province boundary */
+    g.globalAlpha=0.30;g.strokeStyle='#7E99B2';g.lineWidth=mobile?0.55:0.7;
+    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});g.stroke();
+    g.globalAlpha=1;
+  });
+}
+
+function layout(){
+  var r=stage.getBoundingClientRect();W=Math.max(200,Math.round(r.width));H=Math.max(200,Math.round(r.height));
+  dpr=Math.min(2,window.devicePixelRatio||1);
+  canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  mobile=W<560;accW=mobile?4.2:5.8;
+  monoFont='500 '+(mobile?10:11)+'px "Geist Mono", ui-monospace, Menlo, Consolas, monospace';
+  yearFont='500 '+(mobile?11:12)+'px "Geist Mono", ui-monospace, Menlo, Consolas, monospace';
+  pad={l:mobile?8:10,r:mobile?10:14,t:mobile?8:14,b:mobile?26:34};
+  var bw=fitB[2]-fitB[0],bh=fitB[3]-fitB[1];
+  k=Math.min((W-pad.l-pad.r)/bw,(H-pad.t-pad.b)/bh);
+  ox=pad.l+((W-pad.l-pad.r)-bw*k)/2;oy=pad.t+((H-pad.t-pad.b)-bh*k)*(mobile?0.20:0.36);
+  mainScr=mainRaw.map(function(rg){return rg.map(sx);});
+  var coast=levRaw.map(sx),restS=restRaw.map(sx);
+  xL=pad.l+6;xR=coast[coast.length-1][0];yB=coast[0][1];yT=coast[coast.length-1][1];
+  chartRes=resample(YR.map(function(y,j){return [xs(y),ys(V[j])];}),M);
+  coastRes=resample(coast,M);chartNrm=normals(chartRes);coastNrm=normals(coastRes);
+  restRes=resample(restS,300);restNrm=normals(restRes);
+  /* stroke half-width follows the value of the series */
+  hwProf=new Array(M);
+  for(var j=0;j<M;j++){
+    var yy=clamp((xsInv(chartRes[j][0])-Y0)/(Y1-Y0)),idx=Math.round(yy*(N-1)),vn=V[idx]/vMax;
+    hwProf[j]=Math.max(mobile?1.4:1.8,accW*(0.24+0.86*vn)*(1+0.20*fbm(j*0.11,3)))*Math.min(1,0.35+j/9)*Math.min(1,0.35+(M-1-j)/7);
+  }
+  hwRest=new Array(restRes.length);
+  for(j=0;j<restRes.length;j++)hwRest[j]=(mobile?0.9:1.15)*(1+0.55*fbm(j*0.13,11))*Math.min(1,0.3+j/8)*Math.min(1,0.3+(restRes.length-1-j)/8);
+
+  /* Canary inset, bottom-right, kept clear of the mainland */
+  var cw=canB[2]-canB[0],ch=canB[3]-canB[1],kc=k*0.72,tries=0,ok=false;inset=null;
+  var insetBot=H-(mobile?24:14);
+  while(!ok&&tries++<10){var iw=cw*kc,ih=ch*kc,x1=W-pad.r+4,y1=insetBot,x0=x1-iw,y0=y1-ih;ok=true;
+    for(var a=0;a<mainScr.length&&ok;a++){var rr=mainScr[a];for(j=0;j<rr.length;j++){if(rr[j][0]>=x0-16&&rr[j][1]>=y0-18){ok=false;break;}}}
+    if(!ok)kc*=0.86;else inset={x0:x0,y0:y0,x1:x1,y1:y1,k:kc};}
+  if(!inset)inset={x0:W-pad.r-cw*kc,y0:insetBot-ch*kc,x1:W-pad.r,y1:insetBot,k:kc};
+  canScr=canRaw.map(function(rg){return rg.map(sxc);});
+  provScr=provRaw.map(function(p){return {name:p.name,can:p.can,c:p.can?sxc(p.c):sx(p.c),scr:p.rings.map(function(rg){return rg.map(p.can?sxc:sx);})};});
+  provBB=provScr.map(function(p){var b=[Infinity,Infinity,-Infinity,-Infinity];
+    p.scr.forEach(function(rg){rg.forEach(function(q){if(q[0]<b[0])b[0]=q[0];if(q[1]<b[1])b[1]=q[1];if(q[0]>b[2])b[2]=q[0];if(q[1]>b[3])b[3]=q[1];});});return b;});
+  finalLayer=null;HOV=null;clearTip();
+
+  /* the primed ground */
+  if(!groundPat)groundPat=ctx.createPattern(makeGroundTile(),'repeat');
+  groundLayer=document.createElement('canvas');groundLayer.width=canvas.width;groundLayer.height=canvas.height;
+  var pg=groundLayer.getContext('2d');pg.setTransform(dpr,0,0,dpr,0,0);
+  pg.fillStyle=groundPat;pg.fillRect(0,0,W,H);
+  var vg=pg.createRadialGradient(W*0.42,H*0.34,Math.min(W,H)*0.10,W*0.5,H*0.5,Math.max(W,H)*0.82);
+  vg.addColorStop(0,'rgba(52,96,132,0.30)');vg.addColorStop(1,'rgba(3,9,17,0.55)');
+  pg.fillStyle=vg;pg.fillRect(0,0,W,H);
+
+  /* the finished painted curve, revealed by a moving clip */
+  chartLayer=document.createElement('canvas');chartLayer.width=canvas.width;chartLayer.height=canvas.height;
+  var cg=chartLayer.getContext('2d');cg.setTransform(dpr,0,0,dpr,0,0);
+  paintStroke(cg,chartRes,chartNrm,hwProf,0,M-1);
+
+  /* the finished painted coast */
+  coastLayer=document.createElement('canvas');coastLayer.width=canvas.width;coastLayer.height=canvas.height;
+  var sg=coastLayer.getContext('2d');sg.setTransform(dpr,0,0,dpr,0,0);
+  paintStroke(sg,coastRes,coastNrm,hwProf,0,M-1);
+
+  buildGlaze();
+
+  tickAt=[1860,1900,1950,2000,Y1].map(function(y){
+    var s=clamp((y-Y0)/(Y1-Y0)),f=s*(M-1),a2=Math.floor(f),b2=Math.min(M-1,a2+1),u=f-a2;
+    return {year:y,s:s,i:Math.round(f),cx:xs(y),
+      tx:lerp(coastRes[a2][0],coastRes[b2][0],u),ty:lerp(coastRes[a2][1],coastRes[b2][1],u),
+      nx:coastNrm[Math.round(f)][0],ny:coastNrm[Math.round(f)][1]};
+  });
+}
+
+/* one loaded brush stroke of copper: wet halo, body, bristles */
+function paintStroke(g,pts,nrm,hw,a,b){
+  g.lineJoin='round';g.lineCap='round';
+  ribbon(g,pts,nrm,hw.map(function(w){return w*1.62;}),COBRE_WET,0.15,a,b);
+  ribbon(g,pts,nrm,hw,COBRE,0.86,a,b);
+  ribbon(g,pts,nrm,hw.map(function(w){return w*0.52;}),COBRE_D,0.45,a,b);
+  bristles(g,pts,nrm,hw,'#2A0E03',0.26,5,4,a,b);
+  bristles(g,pts,nrm,hw,'#F3C793',0.30,17,2,a,b);
+}
+/* the Atlantic remainder, drawn with a dry pale brush */
+function paintDry(g,pts,nrm,hw,a,b){
+  g.lineJoin='round';g.lineCap='round';
+  ribbon(g,pts,nrm,hw.map(function(w){return w*2.0;}),'#6E90AC',0.14,a,b);
+  ribbon(g,pts,nrm,hw,'#BFD2E0',0.72,a,b);
+  bristles(g,pts,nrm,hw.map(function(w){return w*1.5;}),'#DCE7F0',0.20,23,3,a,b);
+}
+
+/* ---------- script ---------- */
+var T={grain:280,draw0:320,draw1:3300,morph0:3600,morph1:5200,rest0:5150,rest1:6600,glaze0:5450,glaze1:7300,end:7700};
+var PER=15000;
+
+function axes(alpha){
+  if(alpha<=0)return;ctx.globalAlpha=alpha;ctx.font=monoFont;ctx.lineWidth=1;
+  (mobile?[500]:[250,500,750]).forEach(function(v){var y=ys(v);ctx.strokeStyle=HAIR;
+    ctx.beginPath();for(var x=xL;x<xR;x+=7){ctx.moveTo(x,y+fbm(x*0.05,31)*0.7);ctx.lineTo(Math.min(xR,x+4.4),y+fbm(x*0.05+2,31)*0.7);}ctx.stroke();
+    ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(v+' Mt',xL,y-4);});
+  ctx.strokeStyle=HAIR;ctx.beginPath();ctx.moveTo(xL,yB);ctx.lineTo(xR,yB);ctx.stroke();
+  ctx.globalAlpha=1;
+}
+function ticks(m,alpha){
+  ctx.font=monoFont;ctx.globalAlpha=alpha;
+  tickAt.forEach(function(tk){
+    var w=1-tk.s,l=m>=1?1:ease(clamp((m-0.35*w)/0.65));
+    var x=lerp(tk.cx,tk.tx,l),y=lerp(yB,tk.ty,l);
+    if(l<0.5){ctx.strokeStyle=HAIR;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+4);ctx.stroke();
+      ctx.fillStyle=MUTED;ctx.textAlign=tk.year===Y1?'right':tk.year===Y0?'left':'center';ctx.textBaseline='top';ctx.fillText(tk.year,x,y+8);}
+    else{ctx.fillStyle=CAL;ctx.beginPath();ctx.arc(x,y,2,0,6.2832);ctx.fill();
+      var nx=tk.nx,ny=tk.ny;ctx.textAlign=nx>.35?'left':nx<-.35?'right':'center';ctx.textBaseline=ny>.35?'top':ny<-.35?'bottom':'middle';
+      ctx.fillStyle=CAL2;ctx.fillText(tk.year,x+nx*10,y+ny*10);}
+  });
+  ctx.globalAlpha=1;
+}
+function wetHead(x,y,a,rad){
+  if(a<=0)return;ctx.globalAlpha=a*0.24;ctx.fillStyle=COBRE_WET;ctx.beginPath();ctx.arc(x,y,rad*2.6,0,6.2832);ctx.fill();
+  ctx.globalAlpha=a*0.92;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(x,y,rad,0,6.2832);ctx.fill();ctx.globalAlpha=1;
+}
+function glaze(alpha,rev){
+  if(alpha<=0)return;
+  ctx.save();
+  if(rev<1){var d=(W+H)*rev;ctx.beginPath();ctx.moveTo(-40,-40);ctx.lineTo(-40+d,-40);ctx.lineTo(-40,-40+d);ctx.closePath();ctx.clip();}
+  ctx.globalAlpha=alpha;ctx.drawImage(glazeLayer,0,0,W,H);ctx.globalAlpha=1;ctx.restore();
+}
+/* the line that used to name what the curve carried has gone: the subtitle already says it,
+   and the plate now answers for itself when it is pointed at. */
+var hinted=false;
+function hint(){
+  if(hinted)return;
+  var g=ctx,x=pad.l+2,y=H-(mobile?15:14);
+  g.save();g.font=monoFont;g.textAlign='left';g.textBaseline='bottom';
+  g.globalAlpha=0.9;g.fillStyle=MUTED;
+  g.fillText(COARSE?'Toca el mapa':'Pasa el cursor por el mapa',x+15,y);
+  g.strokeStyle=COBRE;g.lineWidth=1.1;g.globalAlpha=0.85;
+  g.beginPath();g.arc(x+5.5,y-4.2,4.5,0,6.2832);g.stroke();
+  g.fillStyle=COBRE;g.beginPath();g.arc(x+5.5,y-4.2,1.5,0,6.2832);g.fill();
+  g.restore();g.globalAlpha=1;
+}
+function canaryFrame(alpha){
+  if(alpha<=0)return;ctx.globalAlpha=alpha*0.65;ctx.strokeStyle=HAIR;ctx.lineWidth=1;
+  var bx=inset.x0-12,by=inset.y0-12;ctx.beginPath();ctx.moveTo(bx,inset.y1+2);ctx.lineTo(bx,by);ctx.lineTo(inset.x1+2,by);ctx.stroke();
+  ctx.font=monoFont;ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText('Canarias',bx,by-5);ctx.globalAlpha=1;
+}
+
+
+/* ---------- the reading: point at a province or at the copper shore ---------- */
+var HOV=null;
+var NFM=(window.Intl&&Intl.NumberFormat)?new Intl.NumberFormat('es-ES',{maximumFractionDigits:0}):{format:function(v){return ''+Math.round(v);}};
+var NF1=(window.Intl&&Intl.NumberFormat)?new Intl.NumberFormat('es-ES',{maximumFractionDigits:1}):{format:function(v){return ''+v;}};
+function clearTip(){if(tipEl)tipEl.className='tip';}
+function showTip(html,x,y,cls){
+  tipEl.innerHTML=html;tipEl.className='tip on'+(cls?' '+cls:'');
+  var w=tipEl.offsetWidth,h=tipEl.offsetHeight,px,py;
+  if(COARSE){px=Math.min(Math.max(8,x-w/2),W-w-8);py=(y>H*0.55)?Math.max(8,y-h-28):Math.min(H-h-8,y+28);}
+  else {px=Math.min(Math.max(8,x+18),W-w-8);py=(y+18+h<=H-8)?(y+18):Math.max(8,y-h-26);}
+  tipEl.style.left=px+'px';tipEl.style.top=py+'px';
+}
+function inRings(x,y,rings){
+  var inside=false;
+  for(var r=0;r<rings.length;r++){
+    var rg=rings[r];
+    for(var a=0,b=rg.length-1;a<rg.length;b=a++){
+      var xi=rg[a][0],yi=rg[a][1],xj=rg[b][0],yj=rg[b][1];
+      if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;
+    }
+  }
+  return inside;
+}
+function provPath(p){
+  var pa=new Path2D();
+  p.scr.forEach(function(rg){pa.moveTo(rg[0][0],rg[0][1]);
+    for(var j=1;j<rg.length;j++)pa.lineTo(rg[j][0],rg[j][1]);pa.closePath();});
+  return pa;
+}
+function pick(x,y){
+  if(!coastRes||!provScr)return null;
+  var R=COARSE?44:24,best=1e9,bi=-1,j;
+  for(j=0;j<M;j++){var dx=coastRes[j][0]-x,dy=coastRes[j][1]-y,dd=dx*dx+dy*dy;if(dd<best){best=dd;bi=j;}}
+  if(bi>=0&&Math.sqrt(best)<=R)return {mode:'coast',i:bi};
+  var pad2=COARSE?18:2;
+  for(j=0;j<provScr.length;j++){
+    var b=provBB[j];
+    if(x<b[0]-pad2||x>b[2]+pad2||y<b[1]-pad2||y>b[3]+pad2)continue;
+    if(inRings(x,y,provScr[j].scr))return {mode:'prov',i:j};
+  }
+  if(COARSE){
+    var bp=-1;best=44*44;
+    for(j=0;j<provScr.length;j++){
+      var bb=provBB[j];
+      if(x<bb[0]-44||x>bb[2]+44||y<bb[1]-44||y>bb[3]+44)continue;
+      var rings=provScr[j].scr;
+      for(var r2=0;r2<rings.length;r2++){
+        var rg=rings[r2];
+        for(var q=0;q<rg.length-1;q++){
+          var ax=rg[q][0],ay=rg[q][1],bx=rg[q+1][0]-ax,by=rg[q+1][1]-ay;
+          var LL=bx*bx+by*by,ux=x-ax,uy=y-ay;
+          var tt=LL>0?(ux*bx+uy*by)/LL:0; if(tt<0)tt=0; else if(tt>1)tt=1;
+          var ex=ux-tt*bx,ey=uy-tt*by,d2=ex*ex+ey*ey;
+          if(d2<best){best=d2;bp=j;}
+        }
       }
-      tick();
-    }, N * 8 + 600);
-  }
-  let started = false;
-  window.addEventListener("portada-mode", e => {
-    if(e.detail === "franjas" && !started){ started = true; show(); }
-  });
-})();
-
-/* ====== Portada mode switcher ====== */
-(function(){
-  const portada = document.getElementById("portada");
-  const btns = document.querySelectorAll(".portada-mode-switch button");
-  function apply(mode){
-    portada.classList.toggle("mode-globo", mode === "globo");
-    portada.classList.toggle("mode-franjas", mode === "franjas");
-    btns.forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
-    try { localStorage.setItem("cahe_portada_mode", mode); } catch(_){}
-    window.dispatchEvent(new CustomEvent("portada-mode", { detail: mode }));
-  }
-  btns.forEach(b => b.addEventListener("click", () => apply(b.dataset.mode)));
-  let initial = "globo";
-  apply(initial);
-})();
-
-setTimeout(function(){
-  ['hero-kicker','hero-title','hero-sub','hero-info'].forEach(function(id){
-    var el = document.getElementById(id); if(el) el.classList.add('visible');
-  });
-  var cards = document.querySelectorAll('.hero-nav-card');
-  cards.forEach(function(c, i){ setTimeout(function(){ c.classList.add('visible'); }, 600 + i * 120); });
-}, 400);
-
-(function(){
-  var frame = document.getElementById('viewer-frame');
-  function openSection(section){
-    if(!frame.src) frame.src = 'explorer.html?v=20260905b#' + section;
-    else { try { frame.contentWindow.location.hash = section; } catch(_){} }
-    document.body.classList.add('viewer-open');
-    setTimeout(function(){ try { frame.contentWindow && frame.contentWindow.focus(); } catch(_){} }, 60);
-  }
-  document.querySelectorAll('[data-section]').forEach(function(el){
-    el.addEventListener('click', function(e){ e.preventDefault(); openSection(el.dataset.section); });
-  });
-  window.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && document.body.classList.contains('viewer-open')){
-      document.body.classList.remove('viewer-open');
     }
-  });
-  window.addEventListener('message', function(e){
-    if(e.data && e.data.type === 'cahe-back') document.body.classList.remove('viewer-open');
+    if(bp>=0)return {mode:'prov',i:bp};
+  }
+  return null;
+}
+function hoverPaint(){
+  if(!HOV)return;
+  var g=ctx;
+  g.save();g.globalAlpha=0.58;g.fillStyle=PRUSIA;g.fillRect(0,0,W,H);g.restore();
+  if(HOV.mode==='prov'){
+    var p=provScr[HOV.i],pa=provPath(p);
+    g.save();g.clip(pa);g.drawImage(glazeLayer,0,0,W,H);
+    var val0=CARB[p.name];
+    g.globalAlpha=(typeof val0==='number')?0.16:0.08;
+    g.fillStyle=mix(VERD_HI,CAL,0.25);g.fillRect(0,0,W,H);g.globalAlpha=1;g.restore();
+    g.globalAlpha=0.9;g.strokeStyle=CAL;g.lineWidth=1.4;g.lineJoin='round';g.stroke(pa);g.globalAlpha=1;
+    g.font=monoFont;g.textAlign='center';g.textBaseline='middle';
+    g.fillStyle='rgba(9,23,38,0.75)';
+    var tw=g.measureText(p.name).width;
+    g.fillRect(p.c[0]-tw/2-5,p.c[1]-8,tw+10,16);
+    g.fillStyle=CAL;g.fillText(p.name,p.c[0],p.c[1]);
+  }else{
+    var i2=HOV.i,a0=Math.max(0,i2-9),b0=Math.min(M-1,i2+9);
+    paintStroke(g,coastRes,coastNrm,hwProf.map(function(w){return w*1.5;}),a0,b0);
+    var q=coastRes[i2];
+    wetHead(q[0],q[1],1,4.2);
+    var nx=-coastNrm[i2][0],ny=-coastNrm[i2][1];
+    g.globalAlpha=0.55;g.strokeStyle=COBRE_HI;g.lineWidth=1;
+    g.beginPath();g.moveTo(q[0],q[1]);g.lineTo(q[0]+nx*15,q[1]+ny*15);g.stroke();g.globalAlpha=1;
+  }
+}
+function acted(){return RM||(startTime!==null&&performance.now()-startTime>=T.end);}
+function hoverAt(x,y){
+  if(!acted())return;
+  var h=pick(x,y);
+  if(h)hinted=true;
+  var same=(h&&HOV&&h.mode===HOV.mode&&h.i===HOV.i);
+  HOV=h;
+  if(!h)clearTip();
+  else if(!same||tipEl.className.indexOf('on')<0){
+    if(h.mode==='prov'){
+      var p=provScr[h.i],v=CARB[p.name];
+      showTip('<span class="k">'+p.name+'</span><span class="p">Carbono forestal</span>'+
+              '<span class="v">'+((typeof v==='number')?('<em>'+NF1.format(v)+'</em> t C '+(COARSE?'por ha de monte':'por hectárea de monte')):'sin dato en esta serie')+'</span>',
+              p.c[0],p.c[1],'verd');
+    }else{
+      var yr=Math.round(xsInv(0)+0),f=h.i/(M-1);
+      yr=Math.round(Y0+f*(Y1-Y0));
+      var idx=Math.max(0,Math.min(N-1,Math.round((yr-Y0)/(Y1-Y0)*(N-1))));
+      showTip('<span class="k">'+yr+'</span><span class="p">Materiales extraídos</span>'+
+              '<span class="v"><em>'+NFM.format(V[idx])+'</em> millones de toneladas</span>',
+              coastRes[h.i][0],coastRes[h.i][1]);
+    }
+  }
+  if(RM)render(T.end);
+}
+function hoverOff(){HOV=null;clearTip();if(RM)render(T.end);}
+
+function buildFinal(){
+  finalLayer=document.createElement('canvas');finalLayer.width=canvas.width;finalLayer.height=canvas.height;
+  var real=ctx,hv=HOV,off=finalLayer.getContext('2d');
+  off.setTransform(dpr,0,0,dpr,0,0);
+  ctx=off;HOV=null;building=true;
+  render(T.end);
+  building=false;HOV=hv;ctx=real;
+}
+function render(t){
+  if(!building&&t>=T.end){
+    if(!finalLayer)buildFinal();
+    ctx.clearRect(0,0,W,H);ctx.drawImage(finalLayer,0,0,W,H);
+    if(HOV){hoverPaint();return;}
+    hint();
+    if(!RM){
+      var ph0=((t-T.end)%PER)/PER,a0=Math.min(1,Math.sin(Math.PI*ph0)*2.4),k0=Math.round(ph0*(M-1));
+      ctx.globalAlpha=a0;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(coastRes[k0][0],coastRes[k0][1],2.6,0,6.2832);ctx.fill();
+      ctx.font=yearFont;var qx=-coastNrm[k0][0],qy=-coastNrm[k0][1];
+      ctx.textAlign=qx>.35?'left':qx<-.35?'right':'center';ctx.textBaseline=qy>.35?'top':qy<-.35?'bottom':'middle';
+      ctx.fillStyle=CAL;ctx.fillText(Math.round(Y0+ph0*(Y1-Y0)),coastRes[k0][0]+qx*12,coastRes[k0][1]+qy*12);
+      ctx.globalAlpha=1;
+    }
+    return;
+  }
+  ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha=Math.min(1,t/T.grain);ctx.drawImage(groundLayer,0,0,W,H);ctx.globalAlpha=1;
+  if(t<T.morph0){
+    var u=clamp((t-T.draw0)/(T.draw1-T.draw0)),f=0.5*u+0.5*ease(u);
+    axes(1);ticks(0,1);
+    var idx=Math.min(M-1,f*(M-1));
+    ctx.save();ctx.beginPath();ctx.rect(0,0,chartRes[Math.floor(idx)][0]+(idx-Math.floor(idx))*8+2,H);ctx.clip();
+    ctx.drawImage(chartLayer,0,0,W,H);ctx.restore();
+    if(u>0&&u<1){var ii=Math.floor(idx);wetHead(chartRes[ii][0],chartRes[ii][1],1,Math.max(3,hwProf[ii]*0.95));
+      ctx.font=yearFont;ctx.fillStyle=CAL;ctx.textAlign='left';ctx.textBaseline='bottom';
+      ctx.fillText(Math.round(xsInv(chartRes[ii][0])),chartRes[ii][0]+11,chartRes[ii][1]-10);}
+    return;
+  }
+  if(t<T.morph1){
+    var m=clamp((t-T.morph0)/(T.morph1-T.morph0)),fade=1-clamp(m/0.4);
+    axes(fade);
+    var pts=new Array(M);
+    for(var j=0;j<M;j++){var wgt=1-j/(M-1),l=ease(clamp((m-0.35*wgt)/0.65));
+      pts[j]=[lerp(chartRes[j][0],coastRes[j][0],l),lerp(chartRes[j][1],coastRes[j][1],l)];}
+    paintStroke(ctx,pts,normals(pts),hwProf,0,M-1);
+    ticks(m,1);
+    return;
+  }
+  /* map phase */
+  var rv=easeOut(clamp((t-T.rest0)/(T.rest1-T.rest0)));
+  var ga=clamp((t-T.glaze0)/700),gr=easeOut(clamp((t-T.glaze0)/(T.glaze1-T.glaze0)));
+  glaze(ga,gr);
+  ctx.globalAlpha=1;ctx.drawImage(coastLayer,0,0,W,H);
+  var last=Math.max(1,Math.round(rv*(restRes.length-1)));
+  paintDry(ctx,restRes,restNrm,hwRest,0,last);
+  if(rv>=1){canScr.forEach(function(rg){var nr=normals(rg),hw=rg.map(function(_,j){return (mobile?0.8:1.0)*(1+0.5*fbm(j*0.2,5));});paintDry(ctx,rg,nr,hw,0,rg.length-1);});
+    canaryFrame(clamp((t-T.rest1)/500));}
+  ticks(1,0.85);
+}
+
+/* ---------- clock, skip, resize ---------- */
+var startTime=null,raf=null,hiddenAt=null,frames=0,fpsT0=0;
+window.__fps=0;
+function frame(now){raf=null;if(startTime===null)startTime=now;
+  frames++;if(!fpsT0)fpsT0=now;
+  if(now-fpsT0>=500){window.__fps=Math.round(frames*1000/(now-fpsT0));frames=0;fpsT0=now;}
+  render(now-startTime);if(!document.hidden)raf=requestAnimationFrame(frame);}
+function finish(){if(RM)return;var now=performance.now();if(startTime===null)startTime=now;if(now-startTime<T.end)startTime=now-T.end;}
+function start(){layout();if(RM){render(T.end);return;}raf=requestAnimationFrame(frame);}
+document.addEventListener('visibilitychange',function(){if(RM)return;if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}hiddenAt=performance.now();}else{if(hiddenAt!==null&&startTime!==null)startTime+=performance.now()-hiddenAt;hiddenAt=null;if(!raf)raf=requestAnimationFrame(frame);}});
+var rt=null;function onResize(){clearTimeout(rt);rt=setTimeout(function(){HOV=null;clearTip();layout();if(RM)render(T.end);},70);}
+window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){finish();hoverOff();}});
+/* pointing at the plate: during the act it keeps out of the way, after it the plate answers */
+function local(e){var r=stage.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
+stage.addEventListener('pointermove',function(e){
+  if(e.pointerType==='touch')return;
+  var p=local(e);hoverAt(p[0],p[1]);
+},{passive:true});
+/* a touch pointer is destroyed on release and fires pointerleave right after pointerdown:
+   only a real mouse leaving the plate should put the reading away */
+stage.addEventListener('pointerleave',function(e){if(e.pointerType==='touch')return;hoverOff();},{passive:true});
+document.addEventListener('pointerdown',function(e){
+  if(e.target.closest&&e.target.closest('a,button'))return;
+  var inStage=stage.contains(e.target);
+  if(!acted()){finish();if(inStage){var p0=local(e);setTimeout(function(){hoverAt(p0[0],p0[1]);},30);}return;}
+  if(inStage){var p=local(e);hoverAt(p[0],p[1]);}else hoverOff();
+});
+/* the autocheck reads this */
+window.__probe=function(){return HOV?{mode:HOV.mode,tip:tipEl.className.indexOf('on')>=0,text:tipEl.textContent}
+                                    :{mode:null,tip:tipEl.className.indexOf('on')>=0,text:''};};
+window.addEventListener('wheel',finish,{passive:true});window.addEventListener('touchmove',finish,{passive:true});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){onResize();});
+start();
+})();
+</script>
+
+<script>
+/* Bilingual door. Every translatable node carries its English in data-en and keeps its Spanish as
+   the written text, so the page is correct with JavaScript off. The choice is stored under the
+   same key the explorer reads (cahe_lang), so entering the viewer does not undo it. */
+(function(){
+  var btn = document.getElementById('lang-toggle');
+  if (!btn) return;
+  var TITULOS = {es: document.title, en: 'CAHE \u00b7 Spain\u2019s Historical Environmental Accounts'};
+  var nodos = [].slice.call(document.querySelectorAll('[data-en]'));
+  nodos.forEach(function(n){ n.dataset.es = n.innerHTML; });
+  var nav = document.querySelector('[data-en-label]');
+  var navEs = nav ? nav.getAttribute('aria-label') : null;
+
+  function aplicar(lang){
+    var en = lang === 'en';
+    nodos.forEach(function(n){ n.innerHTML = en ? n.dataset.en : n.dataset.es; });
+    if (nav) nav.setAttribute('aria-label', en ? nav.dataset.enLabel : navEs);
+    document.documentElement.lang = en ? 'en' : 'es';
+    document.title = TITULOS[en ? 'en' : 'es'];
+    btn.textContent = en ? 'ES' : 'EN';
+  }
+
+  var guardado = 'es';
+  try { guardado = localStorage.getItem('cahe_lang') || 'es'; } catch (e) {}
+  aplicar(guardado);
+
+  btn.addEventListener('click', function(){
+    var nuevo = document.documentElement.lang === 'en' ? 'es' : 'en';
+    try { localStorage.setItem('cahe_lang', nuevo); } catch (e) {}
+    aplicar(nuevo);
   });
 })();
 </script>
