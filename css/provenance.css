@@ -127,3 +127,36 @@
 @media (prefers-reduced-motion: reduce) {
     .pv-panel *, .pv-matrix-scroll * { transition: none !important; animation: none !important; }
 }
+
+/* ── intro a dos columnas ────────────────────────────────────────────────────────────
+   Medido el 2026-09-06 a 1440 px: la prosa era una columna de 473 px que bajaba 886 px por la
+   izquierda con 595 px de pantalla vacía a su derecha, mientras la tira de cifras y los
+   paneles sí ocupaban el ancho entero. Las cifras y los límites se mudan a esa mitad. */
+.pv-intro { display: grid; gap: 22px; grid-template-columns: 1fr; align-items: start; }
+.pv-aside { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.pv-aside .pv-headline { margin: 0; }
+.pv-aside .pv-limits { margin: 0; }
+@media (min-width: 1000px) {
+    .pv-intro { grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr); gap: 40px; }
+    .pv-intro .pv-prose { max-width: none; }
+    .pv-aside .pv-headline { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+}
+
+/* rótulos de sección y textos de apoyo */
+.pv-h3 { margin: 30px 0 8px; }
+.pv-lede { margin: 0 0 20px; font-size: .93rem; line-height: 1.58; color: var(--ink-soft, #4a473f); }
+.pv-lede p { margin: 0 0 .9em; max-width: 78ch; }
+.pv-lede p:last-child { margin-bottom: 0; }
+@media (min-width: 1000px) {
+    /* dos columnas, igual que el intro: si no, este parrafo repite el mismo hueco a la derecha */
+    .pv-lede { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: start; }
+    .pv-lede p { margin: 0; }
+}
+.pv-note { margin: 8px 0 0; font-size: .84rem; line-height: 1.5; color: var(--ink-soft, #4a473f); }
+
+/* la sección vive dentro de «Datos y metodología», que ya pone su propio ancho y su
+   propio relleno: aquí sobra el de la página suelta */
+.metodos-body .pv-section { max-width: none; margin: 0; padding: 4px 0 8px; }
+/* el titulo ya lo pone el propio bloque plegable, no hace falta repetirlo dentro */
+.metodos-body .pv-section > h2 { position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }

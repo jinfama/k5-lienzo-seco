@@ -77,9 +77,15 @@ function drawSeries(host, serie, opts = {}) {
         donors: serie.donors?.[i] || null,
     }));
 
+    // Los dominios se calculan UNA VEZ sobre la serie entera y no sobre lo que el
+    // interruptor deja a la vista. Antes salían del conjunto ya filtrado, así que al marcar
+    // «ver solo los años observados» el eje X se encogía al tramo observado y el Y se
+    // reescalaba a su máximo: las dos versiones quedaban a escalas distintas y dejaban de
+    // ser comparables, que es lo único para lo que ese interruptor servía.
+    const all = points.filter(p => p.value != null);
     const shown = onlyObserved ? points.filter(p => p.flag === FLAG_OBS) : points;
     const withValue = shown.filter(p => p.value != null);
-    if (!withValue.length) {
+    if (!all.length) {
         host.innerHTML = '<p class="pv-empty">Esta serie no tiene ningún valor que mostrar.</p>';
         return;
     }
@@ -87,8 +93,8 @@ function drawSeries(host, serie, opts = {}) {
     const W = 820, H = 300, M = { top: 16, right: 16, bottom: 30, left: 62 };
     const iw = W - M.left - M.right, ih = H - M.top - M.bottom;
 
-    const x = d3.scaleLinear().domain(d3.extent(withValue, p => p.year)).range([0, iw]).nice();
-    const y = d3.scaleLinear().domain([0, d3.max(withValue, p => p.value) * 1.08]).range([ih, 0]).nice();
+    const x = d3.scaleLinear().domain(d3.extent(all, p => p.year)).range([0, iw]).nice();
+    const y = d3.scaleLinear().domain([0, d3.max(all, p => p.value) * 1.08]).range([ih, 0]).nice();
 
     host.innerHTML = '';
     const svg = d3.select(host).append('svg')
@@ -124,7 +130,7 @@ function drawSeries(host, serie, opts = {}) {
             .attr('stroke-width', s => s.solid ? 2.2 : 1.4)
             .attr('stroke-dasharray', s => s.solid ? null : '4 3')
             .attr('opacity', s => s.solid ? 1 : 0.75);
-    } else {
+    } else if (withValue.length) {
         g.append('path')
             .attr('fill', 'none').attr('stroke', METHODS.observed.color).attr('stroke-width', 2.2)
             .attr('d', d3.line().x(p => x(p.year)).y(p => y(p.value))(withValue));

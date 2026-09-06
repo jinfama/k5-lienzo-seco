@@ -1131,3 +1131,43 @@ button{font-family:inherit;cursor:pointer}
    el spinner de carga, la marca de reproduccion de audio, el tirador del
    progreso de audio, los botones redondos de cerrar y el panel movil.
    ====================================================================== */
+
+/* ======================================================================
+   «Cómo trabajamos» dentro de «Datos y metodología»
+   Antes era una pestaña hermana en la barra. Ahora encabeza la página de
+   datos, plegada, y se abre al pincharla: es la letra pequeña de todo lo
+   que se descarga debajo.
+   ====================================================================== */
+.metodos-block{padding:0;overflow:hidden}
+.metodos-toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
+  width:100%;padding:18px 24px;background:var(--paper-2);border:0;border-left:3px solid var(--warm-soft);
+  text-align:left;cursor:pointer;font:inherit;color:var(--ink);transition:background .18s}
+.metodos-toggle:hover{background:color-mix(in srgb,var(--warm-soft) 12%,var(--paper-2))}
+.metodos-toggle:focus-visible{outline:2px solid var(--warm);outline-offset:-2px}
+.metodos-toggle .mt-text{min-width:0}
+.metodos-toggle .mt-title{display:block;font-family:var(--ff-serif);font-size:24px;font-weight:600;
+  line-height:1.1;color:var(--ink)}
+.metodos-toggle .mt-lede{display:block;margin-top:5px;font-size:13.5px;line-height:1.5;
+  color:var(--ink-soft);max-width:88ch}
+.metodos-toggle .mt-cta{display:inline-flex;align-items:center;gap:9px;flex:0 0 auto;
+  font-size:10.6px;font-weight:850;letter-spacing:1.05px;text-transform:uppercase;color:var(--warm)}
+.metodos-toggle .mt-ico{position:relative;width:16px;height:16px;flex:0 0 auto}
+.metodos-toggle .mt-ico::before,.metodos-toggle .mt-ico::after{content:'';position:absolute;
+  background:var(--warm);transition:transform .25s}
+.metodos-toggle .mt-ico::before{top:7px;left:0;width:16px;height:2px}
+.metodos-toggle .mt-ico::after{left:7px;top:0;width:2px;height:16px}
+.metodos-toggle.open .mt-ico::after{transform:scaleY(0)}
+.metodos-body{padding:0 24px 8px;border-top:1px solid var(--rule)}
+@media (max-width:640px){
+  .metodos-toggle{grid-template-columns:1fr;gap:10px;padding:15px 16px}
+  .metodos-toggle .mt-title{font-size:20px}
+  .metodos-body{padding:0 12px 6px}
+}
+
+/* Equipo, ahora arriba del todo dentro de «Acerca» */
+.acerca-team{padding:20px 24px 24px}
+.acerca-team .eyebrow{font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:var(--warm);
+  font-weight:700;margin-bottom:6px}
+.acerca-team h2{font-family:var(--ff-serif);font-size:24px;font-weight:600;margin-bottom:4px}
+.acerca-team .sub{font-size:13.5px;color:var(--ink-soft);margin-bottom:16px;max-width:88ch}
+@media (max-width:640px){ .acerca-team{padding:16px} }
