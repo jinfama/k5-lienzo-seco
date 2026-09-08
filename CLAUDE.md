@@ -20,15 +20,18 @@ fuera de OneDrive sin romper este visor.
 ## Estructura
 
 ```
-index.html              PORTADA Y PUERTA DE ENTRADA. Es la portada aprobada
-                        "La costa pintada" (V5), autocontenida: lleva dentro su
-                        propio <style> y su propio <script>, no usa css/styles.css
-                        ni js/. Ver "Entrada" mas abajo.
+index.html              PORTADA Y PUERTA DE ENTRADA. Portada V7 (2026-09-08):
+                        la curva de emisiones sube, se hace contorno de España y
+                        el contorno se eleva a un globo que gira. Autocontenida:
+                        lleva dentro su propio <style> y su propio <script>, no
+                        usa css/styles.css ni js/. Ver "Entrada" mas abajo.
 explorer.html           LA APLICACIÓN (panel unificado). Se entra desde la
                         portada con un ancla: explorer.html#<seccion>.
-portada/                Kits de datos que dibuja la portada (spain.js, cahe.js).
-                        Copiados desde 07_temp/portadas_visores_2026-09/data/
-                        por tools/integrar_portada.py. Solo los lee index.html.
+portada/                Kits de datos que dibuja la portada: spain.js, cahe.js y
+                        world-110m.js (tierras del globo, copiado del kit de
+                        07_temp/portadas_visores_2026-09/data/ el 2026-09-08).
+                        cahe-prov.js es un resto de la V6 y ya no lo carga nadie.
+                        Solo los lee index.html.
 css/styles.css          Sistema visual: cal + azul de Prusia + cobre,
                         bordes cuadrados. Ver "Paleta" mas abajo.
 css/provenance.css      Componente "Como trabajamos" (procedencia por celda).
@@ -98,13 +101,14 @@ También funciona sirviendo solo `web_cahe_v3/`.
 sus enlaces aterriza dentro de la aplicación, en la sección que pedía el ancla.
 No hay ninguna pantalla de bienvenida intermedia y no debe volver a haberla.
 
-`index.html` es la portada aprobada `V5_costa-pintada.html` ("La costa
-pintada"), integrada el 2026-09-06 con
-`06_dev/docs/visores_2026-09/tools/integrar_portada.py cahe --apply`. Es un
-único fichero autocontenido: su CSS y su JS van en línea, y lo único que carga
-de fuera son las dos fuentes de Google y los dos kits de `portada/`. **No
-depende de `css/styles.css` ni de `js/`**: tocar el cromo del visor no la
-cambia, y al revés.
+`index.html` es la **portada V7** (2026-09-08, noche), escrita a mano tras la revisión de
+Juan de las V6 («me estás poniendo un visor ya en la portada; lo que quiero es algo
+estéticamente chulo»). Es un único fichero autocontenido: su CSS y su JS van en línea, y lo
+único que carga de fuera son las fuentes de Google (Fraunces, Geist, Geist Mono), D3 v7 y
+topojson-client v3 por CDN, y los tres kits de `portada/`. **No depende de `css/styles.css`
+ni de `js/`**: tocar el cromo del visor no la cambia, y al revés. Las V5 y V6 quedan en
+`C:/Work/scratch/checkpoint/visores_2026-09/web_cahe_v3_backup/index.html.20260908.bak` y
+`index.html.20260908-v6.bak`.
 
 Sus seis enlaces, y a dónde llevan:
 
@@ -137,30 +141,31 @@ lienzo (unidad del eje, pista de abajo, fichas de provincia, rótulo de
 Canarias) no puede llevar `data-en`: vive en el diccionario `STR` del script de
 la portada y se repinta cuando el conmutador emite el evento `cahe:lang`.
 
-**Lo que dibuja la portada** (revisado el 2026-09-06):
+**Lo que dibuja la portada** (V7, 2026-09-08). Una sola escena en un canvas, sin
+paneles, sin leyendas ni contadores:
 
-- La curva es la serie de **emisiones de GEI de España, 1860-2023**
-  (`CAHE.series['emisiones-gei']`, en Mt de CO₂ equivalente). Antes era la de
-  materiales y no se decía en ninguna parte. El rótulo `.cap`, arriba a la
-  izquierda del plato, la nombra con su periodo y su unidad; el eje rotula
-  `100 / 200 / 300 Mt CO₂e`.
-- El color de cada provincia es la **densidad de carbono forestal**
-  (t C por hectárea de monte), y ahora es una serie completa 1860-2021, no un
-  corte de 2021: `window.CAHE_PROV_C` en el propio `index.html`, sacada de
-  `data/provincial/bosques.json`, combo `densidad-de-c__total`, redondeada a un
-  decimal. La escala de color se calcula sobre la matriz entera para que mover
-  el año enseñe algo. El kit de `portada/` **no** trae ninguna serie provincial
-  y CAHE no tiene emisiones por provincia: por eso el mapa colorea bosques y no
-  emisiones, y la cifra nacional del año que aparece junto al deslizador es la
-  de la curva.
-- Bajo el mapa hay una **línea del tiempo** (`.tl`, un `input[type=range]`
-  1860-2021) que aparece al terminar el acto y recolorea las provincias al
-  arrastrarla. Un toque o clic sobre una provincia **fija su ficha** con el
-  valor de ese año hasta que se toca fuera. Rehacer el barniz cuesta unos 32 ms
-  por año medidos en Chromium, y se agrupa por `requestAnimationFrame`.
-- El lienzo reserva sitio arriba para el rótulo y abajo para la tira
-  (`capH` y `tlH` en `layout()`), así que el mapa se pinta un poco más pequeño
-  que antes. La transición curva → costa no se ha tocado.
+1. La curva de **emisiones totales de GEI de España, 1860-2023** (`CAHE.series['emisiones-gei']`,
+   Mt CO₂e) sube despacio (≈ 5,7 s) en cobre luminoso sobre azul de Prusia, con el año
+   corriendo en el rótulo de abajo a la izquierda (`#yr`).
+2. Al llegar a 2023 la línea se **convierte en el contorno de la península** (`SPAIN.peninsula`,
+   un solo anillo remuestreado a 420 puntos; nada de provincias, así no hay huecos). El anillo
+   empieza en Tarifa y recorre el país en el sentido de las agujas del reloj, para que el pico
+   de la curva caiga cerca de Cap de Creus y el arranque plano suba por la raya de Portugal.
+3. El contorno se **eleva a un globo**: proyección ortográfica de D3 en Canvas 2D (sin WebGL),
+   tierras de `portada/world-110m.js` en cardenillo apagado, España (`SPAIN.outline`, con
+   Baleares y Canarias) en cobre, atmósfera y sombra suaves, graticulado tenue. El radio inicial
+   es el que hace coincidir España con el contorno plano (`S_BIG`) y baja en escala logarítmica
+   hasta `R_FIN` (0,40·min(W,H); 0,42 en móvil). La curva queda como una estela fina al fondo.
+4. El globo **gira para siempre** (2,6°/s). Arrastrar lo gira (horizontal en táctil, ambos ejes
+   con ratón), al soltar sigue con la inercia del gesto y vuelve a la velocidad base. Botón
+   pausa/reproduce de 44 px; espacio pausa; Esc salta la intro; ← → giran 8°.
+5. `prefers-reduced-motion`: estado final estático (globo con España de frente, sin giro);
+   el botón permite arrancar el giro.
+
+Chrome de la escena: rótulo de una línea («Emisiones totales de GEI · España 1860-2023 ·
+Mt CO₂e», en dos líneas en móvil), el año, el botón pausa y una pista «Arrastra para girar el
+globo» que se apaga sola. Intro completa: 9,85 s. Sonda `window.__probe()` y
+`window.__portada.finish()` para la verificación automática.
 
 **Lo que se quitó el 2026-09-06** (portada vieja: globo 3D + franjas
 climáticas, que abría `explorer.html` dentro de un `<iframe>`):
@@ -171,8 +176,8 @@ climáticas, que abría `explorer.html` dentro de un `<iframe>`):
   `.hero-*`, `.stripes-*`, `.globe-container`, `#globe-canvas`,
   `.viewer-frame`, `body.home-page`) y sus tres bloques `@media`.
 
-`explorer.html` pide hoy `css/provenance.css?v=20260906k`,
-`css/styles.css?v=20260906k` y `js/app.js?v=20260906k`; `app.js` importa
+`explorer.html` pide hoy `css/provenance.css?v=20260908b`,
+`css/styles.css?v=20260908b` y `js/app.js?v=20260908b`; `app.js` importa
 `methods/como-trabajamos.js?v=20260906k` y este `methods/provenance-panel.js?v=20260906k`.
 Al editar cualquiera de esos ficheros hay que subir el `?v=` en quien lo pide.
 
@@ -273,13 +278,24 @@ python build\generate_data.py
 
 ## Paleta
 
-**El visor sigue la portada aprobada `V5_costa-pintada.html`**
-(`07_temp/portadas_visores_2026-09/cahe/V5_costa-pintada.html`, "La costa
-pintada": azul de Prusia, cobre y cardenillo). Aplicada al cromo el 2026-09-06.
+**Regla (V7, 2026-09-08): la paleta del interior es la de la portada.** Al pulsar
+«Entrar al visor» no se cambia de mundo. La portada es azul de Prusia · cal · cobre ·
+cardenillo, y desde el 8 de septiembre el **cromo** del explorador va en esos mismos tokens:
+cabecera, barra lateral (incluido el conmutador de grupos, antes un bloque de cal) y línea
+temporal en Prusia con texto cal y acentos cobre (`--chrome`, `--chrome-2`, `--chrome-3`,
+`--chrome-hover`, `--chrome-text`, `--chrome-mute`, `--chrome-rule` en `:root`). El estado
+activo de la barra lateral es fondo `--chrome` con filete izquierdo `--warm-hi`; el botón de
+reproducir, la selección y el deslizador de la línea temporal son cobre. Los **lienzos de
+gráfica siguen en papel claro** (papel sobre mar, como permite el brief): la cal de la portada
+(`--cal #EFE8D8`) sigue siendo el fondo de la aplicación y el azul de Prusia la tinta.
 
-La portada es de fondo oscuro y el visor de fondo claro: se traslada el
-*pigmento*, no la inversion. La cal de la portada (`--cal #EFE8D8`) pasa a ser
-el fondo del visor, y el azul de Prusia pasa a ser la tinta y la barra lateral.
+Rampas de mapa (`mapPalette` en `renderMap` de `js/app.js`): cal → cardenillo → sombra, siete
+tonos separables (`#F3EDDD … #1B4A44`); «sin dato» es una trama de puntos (`<pattern
+id="cahe-nodata">`, mismo canal que en los demás visores desde el 7-IX) y la leyenda repite la
+muestra. En las comparativas globales España va en cobre (`COLOR_SPAIN #9a4e1d`) y el Mundo en
+cardenillo (`COLOR_WORLD #33735e`), como en el globo de la portada. Las miniaturas de
+Perspectivas usan los mismos dos tonos. Backups previos en
+`C:/Work/scratch/checkpoint/visores_2026-09/web_cahe_v3_backup/*.20260908-v7.bak`.
 
 Tokens de cromo en `css/styles.css` (`:root`):
 
@@ -317,10 +333,11 @@ cuatro unicas excepciones estan declaradas en un comentario al final de
 `css/styles.css`: los dos retratos circulares del equipo y las dos asas de
 arrastre de la linea temporal en tactil.
 
-**Tipografia.** Sin cambios: `DM Serif Display` + `Source Sans 3` desde la hoja
-de Google Fonts que ya pedia el visor. La portada usa Fraunces/Geist, pero aqui
-la instruccion fue "paleta y esquinas, nada mas", asi que la voz tipografica se
-dejo intacta.
+**Tipografía.** Desde la V7 el interior usa la misma voz que la portada: `--ff-serif`
+= Fraunces, `--ff-sans` = Geist, `--ff-mono` = Geist Mono (hoja de Google Fonts en
+`explorer.html`). `Cormorant Garamond` se mantiene solo para la prosa de «Acerca»
+(`.acerca-page .prose`), que la pide por nombre. DM Serif Display, Source Sans 3 e Inter ya
+no se cargan.
 
 ## Protocolo Perspectivas
 

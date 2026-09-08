@@ -545,8 +545,10 @@ const MODAL_INFO = {
   },
 };
 
-const COLOR_SPAIN = "#1e6091";
-const COLOR_WORLD = "#e63946";
+/* España en cobre y el mundo en cardenillo, como en el globo de la portada (V7, 2026-09-08);
+   tonos oscurecidos para leerse como texto sobre cal (≥ 4,5:1). */
+const COLOR_SPAIN = "#9a4e1d";
+const COLOR_WORLD = "#33735e";
 const FALLBACK_PALETTE = ["#c93324","#3a6d8a","#6f7a3d","#c79a3b","#8b5a3c","#4f8a64","#a44c2c","#5e6871","#2c5d3e","#e6892b"];
 const INDICATOR_STYLES = {
   energia: {
@@ -2768,7 +2770,8 @@ function renderMap(container, mapData, item){
   const extent = d3.extent(allVals);
   const minVal = Number.isFinite(extent[0]) ? extent[0] : 0;
   const maxVal = Number.isFinite(extent[1]) && extent[1] > minVal ? extent[1] : minVal + 1;
-  const mapPalette = ["#fff7d6","#ead77f","#c7b640","#8d9b35","#5f842f","#2d6030","#123624"];
+  /* rampa secuencial de la familia de la portada: cal → cardenillo → sombra (7 tonos separables) */
+  const mapPalette = ["#F3EDDD","#D6DBC6","#AECDB9","#7FB79F","#4F9C82","#33735E","#1B4A44"];
   const colorIndex = d3.scalePow().exponent(0.72).domain([minVal, maxVal]).range([0, mapPalette.length - 1]).clamp(true);
   const color = v => mapPalette[Math.max(0, Math.min(mapPalette.length - 1, Math.floor(colorIndex(v))))];
   const idx = mapData.years.indexOf(state.year);
@@ -2779,6 +2782,11 @@ function renderMap(container, mapData, item){
   const W = Math.max(360, box.width || 800), H = Math.max(430, box.height || 560);
   const svg = d3.select(container).append("svg").attr("class","map-svg")
     .attr("viewBox", `0 0 ${W} ${H}`).attr("preserveAspectRatio","xMidYMid meet");
+  /* «Sin dato»: trama de puntos, un canal distinto de la rampa (como en los demás visores desde el 7-IX) */
+  const NO_DATA = "url(#cahe-nodata)";
+  const pat = svg.append("defs").append("pattern").attr("id","cahe-nodata").attr("patternUnits","userSpaceOnUse").attr("width",5).attr("height",5);
+  pat.append("rect").attr("width",5).attr("height",5).attr("fill","#f1ebdd");
+  pat.append("circle").attr("cx",2.5).attr("cy",2.5).attr("r",0.9).attr("fill","#6f7b86");
 
   const canaryIso = new Set(["ES-GC","ES-TF"]);
   const isCanary = f => canaryIso.has(f.properties.iso_3166_2);
@@ -2795,7 +2803,7 @@ function renderMap(container, mapData, item){
 
   function fillFor(f){
     const v = values.get(f.properties.iso_3166_2);
-    return v == null ? "#ece6d6" : color(v);
+    return v == null ? NO_DATA : color(v);
   }
   let hoverTarget = null;
   function tooltipRowsFor(iso){
@@ -2830,7 +2838,7 @@ function renderMap(container, mapData, item){
     const cx = 18, cy = Math.max(18, H - ch - 82);
     const inset = svg.append("g").attr("class", "canarias-inset").attr("transform", `translate(${cx},${cy})`);
     inset.append("rect").attr("width", cw).attr("height", ch).attr("fill","rgba(251,248,241,.78)").attr("stroke","#d2c8b2");
-    inset.append("text").attr("x", 6).attr("y", 11).attr("font-family","Inter,sans-serif").attr("font-size",7.5).attr("font-weight",700).attr("letter-spacing",1).attr("fill","#8a8c8f").text("CANARIAS");
+    inset.append("text").attr("x", 6).attr("y", 11).attr("font-family","Geist,sans-serif").attr("font-size",7.5).attr("font-weight",700).attr("letter-spacing",1).attr("fill","#4d6274").text("CANARIAS");
     const cProj = d3.geoMercator().fitExtent([[7,17],[cw-7,ch-7]], canary);
     canaryPaths = inset.append("g").selectAll("path").data(canary.features).join("path")
       .attr("class","map-province").attr("d", d3.geoPath(cProj)).attr("fill", fillFor).call(bindHover);
@@ -2842,8 +2850,8 @@ function renderMap(container, mapData, item){
     const idx2 = mapData.years.indexOf(year);
     const newV = new Map();
     for(const [iso, arr] of Object.entries(combo.values)) newV.set(iso, arr[idx2]);
-    mainPaths.attr("fill", f => { const v = newV.get(f.properties.iso_3166_2); return v == null ? "#ece6d6" : color(v); });
-    if(canaryPaths) canaryPaths.attr("fill", f => { const v = newV.get(f.properties.iso_3166_2); return v == null ? "#ece6d6" : color(v); });
+    mainPaths.attr("fill", f => { const v = newV.get(f.properties.iso_3166_2); return v == null ? NO_DATA : color(v); });
+    if(canaryPaths) canaryPaths.attr("fill", f => { const v = newV.get(f.properties.iso_3166_2); return v == null ? NO_DATA : color(v); });
     values.clear();
     for(const [k, v] of newV) values.set(k, v);
     mini.update(year);
@@ -2862,6 +2870,7 @@ function renderMap(container, mapData, item){
         <span>${fmt(minVal)}</span>
         <div class="map-legend-ramp">${swatches}</div>
         <span>${fmt(maxVal)}</span>
+        <span class="map-legend-nodata"><i></i>${state.lang === "en" ? "no data" : "sin dato"}</span>
       </div>
     </div>`);
 }
@@ -2920,7 +2929,7 @@ function drawMapMiniChart(container, mapData, combo){
     .attr("stroke", "#344f24")
     .attr("stroke-width", 1.8)
     .attr("d", d3.line().x(d => x(d.year)).y(d => y(d.value)));
-  const point = g.append("circle").attr("r", 4.2).attr("fill", "#c93324").attr("stroke", "#fff").attr("stroke-width", 1.4);
+  const point = g.append("circle").attr("r", 4.2).attr("fill", "#9a4e1d").attr("stroke", "#fff").attr("stroke-width", 1.4);
   function update(year){
     const d = totals.find(p => p.year === nearestTimelineYear(mapData.years, year)) || totals.at(-1);
     point.attr("cx", x(d.year)).attr("cy", y(d.value));
@@ -4489,7 +4498,7 @@ function miniLineFigure(){
   const lastSpain = miniLastPoint(spain, x, y);
   const lastWorld = miniLastPoint(world, x, y);
   if(!spainPts || !worldPts || !lastSpain || !lastWorld) return null;
-  return `<svg class="perspective-snapshot" viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="0" width="260" height="120" fill="#f5f7f9"/><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M28 16v80h214" fill="none" stroke="#cbd2d8" stroke-width="1"/><polyline points="${worldPts}" fill="none" stroke="#c94132" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${spainPts}" fill="none" stroke="#4f7ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${lastSpain.x}" cy="${lastSpain.y}" r="3.8" fill="#4f7ea8"/><circle cx="${lastWorld.x}" cy="${lastWorld.y}" r="3.8" fill="#c94132"/><text x="32" y="112" font-size="8" fill="#6f7b86">1860</text><text x="216" y="112" font-size="8" fill="#6f7b86">2022</text><text x="${Math.min(224, lastSpain.x + 6)}" y="${Math.max(16, lastSpain.y - 4)}" font-size="8" font-weight="700" fill="#4f7ea8">España</text><text x="${Math.min(224, lastWorld.x + 6)}" y="${Math.max(24, lastWorld.y + 10)}" font-size="8" font-weight="700" fill="#c94132">Mundo</text></svg>`;
+  return `<svg class="perspective-snapshot" viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="0" width="260" height="120" fill="#f5f7f9"/><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M28 16v80h214" fill="none" stroke="#cbd2d8" stroke-width="1"/><polyline points="${worldPts}" fill="none" stroke="#33735e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${spainPts}" fill="none" stroke="#9a4e1d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${lastSpain.x}" cy="${lastSpain.y}" r="3.8" fill="#9a4e1d"/><circle cx="${lastWorld.x}" cy="${lastWorld.y}" r="3.8" fill="#33735e"/><text x="32" y="112" font-size="8" fill="#6f7b86">1860</text><text x="216" y="112" font-size="8" fill="#6f7b86">2022</text><text x="${Math.min(224, lastSpain.x + 6)}" y="${Math.max(16, lastSpain.y - 4)}" font-size="8" font-weight="700" fill="#9a4e1d">España</text><text x="${Math.min(224, lastWorld.x + 6)}" y="${Math.max(24, lastWorld.y + 10)}" font-size="8" font-weight="700" fill="#33735e">Mundo</text></svg>`;
 }
 
 function miniAreaFigure(){
@@ -4504,7 +4513,7 @@ function miniAreaFigure(){
     if(valid.length < 2) return "";
     return `${miniSeriesPath(valid, x, y)} L${x(valid.at(-1).year)} 96 L${x(valid[0].year)} 96 Z`;
   };
-  return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="${areaPath(world)}" fill="#c94132" opacity=".26"/><path d="${areaPath(spain)}" fill="#4f7ea8" opacity=".44"/><path d="${miniSeriesPath(world, x, y)}" fill="none" stroke="#c94132" stroke-width="2"/><path d="${miniSeriesPath(spain, x, y)}" fill="none" stroke="#4f7ea8" stroke-width="2"/></svg>`;
+  return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="${areaPath(world)}" fill="#33735e" opacity=".26"/><path d="${areaPath(spain)}" fill="#9a4e1d" opacity=".44"/><path d="${miniSeriesPath(world, x, y)}" fill="none" stroke="#33735e" stroke-width="2"/><path d="${miniSeriesPath(spain, x, y)}" fill="none" stroke="#9a4e1d" stroke-width="2"/></svg>`;
 }
 
 function miniScatterFigure(){
@@ -4521,7 +4530,7 @@ function miniScatterFigure(){
   const x = d3.scaleLinear().domain(d3.extent(all, d => d.x)).nice().range([30, 236]);
   const y = d3.scaleLinear().domain(d3.extent(all, d => d.y)).nice().range([96, 18]);
   const dots = (data, color) => data.filter((_, i) => i % 4 === 0).map(d => `<circle cx="${x(d.x)}" cy="${y(d.y)}" r="3.3" fill="${color}" opacity=".82"/>`).join("");
-  return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 10v86h212"/><path d="M28 74h212M28 50h212M28 26h212"/></g>${dots(world, "#c94132")}${dots(spain, "#4f7ea8")}</svg>`;
+  return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 10v86h212"/><path d="M28 74h212M28 50h212M28 26h212"/></g>${dots(world, "#33735e")}${dots(spain, "#9a4e1d")}</svg>`;
 }
 
 function miniTapioFigure(){
@@ -4566,11 +4575,11 @@ function perspectiveFigureMarkup(kind){
     : null;
   if(live) return live;
   if(kind === "scatter") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 10v86h212"/><path d="M28 74h212M28 50h212M28 26h212"/></g><g class="mini-dots blue">${[0,1,2,3,4,5,6,7].map((_,i)=>`<circle cx="${48+i*21}" cy="${82-i*6+(i%2)*8}" r="4"/>`).join("")}</g><g class="mini-dots red">${[0,1,2,3,4,5,6,7].map((_,i)=>`<circle cx="${54+i*22}" cy="${78-i*8-(i%2)*4}" r="4"/>`).join("")}</g></svg>`;
-  if(kind === "tapio") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M130 12v92M30 62h210"/><path d="M44 96 216 20"/></g><circle cx="94" cy="76" r="5" fill="#d0a53f"/><circle cx="138" cy="55" r="5" fill="#c94132"/><circle cx="172" cy="45" r="5" fill="#4f7ea8"/><circle cx="188" cy="73" r="5" fill="#5f8d63"/><circle cx="116" cy="41" r="5" fill="#1c1f24"/></svg>`;
-  if(kind === "bars") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M30 96h210"/><path d="M30 72h210M30 48h210M30 24h210"/></g><rect x="48" y="50" width="22" height="46" fill="#c79a3b"/><rect x="82" y="34" width="22" height="62" fill="#4f7ea8"/><rect x="116" y="68" width="22" height="28" fill="#6f7a3d"/><rect x="150" y="22" width="22" height="74" fill="#c94132"/><rect x="184" y="42" width="22" height="54" fill="#1c1f24"/></svg>`;
+  if(kind === "tapio") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M130 12v92M30 62h210"/><path d="M44 96 216 20"/></g><circle cx="94" cy="76" r="5" fill="#d0a53f"/><circle cx="138" cy="55" r="5" fill="#33735e"/><circle cx="172" cy="45" r="5" fill="#9a4e1d"/><circle cx="188" cy="73" r="5" fill="#5f8d63"/><circle cx="116" cy="41" r="5" fill="#1c1f24"/></svg>`;
+  if(kind === "bars") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M30 96h210"/><path d="M30 72h210M30 48h210M30 24h210"/></g><rect x="48" y="50" width="22" height="46" fill="#c79a3b"/><rect x="82" y="34" width="22" height="62" fill="#9a4e1d"/><rect x="116" y="68" width="22" height="28" fill="#6f7a3d"/><rect x="150" y="22" width="22" height="74" fill="#33735e"/><rect x="184" y="42" width="22" height="54" fill="#1c1f24"/></svg>`;
   if(kind === "map") return `<svg viewBox="0 0 260 120" aria-hidden="true"><path d="M90 22 140 18 188 38 180 76 140 100 92 84 70 52z" fill="#e1d8b4"/><path d="M94 28 118 25 120 58 100 60z" fill="#6f7a3d"/><path d="M126 25 154 26 148 54 121 58z" fill="#cdbf86"/><path d="M154 30 180 42 172 70 148 55z" fill="#9aa05b"/><path d="M102 64 140 58 136 94 96 80z" fill="#d7cc9a"/><path d="M142 60 174 73 142 96z" fill="#5f6f32"/><circle cx="198" cy="82" r="7" fill="#9aa05b"/></svg>`;
-  if(kind === "area") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M34 92 C72 88 86 70 112 72 S152 50 178 38 214 26 236 18 L236 96 L34 96z" fill="#c79a3b" opacity=".55"/><path d="M34 92 C76 82 96 84 120 68 S168 55 194 44 218 42 236 34 L236 96 L34 96z" fill="#c94132" opacity=".55"/></svg>`;
-  return `<svg class="perspective-snapshot" viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="0" width="260" height="120" fill="#f5f7f9"/><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M28 16v80h214" fill="none" stroke="#cbd2d8" stroke-width="1"/><polyline points="34,88 62,82 78,76 98,70 126,66 154,48 194,28 236,20" fill="none" stroke="#4f7ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><polyline points="34,90 72,86 98,75 118,62 166,50 188,44 214,38 236,30" fill="none" stroke="#c94132" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="236" cy="20" r="3.8" fill="#4f7ea8"/><circle cx="236" cy="30" r="3.8" fill="#c94132"/><text x="32" y="112" font-size="8" fill="#6f7b86">1860</text><text x="216" y="112" font-size="8" fill="#6f7b86">2022</text><text x="198" y="18" font-size="8" font-weight="700" fill="#4f7ea8">España</text><text x="198" y="42" font-size="8" font-weight="700" fill="#c94132">Mundo</text></svg>`;
+  if(kind === "area") return `<svg viewBox="0 0 260 120" aria-hidden="true"><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M34 92 C72 88 86 70 112 72 S152 50 178 38 214 26 236 18 L236 96 L34 96z" fill="#c79a3b" opacity=".55"/><path d="M34 92 C76 82 96 84 120 68 S168 55 194 44 218 42 236 34 L236 96 L34 96z" fill="#33735e" opacity=".55"/></svg>`;
+  return `<svg class="perspective-snapshot" viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="0" width="260" height="120" fill="#f5f7f9"/><g class="mini-grid"><path d="M28 96h214"/><path d="M28 72h214M28 48h214M28 24h214"/></g><path d="M28 16v80h214" fill="none" stroke="#cbd2d8" stroke-width="1"/><polyline points="34,88 62,82 78,76 98,70 126,66 154,48 194,28 236,20" fill="none" stroke="#9a4e1d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><polyline points="34,90 72,86 98,75 118,62 166,50 188,44 214,38 236,30" fill="none" stroke="#33735e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="236" cy="20" r="3.8" fill="#9a4e1d"/><circle cx="236" cy="30" r="3.8" fill="#33735e"/><text x="32" y="112" font-size="8" fill="#6f7b86">1860</text><text x="216" y="112" font-size="8" fill="#6f7b86">2022</text><text x="198" y="18" font-size="8" font-weight="700" fill="#9a4e1d">España</text><text x="198" y="42" font-size="8" font-weight="700" fill="#33735e">Mundo</text></svg>`;
 }
 
 function perspectiveVisualMarkup(entry){
