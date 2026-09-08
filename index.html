@@ -7,19 +7,21 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0A1B2C">
 <title>CAHE · Contabilidad Ambiental Histórica de España</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Cormorant+Garamond:ital,wght@1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
+/* Portada V6 (2026-09-08). Paleta y tipografía del propio visor (css/styles.css):
+   azul de Prusia · cal · cobre · cardenillo; DM Serif Display + Source Sans 3. */
 :root{
-  /* Azul de Prusia · cobre · cardenillo */
   --prusia:#0A1B2C; --prusia2:#0E2438; --prusia3:#13314A;
   --cal:#EFE8D8; --cal2:#D6CDBA; --muted:#8AA0B4; --hair:rgba(214,205,186,.20); --hair2:rgba(214,205,186,.34);
   --cobre:#C4753C; --cobre-hi:#E39A5B; --cobre-d:#7E3F1A;
-  --verd:#4F9C82; --verd-hi:#8FCBB0;
-  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --sans:Geist,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --display:Fraunces,"Bodoni MT",Didot,Georgia,serif;
+  --verd:#4F9C82; --verd-hi:#8FCBB0; --verd-lo:#255A4C;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --display:"DM Serif Display","Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ital:"Cormorant Garamond","DM Serif Display",Georgia,serif;
   --pad:clamp(18px,3vw,46px);
 }
 *{box-sizing:border-box}
@@ -27,60 +29,41 @@ html,body{height:100%}
 body{margin:0;background:var(--prusia);color:var(--cal);font-family:var(--sans);font-size:15px;line-height:1.45;
      -webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 .page{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(300px,30vw) 1fr;
-      grid-template-rows:auto 1fr;grid-template-areas:"head stage" "nav stage"}
+      grid-template-rows:auto 1fr auto;grid-template-areas:"head stage" "nav stage" "nav tl"}
 .head,.nav{padding-left:var(--pad);padding-right:var(--pad);position:relative;z-index:2}
 .head{grid-area:head;padding-top:clamp(16px,3.2vh,34px)}
 .nav{grid-area:nav;display:flex;flex-direction:column;min-height:0;padding-top:clamp(14px,2.6vh,28px);
      padding-bottom:max(clamp(14px,2.4vh,26px),env(safe-area-inset-bottom))}
-.stage{grid-area:stage;position:relative;border-left:1px solid var(--hair);min-height:0;overflow:hidden}
+.stage{grid-area:stage;position:relative;border-left:1px solid var(--hair);min-height:0;overflow:hidden;
+       touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
-.eyebrow{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.eyebrow{margin:0;font-size:12px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
 .eyebrow i{font-style:normal;color:var(--cobre-hi)}
-h1{font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 144;
-   font-size:clamp(58px,7.4vw,112px);line-height:.86;letter-spacing:-.02em;margin:.14em 0 .16em;color:var(--cal)}
-.sub{margin:0;font-family:var(--display);font-weight:400;font-variation-settings:"opsz" 40;
-     font-size:clamp(16px,1.34vw,22px);line-height:1.18;letter-spacing:-.005em;color:var(--cobre-hi)}
-.lede{margin:.85em 0 0;color:var(--cal2);max-width:none;font-size:clamp(13.5px,.99vw,15px);text-wrap:pretty}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(58px,7.2vw,108px);line-height:.9;letter-spacing:-.01em;
+   margin:.12em 0 .14em;color:var(--cal)}
+.sub{margin:0;font-family:var(--ital);font-style:italic;font-weight:500;font-size:clamp(18px,1.5vw,25px);line-height:1.16;color:var(--cobre-hi)}
+.lede{margin:.85em 0 0;color:var(--cal2);font-size:clamp(13.5px,.99vw,15px);text-wrap:pretty}
 
-.navlabel{margin:0 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-/* the way in weighs more than the rest: a real button, and thin links under it */
 .enterbtn{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;text-decoration:none;color:var(--cal);
           border:1px solid rgba(196,117,60,.55);border-left:3px solid var(--cobre);background:rgba(19,49,74,.62);
           padding:clamp(12px,1.8vh,19px) clamp(13px,1.4vw,19px);min-height:clamp(66px,10vh,98px);
           transition:background .17s,border-color .17s}
-.enterbtn b{display:block;font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 72;
-            font-size:clamp(21px,1.78vw,28px);line-height:1.04;letter-spacing:-.015em;color:var(--cal)}
-.enterbtn s{display:block;text-decoration:none;margin-top:5px;font-family:var(--mono);
-            font-size:clamp(10.4px,.76vw,11.8px);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-.enterbtn i{font-style:normal;font-family:var(--mono);font-size:20px;line-height:1;color:var(--cobre-hi);transition:transform .17s}
+.enterbtn b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(22px,1.8vw,29px);line-height:1.04;color:var(--cal)}
+.enterbtn s{display:block;text-decoration:none;margin-top:5px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.enterbtn i{font-style:normal;font-size:22px;line-height:1;color:var(--cobre-hi);transition:transform .17s}
 .enterbtn:hover,.enterbtn:focus-visible{background:rgba(28,66,98,.8);border-color:var(--cobre-hi);outline:none}
 .enterbtn:hover i,.enterbtn:focus-visible i{transform:translateX(4px)}
 .enterbtn:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
-/* the reading card: it lives inside the plate, never over the way in */
-.tip{position:absolute;z-index:4;pointer-events:none;opacity:0;transform:translateY(3px);
-     transition:opacity .13s ease,transform .13s ease;
-     background:rgba(9,23,38,.94);border:1px solid rgba(196,117,60,.5);border-left:3px solid var(--cobre);
-     padding:9px 13px 10px;max-width:min(64vw,272px);box-shadow:0 3px 18px rgba(0,0,0,.42)}
-.tip.on{opacity:1;transform:none}
-.tip .k{display:block;font-family:var(--display);font-weight:560;font-size:17.5px;line-height:1.1;color:var(--cal)}
-.tip .p{display:block;margin-top:3px;font-family:var(--mono);font-size:9.6px;letter-spacing:.13em;
-        text-transform:uppercase;color:var(--muted)}
-.tip .v{display:block;margin-top:7px;font-family:var(--mono);font-size:12.6px;color:var(--cal2);line-height:1.34}
-.tip .v em{font-style:normal;color:var(--cobre-hi)}
-.tip.verd{border-left-color:var(--verd-hi);border-color:rgba(143,203,176,.42)}
-.tip.verd .v em{color:var(--verd-hi)}
+
+.navlabel{margin:clamp(10px,1.8vh,20px) 0 4px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .index{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
-.index{margin-top:clamp(10px,1.8vh,20px)}
-.index li{display:flex;flex:1 1 auto;min-height:44px;max-height:94px;border-top:1px solid var(--hair2)}
+.index li{display:flex;flex:1 1 auto;min-height:44px;max-height:88px;border-top:1px solid var(--hair2)}
 .index li:last-child{border-bottom:1px solid var(--hair2)}
-.index a{flex:1;display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--cal);
-         font-size:14px;letter-spacing:-.006em;line-height:1.15;transition:color .16s}
-.index a svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--cobre-hi);fill:none;stroke-width:1.5;
-             stroke-linecap:round;stroke-linejoin:round;transition:stroke .16s}
-.index a .ar{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--hair2);
-             transition:transform .16s,color .16s}
-.index a.q{color:var(--muted);font-size:13px}
+.index a{flex:1;display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--cal);font-size:15px;line-height:1.15;transition:color .16s}
+.index a svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--cobre-hi);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .16s}
+.index a .ar{margin-left:auto;font-size:14px;color:var(--hair2);transition:transform .16s,color .16s}
+.index a.q{color:var(--muted);font-size:14px}
 .index a.q svg{stroke:var(--muted)}
 .index a:hover,.index a:focus-visible{color:var(--cobre-hi)}
 .index a:hover svg,.index a:focus-visible svg{stroke:var(--cobre-hi)}
@@ -92,32 +75,110 @@ body.on .enter.d1{transition-delay:.05s}
 body.on .enter.d2{transition-delay:.10s}
 body.on .enter.d3{transition-delay:.14s}
 
+/* Rótulos del escenario: qué es la curva y qué es el mapa, siempre visibles, en HTML para que
+   el conmutador de idioma los alcance. */
+.cap{position:absolute;left:clamp(10px,1.2vw,16px);top:9px;z-index:3;pointer-events:none;max-width:min(64%,640px)}
+.cap p{margin:0;display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.35;letter-spacing:.02em}
+.cap .sw{flex:0 0 auto;display:inline-block;width:18px;height:4px;border-radius:2px;transform:translateY(-3px)}
+.cap .sw-c{background:linear-gradient(90deg,var(--cobre-d),var(--cobre-hi))}
+.cap .sw-v{background:linear-gradient(90deg,var(--verd-lo),var(--verd-hi))}
+.cap-a{color:var(--cal);font-weight:600}
+.cap-b{margin-top:3px!important;color:var(--verd-hi);font-weight:500;opacity:.55;transition:opacity .6s ease}
+.cap-b b{font-weight:600;color:var(--cal);white-space:nowrap}
+.stage.acted .cap-b{opacity:1}
+
+/* Leyenda compacta: escala de color, unidad y rango. */
+.leg{position:absolute;right:clamp(10px,1.2vw,16px);top:56px;z-index:3;pointer-events:none;width:clamp(128px,15%,190px);
+     font-size:12px;line-height:1.3;color:var(--cal2);opacity:0;transition:opacity .6s ease}
+.stage.acted .leg{opacity:1}
+.leg-bar{height:7px;border-radius:2px;background:linear-gradient(90deg,var(--verd-lo),var(--verd-hi));border:1px solid rgba(239,232,216,.18)}
+.leg-r{display:flex;justify-content:space-between;gap:6px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.leg-r .leg-u{color:var(--muted);text-align:center}
+.leg-n{margin:2px 0 0;color:var(--muted);font-size:12px}
+
+/* Ficha de lectura de una provincia. */
+.tip{position:absolute;z-index:4;pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .13s ease,transform .13s ease;
+     background:rgba(9,23,38,.95);border:1px solid rgba(143,203,176,.42);border-left:3px solid var(--verd-hi);
+     padding:9px 13px 10px;max-width:min(66vw,280px);box-shadow:0 3px 18px rgba(0,0,0,.42)}
+.tip.on{opacity:1;transform:none}
+.tip .k{display:block;font-family:var(--display);font-size:18px;line-height:1.1;color:var(--cal)}
+.tip .p{display:block;margin-top:3px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tip .v{display:block;margin-top:6px;font-size:13.5px;color:var(--cal2);line-height:1.34;font-variant-numeric:tabular-nums}
+.tip .v em{font-style:normal;font-weight:700;color:var(--verd-hi)}
+.tip .x{display:block;margin-top:6px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* Barra de tiempo, bajo el escenario: reproducir/pausar, año en numerales grandes, deslizador y lectura. */
+.tl{grid-area:tl;display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:9px clamp(10px,1.2vw,16px) 10px;
+    border-left:1px solid var(--hair);border-top:1px solid var(--hair);background:var(--prusia2);position:relative;z-index:3}
+.tl-b{flex:0 0 auto;width:46px;height:46px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+      background:rgba(19,49,74,.7);border:1px solid rgba(196,117,60,.6);color:var(--cobre-hi);border-radius:0;padding:0;
+      transition:background .15s,border-color .15s}
+.tl-b:hover,.tl-b:focus-visible{background:rgba(28,66,98,.9);border-color:var(--cobre-hi);outline:none}
+.tl-b:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
+.tl-b svg{width:20px;height:20px;fill:currentColor}
+.tl-b .ic-pause{display:none}
+.tl.playing .tl-b .ic-play{display:none}
+.tl.playing .tl-b .ic-pause{display:block}
+.tl-y{flex:0 0 auto;font-family:var(--display);font-size:34px;line-height:1;color:var(--cobre-hi);min-width:2.6em;text-align:center;
+      font-variant-numeric:tabular-nums}
+.tl-r{flex:1 1 160px;min-width:120px;height:44px;margin:0;padding:0;background:transparent;cursor:pointer;touch-action:none;
+      -webkit-appearance:none;appearance:none}
+.tl-r:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
+.tl-r::-webkit-slider-runnable-track{height:2px;background:rgba(214,205,186,.32)}
+.tl-r::-moz-range-track{height:2px;background:rgba(214,205,186,.32)}
+.tl-r::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-8px;border-radius:50%;background:var(--cobre-hi);
+      border:1px solid #2A0E03;box-shadow:0 0 0 5px rgba(196,117,60,.20)}
+.tl-r::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--cobre-hi);border:1px solid #2A0E03;box-shadow:0 0 0 5px rgba(196,117,60,.20)}
+.tl-v{flex:0 1 auto;font-size:12px;line-height:1.35;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.tl-v em{font-style:normal;font-weight:700;color:var(--cal2)}
+.tl-v i{font-style:normal;display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin:0 5px 2px 0}
+.tl-v i.c{background:var(--cobre-hi)}
+.tl-v i.g{background:var(--verd-hi)}
+.tl-k{display:none;margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap}
+@media (min-width:1700px){.tl-k{display:inline}}
+
+/* Conmutador de idioma. */
+.lang-toggle{position:fixed;top:18px;right:18px;z-index:40;border-radius:0;cursor:pointer;font:600 12px/1 var(--sans);letter-spacing:.12em;
+  padding:8px 12px;min-height:32px;background:rgba(255,255,255,.10);color:#e8eef2;border:1px solid rgba(255,255,255,.34);transition:background .18s,border-color .18s}
+.lang-toggle:hover{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.62)}
+.lang-toggle:focus-visible{outline:2px solid #8FCBB0;outline-offset:2px}
+@media (pointer:coarse){.lang-toggle{min-height:44px;min-width:44px}}
+
 @media (max-width:919px) and (orientation:portrait){
-  .page{grid-template-columns:1fr;grid-template-rows:auto minmax(216px,1fr) auto;grid-template-areas:"head" "stage" "nav"}
-  .stage{border-left:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-  .head{padding-bottom:11px}
-  .nav{padding-top:10px}
-  h1{font-size:clamp(48px,15vw,76px)}
-  .sub{font-size:clamp(14px,4vw,18px)}
-  .lede{font-size:12.8px;line-height:1.4}
-  .index{flex:0 0 auto;margin-top:9px}
+  .page{grid-template-columns:1fr;grid-template-rows:auto 54vh auto auto;grid-template-areas:"head" "stage" "tl" "nav"}
+  @supports (height:1svh){.page{grid-template-rows:auto 54svh auto auto}}
+  .stage{border-left:0;border-top:1px solid var(--hair);min-height:400px}
+  .head{padding-top:14px;padding-bottom:8px}
+  /* z-index:auto: si .nav apilase, el CTA fijo quedaría debajo de la barra de tiempo */
+  .nav{z-index:auto;padding-top:8px;padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+  h1{font-size:clamp(42px,12.5vw,64px);margin:.08em 0 .1em}
+  .sub{font-size:clamp(15px,4.2vw,19px)}
+  .lede{font-size:12.5px;line-height:1.34;margin-top:.5em}
+  .index{flex:0 0 auto;margin-top:4px}
   .index li{flex:0 0 auto;max-height:none;min-height:46px}
-  .enterbtn{min-height:58px;padding:11px 13px}
-  .enterbtn b{font-size:20px}
-  .enterbtn s{font-size:10px;margin-top:3px}
-  .tip{max-width:min(70vw,226px);padding:8px 11px 9px}
-  .tip .k{font-size:15.5px}
-  .tip .v{font-size:11.8px;margin-top:5px}
+  .enterbtn{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:30;min-height:60px;padding:11px 14px;
+            background:rgba(19,49,74,.96);box-shadow:0 -6px 24px rgba(3,9,17,.55)}
+  .enterbtn b{font-size:21px}
+  .enterbtn s{margin-top:3px}
+  .tl{border-left:0;padding:8px 10px 9px;gap:6px 10px}
+  .tl-y{font-size:28px;min-width:2.5em}
+  .tl-v{flex:1 0 100%;text-align:left}
+  .tl-k{display:none}
+  .cap{left:10px;top:7px;max-width:calc(100% - 20px)}
+  .leg{right:10px;width:124px}
+  .leg-n{display:none}
+  .tip{max-width:min(72vw,240px);padding:8px 11px 9px}
+  .tip .k{font-size:16px}
+  .tip .v{font-size:13px;margin-top:5px}
+  .lang-toggle{top:10px;right:10px}
 }
 @media (max-height:540px) and (orientation:landscape){
   :root{--pad:clamp(13px,2.2vw,22px)}
   .head{padding-top:11px}
   h1{font-size:clamp(38px,10.5vh,56px);margin:.08em 0 .1em}
-  .sub{font-size:14px}
-  .lede{font-size:12px;margin-top:.5em;max-width:46ch}
-  .eyebrow{display:none}
-  .lede{font-size:11px;line-height:1.34;margin-top:.45em}
-  .navlabel{display:none}
+  .sub{font-size:15px}
+  .eyebrow,.navlabel{display:none}
+  .lede{font-size:12px;line-height:1.34;margin-top:.45em}
   .index li{min-height:30px;max-height:36px}
   .enterbtn{min-height:44px;padding:7px 11px}
   .enterbtn b{font-size:17px}
@@ -126,76 +187,16 @@ body.on .enter.d3{transition-delay:.14s}
   .index a{font-size:12.5px;gap:8px}
   .index a svg{width:14px;height:14px}
   .nav{padding-top:6px;padding-bottom:8px}
+  .tl-y{font-size:24px}
 }
-@media (prefers-reduced-motion:reduce){ .enter{transition:none;opacity:1;transform:none}
-  .index a,.index a .ar,.enterbtn,.enterbtn i,.tip{transition:none} }
-
-/* Rótulo del plato. Hasta hoy la portada dibujaba una curva sin decir en ninguna parte de
-   qué era. Va en HTML, no en el lienzo, para que el conmutador de idioma lo alcance sin
-   tener que repintar el canvas. */
-.cap{position:absolute;left:clamp(10px,1.2vw,16px);top:10px;z-index:3;pointer-events:none;
-     max-width:min(64%,580px)}
-.cap p{margin:0}
-.cap-t{font-family:var(--mono);font-size:10.6px;letter-spacing:.1em;text-transform:uppercase;
-       color:var(--cal2);line-height:1.36}
-.cap-s{margin-top:2px;font-family:var(--mono);font-size:10.2px;letter-spacing:.05em;color:var(--muted);
-       line-height:1.34}
-.cap-m{margin-top:5px;font-family:var(--mono);font-size:9.8px;letter-spacing:.04em;color:var(--verd-hi);
-       line-height:1.34;opacity:0;transition:opacity .7s ease}
-.stage.acted .cap-m{opacity:.9}
-
-/* La línea del tiempo del mapa. No existe hasta que el acto termina, para no pisar la
-   transición: al arrastrarla se recolorean las provincias del año elegido. */
-.tl{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;
-    gap:11px;padding:9px clamp(10px,1.3vw,16px) 10px;
-    background:linear-gradient(to top,rgba(6,16,27,.95),rgba(6,16,27,.74) 58%,rgba(6,16,27,0));
-    opacity:0;pointer-events:none;transition:opacity .6s ease}
-.tl.on{opacity:1;pointer-events:auto}
-.tl-y{flex:0 0 auto;font-family:var(--mono);font-weight:600;font-size:17px;line-height:1;
-      color:var(--cobre-hi);font-variant-numeric:tabular-nums;min-width:4.4ch}
-.tl-r{flex:1 1 auto;min-width:70px;height:24px;margin:0;padding:0;background:transparent;
-      cursor:pointer;touch-action:none;-webkit-appearance:none;appearance:none}
-.tl-r:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:3px}
-.tl-r::-webkit-slider-runnable-track{height:2px;background:rgba(214,205,186,.32)}
-.tl-r::-moz-range-track{height:2px;background:rgba(214,205,186,.32)}
-.tl-r::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;margin-top:-6.5px;
-      border-radius:50%;background:var(--cobre-hi);border:1px solid #2A0E03;
-      box-shadow:0 0 0 4px rgba(196,117,60,.20)}
-.tl-r::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--cobre-hi);
-      border:1px solid #2A0E03;box-shadow:0 0 0 4px rgba(196,117,60,.20)}
-.tl-v{flex:0 0 auto;font-family:var(--mono);font-size:10.3px;letter-spacing:.04em;color:var(--muted);
-      white-space:nowrap;font-variant-numeric:tabular-nums}
-.tl-v em{font-style:normal;color:var(--cal2)}
-@media (max-width:640px){
-  /* el plato es peque\u00f1o: el r\u00f3tulo baja a dos l\u00edneas y la tira a una sola fila.
-     Lo que dice la aguada lo repite la ficha de cada provincia, as\u00ed que ah\u00ed sobra. */
-  .tl{gap:8px;padding:6px 10px 7px}
-  .tl-y{font-size:14px;min-width:4.2ch}
-  .tl-v{font-size:9.2px}
-  .tl-r{height:22px;min-width:56px}
-  .cap{left:10px;top:6px;max-width:calc(100% - 20px)}
-  .cap-t{font-size:9.4px;line-height:1.3}
-  .cap-s{font-size:9.2px;line-height:1.3}
-  .cap-m{display:none}
+@media (prefers-reduced-motion:reduce){
+  .enter{transition:none;opacity:1;transform:none}
+  .index a,.index a .ar,.enterbtn,.enterbtn i,.tip,.cap-b,.leg,.tl-b{transition:none}
 }
-@media (prefers-reduced-motion:reduce){.tl,.cap-m{transition:none}}
-.tip .x{display:block;margin-top:6px;font-family:var(--mono);font-size:9.4px;letter-spacing:.1em;
-        text-transform:uppercase;color:var(--muted)}
-
-/* Language switch. CAHE is bilingual and the door has to be too: without this, an English
-   reader meets a Spanish page and only finds the switch once already inside the explorer. */
-.lang-toggle{position:fixed;top:18px;right:18px;z-index:40;border-radius:0;cursor:pointer;
-  font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;
-  padding:7px 11px;background:rgba(255,255,255,.10);color:#e8eef2;
-  border:1px solid rgba(255,255,255,.34);transition:background .18s,border-color .18s}
-.lang-toggle:hover{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.62)}
-.lang-toggle:focus-visible{outline:2px solid #8FCBB0;outline-offset:2px}
-@media (max-width:700px){.lang-toggle{top:10px;right:10px;padding:6px 9px}}
 </style>
 </head>
 <body>
-  <button class="lang-toggle" id="lang-toggle" type="button"
-          aria-label="Cambiar idioma / Change language">EN</button>
+  <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Cambiar idioma / Change language">EN</button>
 <main class="page">
   <header class="head">
     <p class="eyebrow enter" data-en="Historical environmental atlas · Spain">Atlas ambiental histórico <i>·</i> España</p>
@@ -205,10 +206,11 @@ body.on .enter.d3{transition-delay:.14s}
   </header>
 
   <nav class="nav" aria-label="Secciones del visor" data-en-label="Viewer sections">
-    <a class="enterbtn enter d2" href="explorer.html#macro">
+    <a class="enterbtn enter d2" id="cta" href="explorer.html#macro">
       <span><b data-en="Enter the viewer">Entrar al visor</b><s data-en="Series 1860 &rarr; 2023 &middot; 52 provinces">Series 1860 &rarr; 2023 &middot; 52 provincias</s></span>
       <i aria-hidden="true">&rarr;</i>
     </a>
+    <p class="navlabel enter d3" data-en="Sections of the viewer">Secciones del visor</p>
     <ul class="index enter d3">
       <li><a class="idx" href="explorer.html#perspectivas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span data-en="Perspectives">Perspectivas</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
       <li><a class="idx" href="explorer.html#publicaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg><span data-en="Publications">Publicaciones</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
@@ -218,92 +220,165 @@ body.on .enter.d3{transition-delay:.14s}
     </ul>
   </nav>
 
-  <div class="stage" id="stage"><canvas id="c" aria-hidden="true"></canvas>
+  <section class="stage" id="stage" aria-label="Escenario: curva de emisiones y mapa provincial de carbono forestal" data-en-label="Scene: emissions curve and provincial forest-carbon map">
+    <canvas id="c" aria-hidden="true"></canvas>
     <div class="cap" id="cap">
-      <p class="cap-t" data-en="Greenhouse gas emissions · Spain">Emisiones de gases de efecto invernadero · España</p>
-      <p class="cap-s" data-en="1860–2023 · million tonnes of CO₂ equivalent">1860–2023 · millones de toneladas de CO₂ equivalente</p>
-      <p class="cap-m" data-en="Province colour: forest carbon, t C per hectare of woodland, 1860–2021">Color de cada provincia: carbono forestal, t C por hectárea de monte, 1860–2021</p>
+      <p class="cap-a"><i class="sw sw-c" aria-hidden="true"></i><span data-en="Total greenhouse gas emissions · Spain 1860–2023 · Mt&nbsp;CO₂e">Emisiones totales de gases de efecto invernadero · España 1860–2023 · Mt&nbsp;CO₂e</span></p>
+      <p class="cap-b" id="cap-b"><i class="sw sw-v" aria-hidden="true"></i><span><span data-en="Forest carbon stock by province · Mt&nbsp;C ·">Stock de carbono forestal por provincia · Mt&nbsp;C ·</span> <b id="cap-y">2021</b></span></p>
+    </div>
+    <div class="leg" id="leg" aria-hidden="true">
+      <div class="leg-bar" id="leg-bar"></div>
+      <div class="leg-r"><span id="leg-min">0</span><span class="leg-u">Mt&nbsp;C</span><span id="leg-max">0</span></div>
+      <p class="leg-n" data-en="Fixed scale 1860–2021 · grey: no series (Canary Islands, Ceuta, Melilla)">Escala fija 1860–2021 · gris: sin serie (Canarias, Ceuta, Melilla)</p>
     </div>
     <div class="tip" id="tip" role="status" aria-live="polite"></div>
-    <div class="tl" id="tl">
-      <span class="tl-y" id="tl-y">2021</span>
-      <input class="tl-r" id="tl-r" type="range" min="1860" max="2021" step="1" value="2021"
-             aria-label="Año del mapa">
-      <span class="tl-v" id="tl-v"></span>
-    </div></div>
+  </section>
+
+  <div class="tl" id="tl">
+    <button class="tl-b" id="tl-play" type="button" aria-label="Reproducir" data-en-label="Play">
+      <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>
+      <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg>
+    </button>
+    <output class="tl-y" id="tl-y" for="tl-r">2023</output>
+    <input class="tl-r" id="tl-r" type="range" min="1860" max="2023" step="1" value="2023" aria-label="Año" data-en-label="Year">
+    <div class="tl-v" id="tl-v"></div>
+    <span class="tl-k" data-en="← → year · Shift ±10 · space plays">← → año · Mayús ±10 · espacio reproduce</span>
+  </div>
 </main>
 
 <script src="portada/spain.js"></script>
 <script src="portada/cahe.js"></script>
-<script>
-'use strict';
-/* Densidad de carbono forestal por provincia, 1860-2021 (toneladas de C por hectárea de
-   monte). Sale del propio fichero provincial del visor, data/provincial/bosques.json, combo
-   "densidad-de-c__total" (fuente spain_forest_geodata.csv), redondeada a un decimal. Antes
-   aquí solo vivía el corte de 2021; la línea del tiempo de la portada necesita la serie
-   entera y el kit portada/ no trae ninguna serie provincial. Va en línea para que la portada
-   siga siendo un único HTML sin fetch. */
-window.CAHE_PROV_C = {"years":[1860,1861,1862,1863,1864,1865,1866,1867,1868,1869,1870,1871,1872,1873,1874,1875,1876,1877,1878,1879,1880,1881,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895,1896,1897,1898,1899,1900,1901,1902,1903,1904,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915,1916,1917,1918,1919,1920,1921,1922,1923,1924,1925,1926,1927,1928,1929,1930,1931,1932,1933,1934,1935,1936,1937,1938,1939,1940,1941,1942,1943,1944,1945,1946,1947,1948,1949,1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960,1961,1962,1963,1964,1965,1966,1967,1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021],"v":{"La Coruña":[28.3,28.2,28.1,27.9,27.8,27.7,27.6,27.4,27.3,27.2,27.1,26.9,26.6,26.4,26.2,25.9,25.7,25.5,25.3,25.0,24.8,24.7,24.6,24.5,24.4,24.3,24.2,24.0,23.9,23.5,23.2,23.0,22.7,22.4,22.1,21.9,21.6,23.3,23.6,22.9,21.8,22.8,23.4,24.3,25.4,21.7,20.0,20.1,20.4,21.0,21.2,21.1,21.2,20.9,21.3,20.6,21.0,21.8,21.5,21.8,20.7,20.4,20.8,20.3,20.7,20.4,20.2,20.3,18.9,19.2,19.4,19.4,19.4,19.4,19.5,19.5,19.3,19.2,19.1,18.9,18.8,19.0,19.2,19.5,19.8,20.1,20.4,20.8,21.2,21.5,22.0,21.7,21.4,21.3,21.2,21.2,21.3,21.3,21.4,21.6,21.8,21.9,22.0,22.3,23.5,23.2,24.0,24.8,25.7,27.9,30.8,32.5,34.2,36.1,37.9,39.7,40.9,41.9,43.2,44.9,47.0,48.5,51.5,54.4,57.2,59.5,62.5,64.7,67.3,64.4,66.2,66.9,67.5,67.7,71.0,72.1,71.6,73.0,74.1,75.7,78.7,80.1,83.2,86.0,87.4,89.9,88.4,90.4,94.7,96.8,97.8,99.1,100.8,102.2,103.8,105.0,106.4,108.0,110.1,112.3,115.0,117.0],"Albacete":[11.3,11.2,11.2,11.1,11.0,11.0,10.9,10.9,10.8,10.7,10.7,10.6,10.5,10.5,10.4,10.3,10.3,10.2,10.1,10.1,10.0,9.9,9.9,9.8,9.7,9.7,9.6,9.6,9.5,9.5,9.4,9.4,9.3,9.3,9.2,9.2,9.2,9.1,9.1,9.0,9.0,9.0,9.0,9.0,9.0,9.0,9.1,9.1,9.1,9.1,9.1,9.1,9.1,9.1,9.1,9.2,9.2,9.3,9.3,9.4,9.5,9.4,9.3,9.2,9.1,9.1,9.0,8.9,8.9,8.9,8.9,8.6,8.4,8.2,8.0,7.8,7.6,7.4,7.2,7.0,6.8,6.8,6.7,6.7,6.7,6.7,6.6,6.6,6.6,6.7,7.8,7.5,7.3,7.1,6.9,6.9,6.7,6.7,6.8,6.8,6.9,7.0,7.1,7.2,7.3,7.3,7.4,7.5,7.6,7.7,7.8,8.0,8.3,8.6,8.8,9.1,9.2,9.5,9.7,9.9,10.2,10.6,10.9,11.1,11.5,11.7,12.0,12.5,12.9,13.4,13.7,14.0,14.3,14.4,14.5,14.8,15.0,15.4,15.6,15.8,16.1,15.9,16.0,16.1,16.4,16.5,16.1,15.8,16.2,15.9,15.9,15.8,15.7,15.7,15.6,15.5,15.6,15.5,15.2,16.0,16.2,16.4],"Alicante":[4.8,4.8,4.7,4.7,4.7,4.6,4.6,4.6,4.5,4.5,4.5,4.4,4.4,4.4,4.3,4.3,4.3,4.2,4.2,4.1,4.1,4.1,4.0,4.0,4.0,4.0,3.9,3.9,3.9,3.9,3.8,3.8,3.8,3.8,3.8,3.8,3.8,3.8,3.8,3.8,3.8,3.7,3.7,3.7,3.7,3.8,4.0,4.0,3.8,3.9,3.6,3.6,3.6,3.7,3.6,3.6,3.6,3.6,3.7,3.6,3.6,3.6,3.7,3.7,3.7,3.7,3.7,3.8,3.8,3.9,3.9,3.9,3.9,3.9,3.9,3.8,3.8,3.8,3.7,3.7,3.6,3.6,3.6,3.6,3.6,3.6,3.6,3.6,3.6,3.5,3.5,3.6,3.6,3.5,3.5,3.5,3.5,3.5,3.6,3.7,3.8,3.8,3.8,3.9,3.9,3.9,4.0,4.0,4.1,4.1,4.2,4.3,4.6,4.8,5.1,5.3,5.3,5.7,5.7,5.9,6.1,6.3,6.5,6.7,6.9,7.1,7.2,7.4,7.7,7.9,8.0,8.4,8.8,9.0,9.3,9.5,9.9,10.3,10.6,10.8,11.2,11.4,11.9,12.7,12.7,13.1,13.0,13.2,13.8,13.9,14.1,14.3,14.5,14.8,14.9,15.1,15.3,15.6,15.5,16.7,17.1,17.7],"Almería":[3.2,3.2,3.2,3.2,3.2,3.1,3.1,3.1,3.1,3.1,3.1,3.0,3.0,3.0,3.0,3.0,2.9,2.9,2.9,2.9,2.9,2.9,2.8,2.8,2.8,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.4,2.7,2.5,2.4,2.5,2.5,2.4,2.4,2.3,2.3,2.2,2.2,2.1,2.1,2.1,2.1,2.1,2.1,2.2,2.2,2.2,2.2,2.2,2.1,2.1,2.1,2.0,2.0,2.0,2.0,1.9,2.0,2.0,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.2,3.5,3.7,3.9,4.1,4.3,4.5,4.7,4.9,5.1,5.4,5.7,5.9,6.2,6.5,6.8,7.2,7.7,8.1,8.5,8.8,9.1,9.4,9.6,9.9,10.4,10.9,11.2,11.4,11.8,11.9,12.2,12.5,12.9,13.2,13.2,13.0,13.5,13.5,13.8,14.0,14.1,14.3,14.3,14.4,14.6,14.8,14.6,15.6,15.9,16.3],"Álava":[42.3,42.1,41.8,41.6,41.3,41.1,40.9,40.7,40.5,40.3,40.1,39.8,39.6,39.3,39.0,38.7,38.5,38.2,38.0,37.8,37.5,37.3,37.1,36.9,36.6,36.4,36.2,36.0,35.8,35.6,35.4,35.3,35.1,35.0,34.9,34.8,34.7,34.5,34.4,34.3,34.2,34.1,34.0,33.9,33.8,33.7,33.7,33.6,33.5,33.4,33.3,32.6,32.0,31.4,30.9,30.4,29.9,29.5,29.2,29.0,28.8,28.9,29.1,29.5,29.8,30.2,30.8,31.7,32.7,33.3,34.6,34.2,33.8,33.5,33.5,33.5,33.8,33.8,33.6,33.9,34.3,34.0,33.7,33.3,33.0,32.8,32.5,32.2,32.0,31.8,31.6,31.2,30.7,30.2,29.9,29.5,29.4,29.1,29.0,29.1,29.4,29.6,29.9,30.1,30.1,30.3,30.7,30.9,31.4,31.8,32.1,33.1,34.0,34.7,35.4,36.2,36.5,37.7,38.4,39.3,40.1,39.4,39.1,39.9,40.7,42.1,44.2,46.5,50.2,52.1,55.3,55.6,56.9,56.0,58.4,59.1,59.4,60.7,61.6,62.7,65.1,66.1,67.7,69.6,71.3,73.2,72.8,72.2,74.5,74.5,75.5,75.8,76.3,78.1,77.9,77.3,78.3,79.5,80.9,83.0,84.2,86.2],"Asturias":[40.9,40.6,40.4,40.1,39.9,39.7,39.5,39.2,39.0,38.8,38.6,38.3,38.0,37.8,37.5,37.3,37.0,36.8,36.5,36.3,36.1,35.9,35.6,35.4,35.2,35.0,34.8,34.6,34.4,34.2,34.0,33.9,33.8,33.6,33.5,33.4,33.3,33.2,33.1,32.9,32.9,32.8,32.8,32.8,32.8,32.7,32.7,32.7,32.7,32.7,32.7,32.6,32.5,32.4,32.3,32.2,32.1,32.1,32.0,32.0,31.9,31.7,31.7,31.4,31.2,31.1,30.9,30.8,30.7,30.6,30.6,30.4,30.3,30.2,30.1,29.9,29.6,29.2,28.9,28.5,28.2,27.9,27.6,27.4,27.1,26.9,26.7,26.5,26.4,26.3,26.2,26.3,26.3,26.3,26.3,26.3,26.4,26.3,26.4,26.6,26.8,27.3,27.9,28.4,28.9,29.3,29.9,30.4,30.9,31.5,31.9,33.4,34.7,35.8,36.9,38.0,37.9,39.7,40.2,41.2,42.1,43.7,45.3,47.5,49.8,50.6,52.8,54.5,56.5,56.6,57.9,58.7,59.6,60.4,61.9,63.2,65.1,65.8,67.4,68.4,70.4,70.6,71.9,73.0,73.3,74.9,73.7,72.2,73.5,72.7,72.7,72.3,71.9,72.1,72.0,71.3,72.5,71.6,69.4,74.1,74.7,76.1],"Ávila":[30.6,30.5,30.3,30.1,30.0,29.8,29.6,29.5,29.3,29.1,28.9,28.8,28.6,28.4,28.2,28.0,27.8,27.6,27.4,27.2,27.0,26.8,26.7,26.5,26.4,26.2,26.0,25.9,25.7,25.5,25.4,25.3,25.3,25.2,25.2,25.1,25.1,25.0,25.0,24.9,24.9,24.8,24.7,24.6,24.5,24.4,24.3,24.2,24.1,24.0,23.9,23.6,23.2,22.9,22.6,22.4,22.3,22.2,22.1,22.1,22.1,21.5,21.0,20.6,20.4,20.3,20.5,21.0,22.0,23.1,24.7,24.2,24.0,23.9,23.9,24.0,24.9,25.3,25.6,26.0,27.0,27.2,27.2,27.2,27.2,27.1,27.3,27.4,27.5,27.6,27.6,27.4,27.4,26.9,26.6,26.5,27.0,26.7,26.8,27.2,27.6,27.5,27.4,27.2,27.1,26.8,26.8,26.6,26.4,26.4,26.3,26.6,26.7,26.8,26.9,27.1,26.6,27.1,27.1,27.2,27.2,27.4,27.7,27.8,28.1,28.1,28.1,28.4,28.7,28.8,28.7,29.1,29.2,29.3,29.6,29.9,30.4,30.9,31.6,31.7,32.2,31.9,31.7,31.9,32.3,32.5,31.6,31.0,31.5,30.7,30.5,30.0,29.7,29.4,29.0,28.5,28.6,28.1,27.3,28.5,28.4,28.6],"Badajoz":[5.6,5.6,5.6,5.5,5.5,5.5,5.4,5.4,5.4,5.4,5.3,5.3,5.3,5.2,5.2,5.2,5.1,5.1,5.1,5.0,5.0,5.0,4.9,4.9,4.9,4.8,4.8,4.8,4.7,4.7,4.7,4.7,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.4,4.4,4.4,4.3,4.3,4.3,4.3,4.3,4.2,4.3,4.3,4.2,4.3,4.3,4.5,4.6,4.5,4.5,4.6,4.5,4.4,4.4,4.3,4.4,4.5,4.5,3.9,4.0,4.2,4.0,4.0,4.1,4.2,4.3,4.1,4.2,4.2,4.3,4.3,4.2,4.2,4.1,4.1,4.0,3.8,3.8,3.8,3.7,3.7,3.7,3.8,3.8,3.8,3.8,3.9,3.9,3.9,3.9,4.0,4.1,4.2,4.3,4.4,4.6,4.7,4.8,4.8,5.0,5.1,5.3,5.4,5.5,5.7,5.7,6.1,6.3,6.4,6.6,6.9,7.1,7.3,7.6,7.8,7.9,8.1,8.3,8.7,9.1,9.5,9.7,10.0,10.0,9.9,10.1,10.6,10.6,10.4,10.5,10.8,10.6,10.8,10.8,10.9,10.9,11.0,10.9,11.1,11.1,11.1,11.5,11.6,11.8],"Barcelona":[18.6,18.6,18.5,18.4,18.4,18.3,18.3,18.2,18.2,18.1,18.1,18.0,17.9,17.9,17.8,17.7,17.7,17.6,17.5,17.4,17.4,17.2,17.1,17.0,16.9,16.8,16.7,16.6,16.5,16.4,16.3,16.1,16.0,15.9,15.7,15.6,15.5,15.4,15.2,15.1,15.0,15.0,15.1,15.1,15.1,15.1,15.1,15.2,15.2,15.2,15.3,15.1,14.9,14.7,14.5,14.4,14.2,14.1,14.0,13.9,13.8,13.7,13.7,13.7,13.6,13.6,13.6,13.6,13.6,13.6,13.6,13.5,13.5,13.4,13.3,13.3,13.1,12.9,12.8,12.6,12.5,12.4,12.4,12.3,12.3,12.2,12.2,12.2,12.1,12.1,12.1,12.2,12.4,12.4,12.7,12.9,13.2,13.4,13.5,14.2,14.8,14.7,15.0,15.9,16.4,16.6,17.2,17.5,18.2,19.5,19.8,20.7,21.6,21.9,22.6,23.3,23.7,24.6,25.1,25.7,26.2,27.1,27.9,28.5,29.6,30.3,31.2,32.1,33.5,34.5,35.5,36.6,38.4,39.3,38.8,40.5,42.0,43.6,43.8,44.6,46.2,46.1,47.9,48.6,49.1,50.5,50.1,48.5,49.5,49.7,49.7,49.6,49.6,49.8,49.8,49.7,50.2,50.2,48.8,52.4,53.0,53.9],"Bizkaia":[40.5,40.3,40.1,39.9,39.7,39.6,39.4,39.3,39.2,39.1,38.9,38.6,38.4,38.1,37.9,37.6,37.3,37.1,36.9,36.7,36.5,36.2,36.0,35.7,35.5,35.3,35.0,34.8,34.6,34.4,34.2,34.2,34.1,34.1,34.0,34.0,34.0,33.9,33.9,33.8,33.8,33.8,33.8,33.8,33.7,33.7,33.7,33.7,33.7,33.8,33.8,33.6,33.4,33.3,33.3,33.3,33.3,33.4,33.6,33.8,34.1,33.9,33.7,33.5,33.3,33.1,32.9,32.7,32.6,32.4,32.3,32.2,32.2,32.1,32.1,32.0,31.9,31.7,31.6,31.4,31.3,30.7,30.2,29.7,29.3,28.9,28.5,28.2,28.0,27.8,27.8,27.3,27.4,27.6,28.2,28.7,29.7,29.9,30.8,32.3,33.8,34.7,35.5,36.3,36.6,37.4,38.4,39.2,40.1,40.9,41.7,43.3,44.8,46.3,47.8,49.3,50.4,52.2,53.6,55.2,56.7,59.1,61.2,63.6,65.7,68.1,70.9,73.1,76.0,76.9,78.7,79.5,80.7,80.9,82.3,84.9,86.1,87.5,87.8,88.3,90.8,90.4,92.1,93.3,93.8,95.9,94.7,91.9,93.4,93.2,93.0,92.2,91.8,91.4,90.8,90.1,90.8,90.1,87.6,92.7,93.2,94.5],"Burgos":[22.9,22.8,22.6,22.5,22.4,22.3,22.2,22.1,22.0,21.9,21.8,21.6,21.5,21.4,21.2,21.1,20.9,20.8,20.7,20.6,20.5,20.4,20.3,20.2,20.0,19.9,19.8,19.7,19.7,19.6,19.5,19.4,19.4,19.3,19.3,19.3,19.2,19.2,19.1,19.1,19.0,19.0,19.0,19.0,18.9,18.9,18.9,18.8,18.8,18.8,18.8,18.8,18.9,18.9,19.0,19.1,19.1,19.2,19.3,19.4,19.5,19.5,19.5,19.6,19.6,19.6,19.7,19.7,19.8,19.8,19.9,19.8,19.7,19.6,19.6,19.5,19.3,19.1,18.9,18.8,18.6,18.7,18.8,18.9,18.9,18.9,19.0,19.2,19.2,19.3,19.4,19.1,18.8,18.6,18.4,18.2,18.2,18.0,17.9,18.0,18.1,18.2,18.3,18.3,18.4,18.4,18.6,18.8,19.0,19.3,19.4,20.1,20.6,21.0,21.4,21.9,21.8,22.6,22.9,23.4,23.8,24.5,25.2,26.0,26.8,27.4,27.8,28.5,29.4,29.8,30.2,31.2,32.1,32.9,34.0,35.1,36.3,37.7,38.9,39.8,41.1,41.7,42.4,43.6,44.6,45.6,45.1,45.0,46.4,46.0,46.3,46.3,46.4,46.8,46.9,47.0,47.8,47.7,46.9,49.9,50.7,51.7],"Cáceres":[5.7,5.6,5.6,5.6,5.5,5.5,5.5,5.4,5.4,5.4,5.3,5.3,5.3,5.2,5.2,5.1,5.1,5.1,5.0,5.0,5.0,4.9,4.9,4.9,4.8,4.8,4.8,4.7,4.7,4.7,4.6,4.6,4.6,4.5,4.5,4.5,4.4,4.4,4.3,4.4,4.3,4.3,4.3,4.3,4.3,4.3,4.2,4.2,4.2,4.2,4.2,4.2,4.3,4.2,4.1,4.1,4.1,4.1,4.1,4.1,4.2,4.1,4.0,4.0,4.0,4.2,4.4,4.6,4.9,4.7,4.9,5.1,5.1,5.2,5.4,5.3,4.2,4.3,4.5,4.4,4.3,4.4,4.5,4.6,4.3,4.2,4.4,4.4,4.4,4.4,4.4,4.4,4.3,4.1,4.0,4.1,4.1,4.2,4.8,4.7,4.2,4.1,4.1,4.2,4.3,4.3,4.4,4.4,4.5,4.6,4.7,4.8,5.0,5.1,5.3,5.4,5.4,5.7,5.9,6.1,6.3,6.4,6.7,6.9,7.3,7.5,7.6,7.9,8.3,8.4,8.7,9.0,9.1,9.4,9.8,9.9,10.6,11.0,11.7,11.8,12.2,12.3,12.2,12.6,13.1,13.2,13.0,13.1,13.5,13.3,13.5,13.6,13.7,13.8,13.8,13.8,14.1,14.1,14.1,14.6,14.9,15.2],"Cádiz":[14.6,14.5,14.4,14.4,14.3,14.2,14.1,14.1,14.0,13.9,13.8,13.7,13.7,13.6,13.5,13.4,13.3,13.2,13.1,13.1,13.0,12.9,12.9,12.8,12.7,12.7,12.6,12.5,12.5,12.3,12.2,12.1,12.1,12.0,12.0,11.9,11.9,11.8,11.7,11.7,11.6,11.6,11.6,11.6,11.6,11.6,11.6,11.5,11.5,11.5,11.5,11.4,11.3,11.2,11.2,11.1,11.0,10.9,10.8,10.7,10.7,10.6,10.5,10.5,10.4,10.4,10.6,10.8,11.0,10.7,10.7,10.4,10.4,10.4,10.4,10.4,10.3,10.2,10.1,10.0,10.0,10.0,10.0,9.9,9.9,9.9,9.9,9.9,9.9,9.9,9.9,9.7,9.6,9.4,9.3,9.2,9.0,8.9,8.8,8.7,8.6,8.6,8.6,8.6,8.7,8.7,8.7,8.7,8.8,8.8,8.9,9.2,9.4,9.6,9.8,10.0,10.1,10.5,10.7,10.9,11.1,11.4,11.7,11.9,12.3,12.5,12.6,13.0,13.4,13.7,14.0,14.4,14.5,14.6,14.8,14.9,15.2,15.6,16.0,16.2,16.5,16.5,16.4,17.0,17.7,17.8,17.5,17.6,18.1,17.9,18.2,18.6,18.6,18.9,19.0,19.0,19.4,19.5,19.6,20.4,20.8,21.2],"Cantabria":[31.4,31.2,31.0,30.8,30.6,30.4,30.2,30.1,29.9,29.7,29.5,29.3,29.1,28.9,28.7,28.4,28.2,28.0,27.8,27.6,27.4,27.2,27.0,26.9,26.7,26.5,26.3,26.2,26.0,25.8,25.7,25.5,25.4,25.3,25.2,25.1,25.0,24.9,24.8,24.7,24.6,24.6,24.6,24.5,24.5,24.5,24.4,24.4,24.3,24.3,24.3,24.2,24.1,24.0,24.0,24.0,23.9,23.9,23.9,23.9,23.9,23.9,24.0,24.1,24.2,24.3,24.5,24.7,24.9,25.0,25.2,25.0,24.8,24.6,24.5,24.3,24.0,23.8,23.6,23.4,23.3,23.5,23.7,23.8,24.0,24.2,24.4,24.6,24.8,25.0,25.2,24.6,24.1,23.6,23.2,22.8,22.6,22.3,22.1,22.0,21.9,23.1,24.3,25.4,26.2,27.3,28.4,29.5,30.5,31.6,32.3,34.5,36.5,38.4,40.1,42.1,42.7,45.2,46.7,48.6,50.5,51.9,53.6,55.8,58.3,60.5,63.3,66.5,70.6,71.4,74.5,74.3,73.6,73.1,73.3,73.9,74.3,74.7,75.3,75.9,77.3,75.5,74.4,74.9,75.8,76.1,74.2,71.6,72.4,71.0,70.0,68.5,67.4,66.2,64.8,63.4,63.0,61.7,59.7,61.4,60.9,60.7],"Castellón":[11.6,11.5,11.4,11.4,11.3,11.2,11.2,11.1,11.0,10.9,10.9,10.8,10.7,10.7,10.6,10.5,10.4,10.4,10.3,10.2,10.1,10.1,10.0,9.9,9.9,9.8,9.8,9.7,9.6,9.6,9.5,9.5,9.5,9.4,9.4,9.4,9.3,9.3,9.3,9.3,9.2,9.2,9.2,9.1,9.1,9.1,9.1,9.0,9.0,9.0,8.9,8.9,8.9,8.9,8.9,9.1,9.1,9.2,9.3,9.5,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.6,9.5,9.7,9.8,9.9,9.9,10.0,10.0,10.0,10.1,10.1,10.1,10.0,10.0,10.0,10.0,10.0,9.9,9.9,9.9,9.9,9.8,9.7,9.6,9.5,9.4,9.4,9.3,9.3,9.3,9.4,9.4,9.4,9.4,9.4,9.4,9.4,9.4,9.4,9.5,9.5,9.9,10.5,10.6,11.0,11.2,11.1,11.8,11.7,11.6,11.9,12.2,12.5,12.8,13.1,13.3,13.4,13.7,14.0,14.3,14.4,15.0,15.6,15.8,15.7,16.1,16.6,17.3,17.8,18.2,18.7,19.1,19.7,20.3,20.8,21.4,21.1,21.2,22.0,21.9,22.1,22.2,22.2,22.5,22.6,22.7,23.1,23.3,22.9,24.6,25.1,25.8],"Ciudad Real":[17.5,17.4,17.3,17.2,17.1,17.0,16.9,16.8,16.7,16.6,16.5,16.4,16.3,16.2,16.1,16.0,15.9,15.8,15.7,15.6,15.5,15.4,15.3,15.2,15.1,15.0,14.9,14.8,14.7,14.6,14.5,14.4,14.3,14.2,14.1,13.9,13.8,13.7,13.6,13.8,13.9,14.0,13.6,14.0,13.9,14.0,13.8,13.7,13.6,13.8,13.7,13.6,13.8,13.6,13.5,13.8,13.8,13.6,13.5,13.4,13.2,13.2,13.1,12.9,12.8,13.1,13.0,12.8,12.6,12.9,13.2,13.0,12.7,12.5,12.3,12.1,13.0,13.2,13.2,11.7,12.5,12.9,13.0,13.2,11.7,11.3,12.7,12.1,12.3,12.2,12.1,12.6,13.5,13.4,12.8,12.6,12.4,11.8,11.6,11.6,11.6,11.3,11.0,10.7,10.7,10.5,10.0,9.9,9.6,9.5,9.4,9.4,9.4,9.4,9.4,9.4,9.0,9.2,9.1,9.0,9.0,9.0,9.0,9.0,9.0,8.9,8.8,8.7,8.7,8.7,8.5,8.7,8.8,8.8,9.0,9.1,9.2,9.3,9.5,9.6,9.9,10.0,10.1,10.4,10.7,10.9,10.7,10.8,11.1,11.0,11.1,11.2,11.2,11.3,11.3,11.3,11.4,11.4,11.3,11.9,12.1,12.3],"Córdoba":[4.4,4.4,4.4,4.4,4.3,4.3,4.3,4.3,4.3,4.2,4.2,4.2,4.2,4.1,4.1,4.1,4.1,4.1,4.0,4.0,4.0,4.0,4.0,3.9,3.9,3.9,3.9,3.9,3.8,3.8,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.7,3.8,3.6,3.6,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.4,3.4,3.4,3.3,3.3,3.3,3.3,3.2,3.2,3.2,3.2,3.1,3.1,3.1,3.1,3.1,3.1,3.2,3.2,3.2,3.2,3.2,3.2,3.2,3.1,3.1,3.1,3.0,3.0,3.0,2.9,2.9,2.9,3.0,2.9,2.9,2.8,2.8,2.8,2.8,2.7,2.7,2.7,2.6,2.6,2.7,2.7,2.7,2.7,2.8,2.8,2.9,2.9,2.9,2.9,3.0,3.0,3.0,3.1,3.1,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4.1,4.3,4.4,4.5,4.6,4.7,4.9,5.0,5.1,5.3,5.5,5.6,5.7,6.1,6.3,6.5,6.8,6.9,7.5,8.0,8.4,8.6,9.0,9.4,9.6,10.2,11.1,11.4,11.5,11.8,12.5,12.6,13.3,13.8,14.0,14.5,14.8,15.0,15.7,15.7,16.4,17.2,17.6,18.2],"Cuenca":[48.6,48.3,48.1,47.8,47.6,47.4,47.2,47.0,46.8,46.5,46.3,46.1,45.8,45.6,45.3,45.0,44.8,44.6,44.3,44.1,44.0,43.8,43.5,43.2,43.0,42.9,42.7,42.5,42.3,42.2,41.9,41.9,41.9,41.8,41.7,41.7,41.6,41.5,41.5,41.4,41.3,41.3,41.3,41.2,41.2,41.2,41.2,41.2,41.2,41.1,41.1,41.0,40.8,40.5,40.4,40.3,40.1,40.0,39.8,39.8,39.7,39.9,40.0,40.1,40.3,40.4,40.6,40.8,41.1,41.4,41.6,41.2,40.7,40.3,39.9,39.6,39.1,38.6,38.0,37.5,38.9,39.5,38.5,38.1,38.8,39.4,40.3,39.4,38.8,39.6,38.9,38.3,37.8,37.3,36.9,36.5,36.2,35.9,35.7,35.5,35.5,35.1,34.9,34.7,34.5,34.3,34.2,34.1,34.1,34.1,34.1,34.7,34.0,33.8,33.6,37.0,32.7,32.8,32.5,32.3,32.1,31.8,31.5,31.2,30.9,30.5,30.3,30.1,29.9,29.6,29.3,29.3,29.5,29.3,29.3,29.7,30.0,30.5,30.7,30.7,31.3,31.0,31.4,31.6,31.7,32.1,31.4,30.5,31.0,31.0,31.4,31.6,32.5,31.4,31.5,29.4,30.2,30.3,29.9,31.5,31.4,31.0],"Gipuzkoa":[23.8,23.6,23.5,23.4,23.3,23.1,23.0,22.9,22.8,22.7,22.6,22.4,22.2,22.1,21.9,21.8,21.6,21.4,21.3,21.1,21.0,20.8,20.7,20.5,20.4,20.2,20.1,20.0,19.8,19.7,19.5,19.4,19.3,19.2,19.1,19.0,18.8,18.7,18.6,18.5,18.4,18.4,18.4,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.4,18.4,18.5,18.5,18.6,18.7,18.7,18.8,18.7,18.6,18.6,18.5,18.4,18.4,18.4,18.5,18.5,18.6,18.5,18.5,18.5,18.5,18.6,18.5,18.4,18.4,18.3,18.3,18.4,18.5,18.6,18.7,18.9,19.1,19.4,19.6,19.8,20.1,20.0,20.0,19.9,20.0,20.0,20.1,20.1,20.2,20.5,20.8,22.1,23.3,24.4,25.1,26.2,27.2,28.2,29.2,30.0,31.1,32.8,34.6,36.4,38.3,40.1,41.7,43.8,45.8,47.8,49.8,52.8,55.4,58.4,60.9,63.8,67.3,70.1,73.5,74.8,77.2,78.8,81.1,82.3,84.7,88.5,90.8,93.4,94.5,96.2,100.0,100.4,103.2,105.4,106.9,110.1,109.8,107.2,109.8,111.4,112.7,113.0,113.3,114.9,114.9,114.4,115.5,116.9,118.7,121.4,123.2,125.2],"Gerona":[15.7,15.6,15.5,15.4,15.3,15.2,15.1,15.0,14.9,14.8,14.7,14.6,14.5,14.4,14.3,14.3,14.2,14.0,13.9,13.8,13.7,13.6,13.5,13.4,13.3,13.3,13.2,13.1,13.0,12.9,12.8,12.8,12.7,12.7,12.6,12.6,12.5,12.5,12.5,12.4,12.4,12.4,12.4,12.4,12.3,12.3,12.3,12.3,12.3,12.3,12.3,12.2,12.2,12.3,12.5,13.1,13.3,13.7,14.1,14.6,15.1,15.1,15.0,14.9,14.8,14.7,14.9,14.9,15.0,15.2,16.0,15.9,15.8,15.7,15.7,15.6,15.4,15.3,15.1,15.0,14.8,14.8,14.7,14.7,14.7,14.6,14.6,14.6,14.6,14.6,14.6,14.5,14.5,14.4,14.4,14.4,14.4,14.3,14.3,14.4,14.5,14.8,15.3,16.1,16.3,16.9,17.6,18.0,18.8,19.9,20.1,21.7,23.2,23.8,25.1,26.2,26.6,28.6,29.5,30.4,31.5,33.4,35.5,36.8,39.1,40.4,41.1,42.8,45.2,46.8,48.3,49.7,51.7,52.7,53.8,55.7,57.4,59.1,60.2,61.5,63.5,63.8,65.8,67.2,68.7,70.7,69.8,68.6,70.5,70.6,70.9,71.0,70.9,71.4,71.7,71.8,72.8,72.8,73.7,76.3,77.7,79.0],"Granada":[6.3,6.3,6.2,6.2,6.1,6.1,6.1,6.0,6.0,6.0,5.9,5.9,5.8,5.8,5.8,5.7,5.7,5.6,5.6,5.5,5.5,5.5,5.4,5.4,5.3,5.3,5.3,5.2,5.2,5.2,5.1,5.1,5.1,5.1,5.0,5.0,5.0,5.0,5.0,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.9,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.8,4.9,4.9,5.0,5.0,5.1,5.1,5.2,5.3,5.4,5.4,5.4,5.4,5.3,5.3,5.3,5.2,5.1,5.1,5.0,5.0,5.1,5.1,5.1,5.1,5.1,5.2,5.2,5.3,5.3,5.2,5.2,5.2,5.1,5.2,5.3,5.1,5.1,5.1,5.1,5.2,5.3,5.5,5.6,5.8,5.9,6.0,6.2,6.5,6.8,7.2,7.6,7.9,8.2,8.5,8.7,9.1,9.3,9.7,10.0,10.3,10.6,10.9,11.4,11.7,12.2,12.8,13.3,13.9,14.4,14.7,15.1,15.2,15.4,15.8,16.2,16.7,16.9,17.0,17.4,17.4,17.6,17.9,18.1,18.5,18.1,17.7,18.1,18.0,18.2,18.1,18.1,18.1,17.9,17.8,17.9,17.8,17.4,18.4,18.5,18.7],"Guadalajara":[16.0,15.9,15.8,15.7,15.6,15.5,15.4,15.3,15.2,15.1,15.0,14.9,14.8,14.7,14.6,14.5,14.3,14.2,14.1,14.0,13.9,13.8,13.7,13.6,13.5,13.4,13.3,13.1,13.0,12.9,12.8,12.8,12.7,12.6,12.5,12.5,12.4,12.3,12.3,12.2,12.1,12.1,12.0,12.0,11.9,11.9,11.8,11.8,11.7,11.7,11.6,11.4,11.3,11.2,11.2,11.2,11.3,11.4,11.5,11.8,12.1,12.2,12.3,12.4,12.5,12.5,12.7,12.8,13.1,13.2,13.4,13.4,13.3,13.3,13.3,13.3,13.1,13.0,12.9,12.8,12.7,12.7,12.6,12.6,12.6,12.6,12.6,12.6,12.5,12.5,12.5,12.4,12.3,12.1,11.9,11.8,11.8,11.7,11.6,11.8,11.8,11.9,12.0,12.1,12.2,12.1,12.3,12.3,12.3,12.4,12.4,12.8,13.0,13.2,13.5,13.7,13.6,14.0,14.2,14.5,14.7,14.8,15.0,15.1,15.4,15.6,15.8,16.3,16.9,17.4,17.9,18.2,18.6,18.8,19.2,19.7,20.2,20.7,21.1,21.4,22.0,22.1,22.6,23.1,23.4,23.8,23.4,23.2,23.8,23.6,23.7,23.6,23.6,23.7,23.6,23.6,23.9,23.9,23.3,24.9,25.2,25.7],"Huelva":[12.3,12.3,12.2,12.1,12.0,12.0,11.9,11.8,11.8,11.7,11.6,11.5,11.5,11.4,11.3,11.2,11.1,11.1,11.0,10.9,10.8,10.8,10.7,10.6,10.6,10.5,10.4,10.3,10.3,10.2,10.1,10.1,10.0,10.0,9.9,9.9,9.8,9.8,9.7,9.7,9.6,9.6,9.6,9.6,9.6,9.5,9.5,9.5,9.5,9.5,9.5,9.4,9.4,9.4,9.3,9.3,9.3,9.2,9.2,9.2,9.1,9.1,9.1,9.0,9.0,9.0,9.1,9.1,9.2,9.2,9.2,9.2,9.2,9.2,9.2,9.2,9.1,9.0,8.9,8.8,8.8,8.7,8.6,8.5,8.4,8.3,8.3,8.2,8.2,8.3,8.3,8.1,8.0,7.9,7.8,7.8,8.1,8.1,8.2,8.5,9.0,8.7,8.5,8.4,8.3,8.1,8.1,8.0,8.0,8.1,8.3,8.4,8.5,8.6,8.6,8.6,8.6,8.8,8.9,9.1,9.1,9.2,9.2,9.3,9.4,9.5,9.6,9.7,9.9,10.0,10.2,10.3,10.3,10.3,10.4,10.6,10.9,10.8,10.9,10.9,11.1,11.3,11.4,11.8,12.1,12.3,12.3,12.2,12.7,12.7,13.1,13.1,13.1,13.4,13.4,13.6,13.8,14.0,14.2,14.6,14.8,15.1],"Huesca":[24.6,24.5,24.3,24.2,24.0,23.9,23.8,23.7,23.6,23.4,23.3,23.1,23.0,22.8,22.6,22.5,22.3,22.1,22.0,21.8,21.7,21.5,21.4,21.2,21.1,21.0,20.9,20.7,20.6,20.5,20.4,20.3,20.2,20.1,20.0,19.9,19.8,19.7,19.6,19.5,19.4,19.4,19.3,19.3,19.3,19.3,19.2,19.2,19.2,19.2,19.1,19.1,19.1,19.0,19.0,19.0,19.0,19.0,19.0,19.0,19.0,19.0,19.1,19.2,19.3,19.5,19.9,20.4,21.0,21.6,22.5,22.3,22.3,22.1,22.0,22.0,21.9,21.7,21.5,21.4,21.4,21.4,21.4,21.5,21.5,21.5,21.6,21.6,21.6,21.7,21.7,21.0,20.4,19.8,19.5,19.1,19.0,18.7,18.5,18.6,18.8,19.0,19.1,19.3,19.4,19.5,19.7,19.7,20.0,20.5,20.6,21.2,21.7,22.1,22.6,23.0,23.1,23.8,24.2,24.6,25.0,25.1,25.4,25.8,26.4,27.0,27.6,28.5,30.0,31.0,32.1,32.1,32.5,32.3,32.7,33.3,33.7,34.1,34.5,35.0,36.1,36.1,36.7,37.4,37.9,38.7,38.0,37.4,38.2,37.8,37.8,37.5,37.5,37.5,37.4,37.2,37.6,37.4,36.5,38.7,39.1,39.7],"Baleares":[14.3,14.2,14.1,14.1,14.0,13.9,13.8,13.8,13.7,13.6,13.5,13.5,13.4,13.3,13.2,13.1,13.0,12.9,12.9,12.8,12.7,12.6,12.6,12.5,12.5,12.4,12.4,12.3,12.3,12.1,11.9,11.7,11.5,11.5,11.5,11.4,11.4,11.3,11.3,11.3,11.2,11.2,11.2,11.2,11.1,11.1,11.1,11.0,11.0,11.0,11.0,10.9,10.9,10.8,10.8,10.8,10.7,10.7,10.7,10.7,10.7,10.6,10.6,10.5,10.5,10.4,10.4,10.4,10.4,10.3,10.3,10.2,10.2,10.3,10.3,10.3,10.2,10.1,9.9,9.9,9.8,9.8,9.8,9.7,9.7,9.7,9.7,9.6,9.6,9.6,9.6,9.5,9.4,9.3,9.3,9.2,9.1,9.1,9.2,9.3,9.4,9.6,10.0,10.5,10.7,11.1,11.4,11.8,12.1,12.7,13.1,14.0,15.1,15.8,16.5,17.2,17.6,18.6,19.2,19.8,20.5,21.4,22.1,22.7,23.6,24.2,25.0,25.9,26.9,27.6,28.2,28.0,27.6,27.0,26.7,26.6,26.3,26.1,25.9,25.7,25.6,24.9,24.2,24.1,24.0,23.8,22.7,21.9,22.0,21.1,20.5,19.8,19.3,18.8,18.2,17.6,17.3,16.7,15.9,16.2,15.8,15.6],"Jaén":[12.8,12.8,12.7,12.6,12.6,12.5,12.4,12.4,12.3,12.3,12.2,12.1,12.0,12.0,11.9,11.8,11.7,11.6,11.6,11.5,11.4,11.4,11.3,11.3,11.3,11.2,11.2,11.1,11.1,10.9,10.7,10.7,10.6,10.6,10.6,10.6,10.6,10.8,11.8,10.1,10.1,10.1,10.0,10.5,9.9,9.9,9.9,9.8,9.8,9.7,9.7,9.8,9.7,9.6,9.6,9.8,10.0,10.3,10.5,10.8,11.1,11.2,11.2,11.8,12.0,13.1,14.1,22.5,16.8,11.5,11.5,11.5,11.4,11.3,11.6,12.0,11.1,10.9,10.8,10.6,10.5,10.9,11.0,10.9,10.6,10.5,10.5,10.5,10.5,10.5,10.5,10.5,10.5,10.4,10.4,10.3,10.4,10.4,10.4,10.5,10.6,10.7,10.8,11.0,11.2,11.2,11.3,11.4,11.5,11.7,11.9,12.4,12.8,13.1,13.5,13.8,13.9,14.4,14.7,15.1,15.4,16.0,16.5,16.9,17.6,18.0,18.5,19.2,19.9,20.6,21.2,21.5,22.0,22.1,22.4,22.8,23.3,23.9,24.3,24.4,25.0,25.0,25.3,25.7,26.1,26.5,26.0,25.5,26.1,25.9,26.1,26.0,26.0,26.1,25.9,25.7,25.9,25.8,25.2,26.7,26.9,27.3],"León":[18.7,18.5,18.4,18.3,18.2,18.1,17.9,17.8,17.7,17.6,17.5,17.3,17.2,17.0,16.9,16.8,16.6,16.5,16.4,16.2,16.1,16.0,15.8,15.7,15.6,15.5,15.4,15.3,15.2,15.1,14.9,14.9,14.8,14.7,14.6,14.5,14.4,14.4,14.3,14.2,14.1,14.1,14.1,14.1,14.1,14.1,14.0,14.0,14.0,14.0,14.0,14.0,13.9,13.8,13.7,13.7,13.6,13.5,13.4,13.4,13.3,13.3,13.4,13.4,13.6,13.7,13.8,14.0,14.2,14.3,14.5,14.5,14.4,14.4,14.4,14.3,14.2,14.0,13.8,13.6,13.5,13.6,13.7,13.7,13.8,13.8,14.0,14.2,14.3,14.4,14.5,14.5,14.5,14.5,14.4,14.4,14.5,14.4,14.4,14.4,14.5,14.5,14.4,14.4,14.4,14.3,14.3,14.3,14.2,14.3,14.2,14.7,15.0,15.3,15.6,15.9,15.8,16.4,16.6,16.9,17.2,17.6,18.1,18.6,19.2,19.5,19.8,20.3,20.8,21.0,21.2,22.0,22.6,23.3,24.1,24.9,26.0,26.8,27.8,28.4,29.1,29.7,30.2,31.3,32.2,32.8,32.6,32.8,33.8,33.5,34.0,34.3,34.3,34.9,35.3,35.5,36.5,36.6,36.3,38.5,39.4,40.5],"Lérida":[27.2,27.1,26.9,26.8,26.6,26.5,26.4,26.2,26.1,25.9,25.8,25.6,25.5,25.3,25.1,25.0,24.8,24.6,24.5,24.3,24.1,24.1,24.0,23.9,23.9,23.8,23.8,23.6,23.4,23.0,22.6,22.2,22.1,22.0,21.9,21.8,21.6,21.5,21.4,21.3,21.2,21.2,21.2,21.2,21.1,21.1,21.1,21.1,21.1,21.1,21.1,21.0,21.0,21.1,21.3,21.6,21.7,22.0,22.2,22.5,22.8,22.8,22.9,22.9,22.9,23.0,23.0,23.1,23.1,23.2,23.2,23.1,22.9,22.8,22.6,22.5,22.1,21.8,21.5,21.2,20.9,20.9,20.9,20.9,20.9,20.9,20.9,20.9,20.9,21.0,21.0,21.0,21.0,21.0,21.0,21.0,21.1,21.2,21.1,21.3,21.5,21.7,22.0,22.3,22.6,22.8,23.1,23.2,23.6,24.0,24.2,24.9,25.5,25.9,26.6,27.2,27.3,28.3,28.8,29.5,30.2,31.3,32.6,33.3,34.6,35.4,36.4,37.3,38.9,39.8,40.8,41.6,43.0,43.5,44.4,46.0,47.1,48.4,48.4,49.1,50.8,50.8,52.4,53.1,53.5,54.9,54.1,52.7,53.7,53.5,53.3,53.0,52.9,52.9,52.7,52.4,52.9,52.7,51.1,54.6,55.1,56.0],"Lugo":[18.5,18.4,18.3,18.2,18.1,18.0,17.9,17.7,17.6,17.5,17.4,17.3,17.2,17.0,16.9,16.8,16.7,16.6,16.5,16.4,16.2,16.1,16.0,15.9,15.8,15.7,15.6,15.5,15.4,15.3,15.2,15.1,15.0,15.0,14.9,14.8,14.8,14.7,14.6,14.6,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.5,14.4,14.4,14.2,14.0,13.8,13.7,13.6,13.5,13.5,13.4,13.4,13.4,13.3,13.3,13.2,13.2,13.2,13.2,13.2,13.3,13.3,13.4,13.4,13.4,13.3,13.3,13.3,13.1,13.0,12.8,12.6,12.5,12.4,12.4,12.4,12.4,12.4,12.4,12.4,12.5,12.5,12.5,12.5,12.4,12.3,12.3,12.3,12.3,12.2,12.3,12.5,12.6,13.1,13.7,14.3,15.2,15.8,16.7,17.4,18.2,19.1,19.9,21.0,22.8,24.5,26.0,27.7,28.8,30.9,32.1,33.7,35.9,37.8,40.6,43.8,46.9,48.1,50.7,53.1,55.7,55.9,58.0,58.7,59.4,60.1,61.6,63.3,64.9,66.5,68.4,70.5,73.8,75.0,77.4,79.1,80.1,82.4,81.5,81.2,83.5,83.6,84.0,84.7,85.6,86.8,87.5,88.1,89.5,90.5,92.4,94.3,92.2,94.8],"Madrid":[20.1,20.0,19.9,19.8,19.7,19.6,19.5,19.4,19.3,19.2,19.0,18.9,18.8,18.7,18.6,18.4,18.3,18.2,18.1,18.0,17.9,17.8,17.7,17.6,17.4,17.3,17.2,17.1,17.0,16.9,16.8,16.7,16.6,16.5,16.5,16.4,16.3,16.2,16.1,16.1,16.0,16.0,16.1,16.1,16.1,16.1,16.2,16.2,16.2,16.2,16.3,16.4,15.8,15.8,15.6,15.1,15.0,15.3,15.2,15.3,15.3,16.4,17.2,17.2,17.3,17.5,17.5,17.6,16.6,14.1,15.1,14.4,14.4,14.4,14.2,14.3,13.6,13.4,13.7,13.5,13.2,13.0,12.9,12.7,12.7,12.6,12.5,12.5,12.4,12.3,12.3,12.3,12.3,12.2,12.1,12.1,12.2,12.1,12.1,12.2,12.3,12.3,12.4,12.4,12.5,12.4,12.5,12.5,12.5,12.6,12.6,12.8,13.0,13.3,13.5,13.7,13.7,14.1,14.3,14.6,14.8,15.2,15.7,16.0,16.6,16.7,17.0,17.8,18.7,19.2,19.6,19.9,19.9,20.1,20.4,20.8,21.4,22.1,23.0,23.3,24.1,24.1,24.2,24.6,24.9,25.3,24.7,24.5,25.1,24.6,24.6,24.4,24.3,24.2,24.1,23.9,24.1,23.9,23.4,24.6,24.8,25.1],"Málaga":[10.7,10.7,10.6,10.6,10.6,10.5,10.5,10.4,10.4,10.4,10.3,10.3,10.2,10.2,10.1,10.1,10.0,10.0,9.9,9.9,9.8,9.7,9.7,9.6,9.5,9.5,9.4,9.3,9.2,9.2,9.1,9.1,9.0,9.0,8.9,8.9,8.8,8.8,8.7,8.7,8.6,8.6,8.5,8.5,8.5,8.4,8.4,8.4,8.3,8.3,8.3,8.4,8.5,8.5,8.5,8.7,8.9,9.2,9.3,9.4,9.6,9.8,9.9,10.0,10.2,10.3,10.5,10.7,11.0,11.1,11.3,11.3,11.2,11.2,11.1,11.1,10.9,10.8,10.7,10.5,10.4,10.4,10.4,10.4,10.4,10.4,10.3,10.3,10.3,10.3,10.3,10.3,10.3,10.2,10.2,10.3,10.4,10.4,10.4,10.5,10.7,10.7,10.7,10.8,10.9,10.8,10.8,10.8,10.8,10.9,11.0,11.2,11.3,11.4,11.8,11.8,12.4,13.0,13.1,13.4,13.6,13.8,13.9,13.8,14.1,14.2,14.2,14.8,15.5,16.1,16.7,16.8,17.0,16.9,17.0,17.3,17.4,17.6,17.7,17.7,18.0,17.9,18.1,18.3,18.4,18.7,18.2,17.8,18.1,17.9,17.8,17.8,17.7,17.7,17.5,17.4,17.5,17.4,17.0,17.9,18.0,18.3],"Murcia":[12.4,12.3,12.3,12.2,12.2,12.2,12.1,12.1,12.0,12.0,11.9,11.9,11.9,11.8,11.8,11.7,11.7,11.6,11.6,11.5,11.4,11.4,11.4,11.3,11.3,11.3,11.3,11.2,11.2,11.1,10.9,11.0,11.1,11.1,11.3,11.5,11.5,12.1,16.5,10.2,10.4,10.3,10.2,10.1,10.1,10.0,9.9,9.8,9.7,9.6,9.5,9.5,9.5,12.4,9.5,9.5,9.6,9.6,9.7,9.8,9.9,9.9,9.8,9.8,9.8,9.8,9.7,9.7,9.7,9.8,9.8,9.7,10.9,11.1,9.6,9.6,9.5,9.4,9.4,9.3,9.2,9.2,9.2,9.2,9.2,9.1,9.1,9.1,9.1,9.1,9.1,8.8,8.6,8.3,8.1,7.9,7.7,7.6,7.5,7.6,7.6,7.4,7.3,7.3,7.1,7.0,7.0,7.0,6.9,7.0,7.0,7.1,7.1,7.1,7.1,7.2,7.0,7.1,7.1,7.1,7.1,7.3,7.5,7.7,7.9,8.1,8.3,8.5,8.8,9.0,9.2,9.9,10.4,10.9,11.2,11.6,12.5,13.0,13.6,14.0,14.6,15.1,15.7,18.4,19.0,19.8,18.6,18.8,18.6,18.9,19.4,19.7,20.4,20.4,20.4,20.6,21.0,21.2,21.2,22.7,23.2,23.9],"Navarra":[46.9,46.6,46.4,46.1,45.8,45.7,45.6,45.5,45.3,45.1,44.9,44.7,44.4,44.2,43.9,43.7,43.4,43.2,43.0,42.8,42.7,42.4,42.2,42.0,41.8,41.6,41.5,41.4,41.2,41.1,41.0,40.8,40.7,40.7,40.5,40.4,40.4,40.3,40.1,40.0,40.0,39.9,39.9,39.8,39.8,39.7,39.6,39.6,39.6,39.5,39.5,39.4,39.4,39.4,39.3,39.4,39.4,39.4,39.4,39.5,39.5,39.7,39.9,40.1,40.2,40.3,40.6,40.9,41.2,41.4,41.7,41.3,40.9,40.5,40.1,39.7,39.2,38.7,38.2,37.8,37.3,37.3,37.2,37.2,37.1,37.1,37.0,37.0,37.0,37.0,37.0,36.6,36.2,35.9,37.1,37.5,35.0,35.4,34.8,34.6,35.4,35.0,35.5,36.8,37.5,38.6,39.3,40.1,40.3,41.2,41.7,42.6,43.6,45.1,46.7,48.4,49.1,51.5,53.1,54.9,56.7,58.9,61.1,63.5,65.7,68.0,70.5,72.7,75.5,76.7,78.5,78.3,78.6,77.8,80.3,79.4,79.6,80.1,79.5,79.2,80.6,80.6,82.8,84.1,84.6,86.8,85.8,83.8,86.6,85.5,85.1,84.2,84.1,84.1,83.8,83.4,84.2,83.7,82.5,86.7,87.4,88.8],"Orense":[26.1,25.9,25.7,25.6,25.4,25.3,25.1,25.0,24.9,24.7,24.6,24.4,24.2,24.1,23.9,23.7,23.5,23.4,23.2,23.1,22.9,22.8,22.6,22.5,22.3,22.2,22.0,21.9,21.8,21.7,21.5,21.4,21.3,21.2,21.1,21.0,20.9,20.9,20.8,20.7,20.6,20.6,20.6,20.5,20.5,20.5,20.5,20.5,20.5,20.4,20.4,20.4,20.3,20.2,20.2,20.1,20.0,20.0,19.9,19.9,19.8,19.8,19.8,19.9,19.9,19.9,20.0,20.0,20.1,20.2,20.2,20.1,20.1,20.0,19.9,19.8,19.6,19.3,19.1,18.9,18.6,18.6,18.6,18.6,18.6,18.6,18.6,18.6,18.6,18.6,18.6,18.5,18.3,18.2,18.1,18.0,17.9,17.8,17.7,17.6,17.6,18.0,18.5,18.9,19.5,19.8,20.2,20.7,21.2,21.8,22.2,23.3,24.4,25.6,26.7,27.8,28.2,29.5,30.2,31.2,32.4,33.8,35.5,37.2,38.9,40.0,41.4,42.7,44.1,44.7,45.6,46.1,46.8,47.1,47.9,48.8,49.3,50.0,50.9,52.0,53.3,54.7,56.4,58.3,59.5,60.8,60.0,60.9,63.4,63.0,63.6,63.4,64.1,65.4,66.6,67.5,68.6,69.2,70.5,72.0,73.4,74.8],"Palencia":[7.3,7.3,7.2,7.2,7.2,7.1,7.1,7.0,7.0,7.0,6.9,6.9,6.8,6.8,6.7,6.7,6.6,6.6,6.5,6.5,6.4,6.4,6.4,6.3,6.3,6.2,6.2,6.1,6.1,6.0,6.0,5.9,5.9,5.9,5.8,5.8,5.7,5.7,5.6,5.6,5.5,5.5,5.5,5.5,5.4,5.4,5.4,5.4,5.4,5.3,5.3,5.3,5.2,5.1,5.1,5.1,5.1,5.1,5.1,5.2,5.3,5.2,5.1,5.0,4.9,4.8,4.8,4.7,4.7,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.5,4.5,4.4,4.4,4.6,4.7,4.8,4.8,4.9,5.2,5.5,5.7,5.9,6.2,6.1,6.0,5.9,5.8,5.7,5.7,5.7,5.6,5.6,5.7,6.0,6.2,6.5,6.7,6.9,7.1,7.3,7.6,7.8,8.0,8.6,9.2,9.7,10.1,10.6,10.9,11.6,12.1,12.7,13.2,14.1,14.9,15.8,16.7,17.6,18.2,19.1,20.0,20.5,21.2,22.3,23.2,24.1,25.3,26.4,27.7,28.9,30.3,31.4,32.9,33.6,33.9,35.4,37.1,37.7,37.7,38.1,39.5,39.4,40.1,40.7,41.0,42.0,42.5,43.0,44.3,44.5,44.9,47.2,48.5,50.0],"Pontevedra":[36.9,36.8,36.6,36.4,36.3,36.1,36.0,35.9,35.8,35.6,35.5,35.3,35.0,34.8,34.5,34.3,34.1,33.9,33.6,33.4,33.2,33.0,32.9,32.7,32.5,32.4,32.2,32.1,31.9,31.8,31.7,31.5,31.3,31.1,30.9,30.7,30.5,30.3,30.1,29.9,29.8,29.9,32.0,30.0,30.1,30.2,30.3,30.4,30.5,30.6,30.8,30.8,30.8,30.8,30.9,31.0,31.1,31.2,31.4,31.5,32.3,31.3,31.1,30.9,30.7,30.6,30.5,30.5,30.6,30.7,30.9,30.7,30.4,30.2,30.0,29.8,29.5,29.2,28.9,28.6,28.3,28.2,28.1,28.1,28.1,28.1,28.2,28.4,28.7,29.0,29.4,28.2,27.3,26.7,26.4,26.2,26.2,26.3,26.4,26.7,27.1,26.9,26.8,26.9,27.2,27.7,28.5,29.4,30.5,32.9,37.1,39.3,42.1,43.9,46.1,45.7,47.3,50.7,50.3,52.6,53.9,53.8,58.2,62.9,66.0,64.6,69.8,74.2,76.5,70.2,73.8,74.7,75.0,74.7,78.3,77.9,76.2,77.0,76.7,77.5,79.8,82.4,86.3,90.2,92.7,95.1,88.2,89.6,94.4,97.0,100.2,101.5,103.8,105.3,107.4,109.7,111.4,110.5,113.0,115.3,119.1,121.2],"La Rioja":[24.1,24.0,23.9,23.7,23.6,23.5,23.4,23.3,23.2,23.2,23.0,22.9,22.8,22.6,22.5,22.4,22.2,22.1,22.0,21.9,21.8,21.7,21.6,21.5,21.3,21.2,21.2,21.1,21.0,20.9,20.8,20.8,20.7,20.7,20.6,20.6,20.6,20.5,20.4,20.4,20.4,20.3,20.2,20.1,20.0,19.9,19.8,19.7,19.6,19.5,19.4,19.4,19.4,19.4,19.4,19.7,19.7,19.9,19.9,20.2,20.3,20.4,20.4,20.5,20.6,20.6,20.8,21.0,21.2,21.3,21.6,21.5,21.4,21.3,21.2,21.2,20.9,20.7,20.5,20.3,20.1,20.5,20.3,20.2,20.0,20.0,20.2,20.6,20.7,20.8,21.1,20.9,20.7,20.5,20.3,20.2,20.1,20.0,19.9,19.9,19.9,20.3,20.6,21.0,21.2,21.5,21.9,22.2,22.5,23.0,23.2,24.3,25.3,26.0,26.9,27.7,28.0,29.7,30.5,31.6,32.8,34.0,35.3,37.0,38.4,39.5,40.7,42.2,44.3,45.3,46.5,47.4,48.4,49.0,50.1,51.6,53.1,55.3,56.5,57.4,59.4,59.5,60.9,61.7,62.1,63.5,62.5,61.1,62.4,61.9,61.8,61.3,61.2,61.2,60.9,60.6,61.2,60.8,59.0,63.0,63.5,64.5],"Salamanca":[8.4,8.3,8.3,8.2,8.2,8.1,8.1,8.1,8.0,8.0,7.9,7.9,7.8,7.8,7.7,7.7,7.6,7.6,7.5,7.5,7.4,7.4,7.3,7.3,7.3,7.2,7.2,7.1,7.1,7.0,6.9,6.8,6.8,6.7,6.7,6.6,6.5,6.6,6.5,6.5,6.5,6.5,6.4,6.4,6.4,6.3,6.3,6.3,6.3,6.4,6.4,6.2,6.3,6.3,6.3,6.2,6.2,6.2,6.2,6.2,6.1,6.1,6.1,6.0,6.2,6.2,6.4,6.6,6.6,7.0,7.4,7.4,7.4,7.3,7.3,7.3,7.2,7.2,7.1,7.1,7.0,7.1,7.0,7.1,7.0,7.0,7.0,7.0,7.0,7.0,7.0,6.9,6.8,6.7,6.7,6.6,6.6,6.5,6.5,6.5,6.4,6.4,6.4,6.3,6.3,6.3,6.3,6.3,6.3,6.3,6.4,6.6,6.7,6.9,7.1,7.2,7.2,7.5,7.7,8.0,8.1,8.3,8.6,8.8,9.3,9.6,9.7,10.1,10.6,10.6,11.0,11.2,11.1,11.2,11.4,11.5,11.6,11.8,12.0,12.2,12.3,12.1,11.7,11.9,12.3,12.2,11.9,11.8,12.0,11.7,11.7,11.5,11.4,11.4,11.2,11.1,11.2,11.0,11.0,11.2,11.2,11.3],"Segovia":[48.3,47.9,47.7,47.4,47.1,46.9,46.7,46.5,46.2,45.9,45.7,45.3,45.1,44.7,44.5,44.1,43.9,43.7,43.5,43.3,43.1,42.8,42.6,42.3,42.0,41.9,41.7,41.5,41.3,41.1,40.9,40.5,40.2,39.9,39.6,39.4,39.1,39.2,39.2,38.8,39.5,39.4,39.1,39.2,39.2,39.3,39.2,39.2,39.4,39.5,39.4,38.8,38.5,37.7,37.1,35.9,35.1,34.9,34.7,34.7,34.8,34.8,34.8,34.8,34.9,34.9,35.0,35.1,35.3,35.4,35.6,35.2,34.8,34.9,34.6,35.5,34.3,34.3,34.3,34.4,34.6,34.6,34.5,34.4,34.3,34.3,34.9,34.2,34.2,34.1,34.1,34.0,36.4,35.4,33.7,33.9,34.9,32.9,32.4,32.7,33.0,33.0,33.0,33.0,33.0,32.7,32.8,32.7,32.5,32.6,32.6,33.1,33.4,33.8,34.1,34.5,34.4,35.1,35.5,35.9,36.2,36.7,37.4,37.8,38.6,39.0,39.7,40.6,41.4,42.1,42.8,43.2,43.5,43.6,44.2,45.2,45.8,46.4,46.8,46.9,47.8,47.1,47.3,47.7,48.0,48.5,47.4,46.1,46.7,45.9,45.6,44.9,44.6,44.1,43.6,42.9,43.1,42.5,41.2,43.2,43.2,43.5],"Sevilla":[8.9,8.8,8.8,8.7,8.7,8.6,8.6,8.5,8.5,8.4,8.4,8.3,8.3,8.2,8.1,8.1,8.0,8.0,7.9,7.9,7.8,7.7,7.7,7.6,7.6,7.5,7.4,7.4,7.3,7.3,7.2,7.2,7.2,7.2,7.1,7.1,7.1,7.1,7.1,7.1,7.1,7.0,7.0,7.0,7.0,7.0,7.0,6.9,6.9,6.9,6.9,6.9,6.8,6.8,6.8,6.7,6.7,6.7,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.6,6.5,6.5,6.5,6.4,6.4,6.3,6.2,6.1,6.0,5.9,5.9,5.8,5.7,5.7,5.6,5.6,5.5,5.5,5.5,5.5,5.5,5.4,5.4,5.4,5.3,5.3,5.2,5.2,5.1,5.1,5.0,4.9,4.9,4.8,4.7,4.6,4.6,4.5,4.5,4.4,4.5,4.5,4.5,4.5,4.6,4.5,4.6,4.6,4.7,4.7,4.7,4.8,4.8,4.8,4.8,4.8,4.8,4.9,4.9,4.9,5.0,5.0,5.0,5.1,5.2,5.3,5.3,5.5,5.5,5.7,5.9,6.1,6.4,6.9,7.0,7.0,7.2,7.5,7.6,8.0,8.4,8.5,8.9,9.0,9.2,9.4,9.6,9.8,10.3,10.6,10.9],"Soria":[36.9,36.7,36.5,36.2,36.0,35.8,35.7,35.5,35.3,35.1,34.9,34.6,34.4,34.1,33.9,33.7,33.4,33.2,33.0,32.9,32.7,32.5,32.3,32.1,31.8,31.7,31.5,31.3,31.1,31.0,30.8,30.7,30.6,30.5,30.3,30.3,30.1,30.0,29.9,29.8,29.7,29.7,29.7,29.7,29.6,29.6,29.6,29.6,29.6,29.5,29.5,29.4,29.2,29.1,29.0,28.9,28.8,28.6,28.5,28.5,28.4,28.5,28.6,28.7,28.8,28.9,29.1,29.3,29.6,29.8,30.2,30.0,29.9,29.8,29.6,29.5,29.2,28.9,28.6,28.3,28.1,28.1,28.1,28.1,28.1,28.1,28.1,28.1,28.1,28.1,28.1,27.7,27.3,26.8,26.5,26.1,25.9,25.6,25.3,25.2,25.1,24.9,24.8,24.6,24.5,24.4,24.4,24.3,24.2,24.3,24.3,24.9,25.3,25.6,26.0,26.4,26.2,27.0,27.4,27.9,28.4,28.9,29.4,29.9,30.4,30.9,31.4,32.0,32.8,33.3,33.6,34.5,35.4,35.9,36.9,38.1,39.2,40.5,41.5,42.2,43.4,43.6,44.3,45.3,46.3,47.1,46.5,46.0,47.2,46.7,46.9,46.8,46.8,47.0,47.0,47.0,47.7,47.6,46.7,49.6,50.3,51.3],"Tarragona":[11.3,11.3,11.2,11.2,11.1,11.1,11.0,11.0,10.9,10.9,10.8,10.8,10.7,10.7,10.6,10.6,10.5,10.5,10.4,10.4,10.3,10.3,10.2,10.2,10.1,10.1,10.0,10.0,9.9,9.9,9.8,9.8,9.7,9.7,9.6,9.5,9.5,9.4,9.4,9.3,9.3,9.2,9.2,9.1,9.1,9.0,9.0,8.9,8.9,8.8,8.8,8.7,8.7,8.7,8.7,8.7,8.7,8.7,8.6,8.6,8.6,8.6,8.5,8.5,8.4,8.3,8.3,8.3,8.4,8.4,8.5,8.5,8.4,8.4,8.4,8.4,8.3,8.2,8.1,8.0,7.9,7.7,7.6,7.4,7.3,7.2,7.1,7.0,6.9,6.9,6.9,6.9,6.9,6.8,6.9,6.9,7.3,7.4,7.4,8.0,8.5,8.6,8.8,9.1,9.1,9.2,9.3,9.3,9.6,10.0,10.0,10.8,11.9,12.0,12.6,13.1,13.0,13.9,14.0,14.3,14.4,15.0,15.6,16.1,16.8,17.2,17.7,18.1,18.9,19.4,19.9,20.5,21.4,21.7,21.9,22.4,23.0,23.9,24.3,24.8,25.5,25.7,26.3,26.8,27.1,27.7,27.1,26.8,27.5,27.2,27.1,27.0,27.0,27.0,27.0,26.9,27.1,27.1,26.4,28.2,28.5,29.0],"Teruel":[18.6,18.5,18.5,18.4,18.3,18.2,18.1,18.1,18.0,17.9,17.8,17.7,17.6,17.5,17.4,17.3,17.3,17.2,17.0,17.0,16.9,16.8,16.7,16.6,16.6,16.5,16.4,16.4,16.3,16.2,16.2,16.2,16.2,16.1,16.1,16.1,16.0,16.0,16.0,16.0,15.9,15.9,15.9,15.9,15.9,15.9,15.9,15.9,15.9,15.9,15.9,15.8,15.8,15.8,15.7,15.7,15.7,15.6,15.6,15.6,15.6,15.6,15.6,15.6,15.6,15.7,15.7,15.7,15.8,15.9,15.9,15.8,15.7,15.6,15.5,15.5,15.3,15.1,15.0,14.8,14.7,14.7,14.6,14.6,14.6,14.5,14.6,14.6,14.5,14.6,14.5,14.3,14.0,13.8,13.7,13.5,13.4,13.2,13.1,13.1,13.0,12.9,12.7,12.7,12.6,12.5,12.6,12.7,12.9,13.2,13.5,14.0,14.6,14.8,15.3,15.6,15.6,16.4,16.5,16.8,17.1,17.6,18.2,18.6,19.1,19.5,19.9,20.4,21.1,21.6,22.0,22.5,23.0,23.1,23.4,23.9,24.3,24.9,25.3,25.7,26.3,26.3,26.7,27.4,28.1,28.6,28.1,27.9,28.7,28.4,28.6,28.4,28.4,28.4,28.3,28.2,28.5,28.4,27.9,29.4,29.7,30.3],"Toledo":[4.5,4.5,4.4,4.4,4.4,4.3,4.3,4.3,4.3,4.2,4.2,4.2,4.1,4.1,4.1,4.0,4.0,4.0,3.9,3.9,3.9,3.8,3.8,3.8,3.8,3.7,3.7,3.7,3.6,3.6,3.6,3.5,3.5,3.5,3.5,3.5,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.3,3.4,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.2,3.2,3.2,3.1,3.1,3.0,3.0,2.9,2.9,2.9,2.9,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.7,2.7,2.7,2.6,2.6,2.6,2.5,2.5,2.5,2.4,2.6,2.7,2.8,2.9,3.0,3.1,3.2,3.3,3.5,3.5,3.7,3.9,4.1,4.2,4.4,4.4,4.7,4.9,5.1,5.3,5.4,5.5,5.6,5.9,6.1,6.3,6.7,7.3,7.7,8.1,8.3,8.4,8.5,8.7,8.9,9.2,9.5,9.9,10.1,10.4,10.4,10.4,10.6,10.9,11.0,10.8,10.8,11.1,10.9,11.0,11.0,11.0,11.1,11.1,11.1,11.2,11.2,11.2,11.7,11.9,12.1],"Valencia":[15.9,15.7,15.7,15.6,15.5,15.4,15.3,15.2,15.2,15.1,15.0,14.9,14.8,14.7,14.6,14.6,14.5,14.4,14.3,14.2,14.1,14.0,13.9,13.8,13.8,13.7,13.6,13.5,13.5,13.4,13.3,13.2,13.2,13.1,13.0,13.0,12.9,12.9,12.8,12.8,12.7,12.7,12.7,12.7,12.7,12.7,12.7,12.7,12.7,12.7,12.8,12.6,12.5,12.4,12.4,12.3,12.2,12.2,12.2,12.1,12.1,12.2,12.2,12.2,12.3,12.5,12.4,13.0,12.5,12.6,12.6,12.6,12.5,12.4,12.4,12.3,12.2,12.1,12.0,11.8,11.7,11.8,11.7,11.7,11.8,11.7,11.8,11.9,11.9,12.0,12.0,11.8,11.6,11.5,11.3,11.2,11.1,11.0,10.9,10.9,10.9,10.9,10.7,11.0,10.4,10.2,10.2,10.1,10.1,10.1,10.0,10.2,10.3,10.4,10.4,10.5,10.4,10.6,10.5,10.5,10.6,10.7,10.8,10.9,11.0,11.0,11.1,11.2,11.3,11.4,11.4,11.4,11.6,11.6,11.2,11.4,12.0,12.9,13.4,13.9,14.3,14.5,14.7,15.3,16.2,16.5,16.5,16.6,17.3,17.5,17.8,17.9,17.9,18.2,18.5,19.4,18.8,19.3,19.7,21.2,20.9,21.3],"Valladolid":[16.8,16.8,16.8,16.8,16.8,16.9,16.9,17.0,17.0,17.0,17.0,17.0,17.0,17.0,17.0,17.0,17.0,17.0,17.1,17.1,17.2,17.2,17.1,17.1,17.0,17.0,17.0,17.0,17.0,17.0,16.9,16.9,16.8,16.8,16.8,16.8,16.7,16.7,16.6,16.6,16.5,16.5,16.5,16.5,16.5,16.5,16.5,16.5,16.5,16.5,16.4,16.4,16.4,16.4,16.4,16.4,16.5,16.5,16.5,16.5,16.5,16.6,16.6,16.6,16.6,16.6,16.7,16.7,16.9,17.0,17.1,16.8,16.5,16.2,16.0,15.7,15.4,15.1,14.8,14.5,14.2,14.4,14.5,14.6,14.6,14.6,14.8,15.0,15.1,15.3,15.3,15.1,15.0,14.8,14.8,14.7,14.7,14.7,14.7,14.7,14.8,14.9,15.0,15.0,15.1,14.9,15.0,15.0,14.9,15.6,16.1,16.4,16.6,16.8,17.1,17.3,17.2,17.6,17.8,18.1,18.3,18.6,18.9,19.2,19.6,20.0,20.5,20.9,21.6,22.0,22.4,22.9,23.4,23.7,24.4,25.4,26.1,26.9,27.5,27.8,28.8,29.1,29.9,30.6,30.8,31.6,31.3,30.8,31.5,31.3,31.6,31.6,31.7,31.9,32.0,31.9,32.6,32.5,31.8,34.0,34.5,35.3],"Zamora":[2.9,2.9,2.9,2.9,2.9,2.9,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.7,2.6,2.6,2.6,2.6,2.6,2.6,2.8,3.0,3.0,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.7,2.7,2.7,2.7,2.7,2.8,2.9,3.0,3.1,3.3,3.5,3.8,4.0,4.1,4.1,4.0,3.9,3.8,3.8,3.7,3.6,3.5,3.4,3.4,3.3,3.3,3.3,3.3,3.3,3.3,3.2,3.2,3.2,3.2,3.1,3.1,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.1,3.2,3.4,3.5,3.6,3.7,3.9,4.0,4.1,4.3,4.4,4.8,5.0,5.3,5.6,5.8,5.9,6.3,6.5,6.7,6.8,7.1,7.6,8.1,8.7,8.9,9.2,9.9,10.9,11.1,11.7,11.9,12.3,13.1,13.8,14.4,15.5,16.4,17.5,17.8,18.3,19.2,19.7,21.0,21.7,21.2,21.3,22.1,22.8,22.5,23.5,23.7,23.4,23.8,24.3,24.5,25.4,25.3,25.2,26.7,27.3,28.2],"Zaragoza":[5.9,5.8,5.8,5.7,5.7,5.7,5.6,5.6,5.6,5.5,5.5,5.5,5.4,5.4,5.4,5.3,5.3,5.2,5.2,5.2,5.1,5.1,5.1,5.0,5.0,5.0,4.9,4.9,4.9,4.9,4.8,4.8,4.8,4.8,4.8,4.7,4.7,4.7,4.7,4.7,4.6,4.6,4.6,4.6,4.6,4.6,4.6,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.8,4.8,4.9,4.9,4.8,4.8,4.8,4.8,4.7,4.7,4.6,4.6,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.4,4.3,4.2,4.2,4.1,4.0,4.0,4.0,3.9,3.9,3.9,4.0,4.0,4.1,4.1,4.2,4.3,4.4,4.5,4.7,5.1,5.5,5.7,6.0,6.2,6.3,6.8,6.9,7.2,7.4,7.7,8.1,8.4,8.8,9.1,9.3,9.6,10.1,10.3,10.6,11.0,11.6,11.9,12.2,12.6,13.1,13.8,14.2,14.7,15.2,15.4,15.8,16.4,17.0,17.4,17.2,17.3,17.9,17.8,17.9,18.0,18.1,18.4,18.5,18.6,19.0,19.1,18.9,20.1,20.5,21.0]}};
-</script>
+<script src="portada/cahe-prov.js"></script>
 <script>
 (function(){
 'use strict';
-var S=window.SPAIN, C=window.CAHE, PC=window.CAHE_PROV_C||{years:[],v:{}};
-var PCY=PC.years||[], PCV=PC.v||{}, CARB={};
-/* el año que pinta el mapa; arranca en el último de la serie provincial */
-var YEAR=PCY.length?PCY[PCY.length-1]:2021, PIN=null;
-function carbSet(y){var i=PCY.indexOf(y);if(i<0)i=PCY.length-1;CARB={};
-  for(var kk in PCV){if(!Object.prototype.hasOwnProperty.call(PCV,kk))continue;CARB[kk]=PCV[kk][i];}}
-carbSet(YEAR);
-var canvas=document.getElementById('c'), stage=document.getElementById('stage'), tipEl=document.getElementById('tip');
+/* ---------- datos: solo lo que trae el kit portada/ ----------
+   Curva: CAHE.series['emisiones-gei'] (t CO2e -> Mt CO2e), 1860-2023.
+   Mapa y segunda gráfica: CAHE_PROV.stock (Mt C por provincia, 1860-2021, generado por
+   build/portada_kit_v6.py desde data/provincial/bosques.json, combo stock-de-c__total) y
+   CAHE_PROV.national (data/national/bosques.json, serie total-stock-de-c-absoluto). */
+var S=window.SPAIN,C=window.CAHE,P=window.CAHE_PROV;
+var canvas=document.getElementById('c'),stage=document.getElementById('stage'),tipEl=document.getElementById('tip');
+var capY=document.getElementById('cap-y');
+var tlEl=document.getElementById('tl'),tlPlay=document.getElementById('tl-play'),tlY=document.getElementById('tl-y'),
+    tlR=document.getElementById('tl-r'),tlV=document.getElementById('tl-v');
+var legEl=document.getElementById('leg'),legBar=document.getElementById('leg-bar'),legMin=document.getElementById('leg-min'),legMax=document.getElementById('leg-max');
 var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 var COARSE=!!(window.matchMedia&&window.matchMedia('(pointer: coarse)').matches);
 requestAnimationFrame(function(){document.body.classList.add('on');});
-if(!S||!C||!canvas.getContext) return;
+if(!S||!C||!P||!canvas.getContext)return;
 var ctx=canvas.getContext('2d');
 
-/* ---------- palette: Prussian blue, copper, verdigris ---------- */
-var PRUSIA='#0A1B2C', PRUSIA2='#0E2438',
-    CAL='#EFE8D8', CAL2='#D6CDBA', MUTED='#8AA0B4', HAIR='#3A5570',
-    COBRE='#C4753C', COBRE_HI='#E39A5B', COBRE_D='#7E3F1A', COBRE_WET='#D98A4A',
-    VERD_LO='#255A4C', VERD_HI='#8FCBB0', SLATE='#5C7690';
+var PRUSIA='#0A1B2C',PRUSIA2='#0E2438',CAL='#EFE8D8',CAL2='#D6CDBA',MUTED='#8AA0B4',HAIR='#3A5570',
+    COBRE='#C4753C',COBRE_HI='#E39A5B',COBRE_D='#7E3F1A',COBRE_WET='#D98A4A',
+    VERD_LO='#255A4C',VERD='#4F9C82',VERD_HI='#8FCBB0',SLATE='#5C7690';
 function mix(a,b,t){var pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);
   var r=Math.round(((pa>>16)&255)+((((pb>>16)&255)-((pa>>16)&255))*t)),
       g2=Math.round(((pa>>8)&255)+((((pb>>8)&255)-((pa>>8)&255))*t)),
       b2=Math.round((pa&255)+(((pb&255)-(pa&255))*t));
   return 'rgb('+r+','+g2+','+b2+')';}
 
-/* ---------- real data: the greenhouse-gas curve, 1860-2023 ----------
-   Antes se pintaba la serie de materiales sin decirlo en ninguna parte. Ahora es la serie
-   de emisiones de GEI (la medida completa, no solo CO2) y el rótulo .cap la nombra. */
-var SER_ID='emisiones-gei';
-var ser=C.series[SER_ID]||C.series.materiales, YR=ser.years, N=YR.length;
-var V=ser.values.map(function(v){return v/1e6;});
-var vMax=-Infinity,iMax=0,i;for(i=0;i<N;i++)if(V[i]>vMax){vMax=V[i];iMax=i;}
-var Y0=YR[0], Y1=YR[N-1];
+var ser=C.series['emisiones-gei'];if(!ser)return;
+var YR=ser.years,N=YR.length,V=ser.values.map(function(v){return v/1e6;}),Y0=YR[0],Y1=YR[N-1];
+var vMax=-Infinity,i;for(i=0;i<N;i++)if(V[i]>vMax)vMax=V[i];
+var PY=P.years,PN=PY.length,P0=PY[0],P1=PY[PN-1],STK=P.stock.v,DEN=P.density.v,NAT=P.national.v;
+var sMin=Infinity,sMax=-Infinity,nm;
+for(nm in STK){if(!Object.prototype.hasOwnProperty.call(STK,nm))continue;var arr=STK[nm];
+  for(i=0;i<arr.length;i++){if(arr[i]==null)continue;if(arr[i]<sMin)sMin=arr[i];if(arr[i]>sMax)sMax=arr[i];}}
+if(!isFinite(sMin)){sMin=0;sMax=1;}
+function pIdx(y){var k=y-P0;return k<0?0:k>=PN?PN-1:k;}
+function mapYear(y){return y>P1?P1:y<P0?P0:y;}
+function stockOf(name,y){var a=STK[name];return a?a[pIdx(y)]:null;}
+function densOf(name,y){var a=DEN[name];return a?a[pIdx(y)]:null;}
+function geiOf(y){var k=y-Y0;return (k<0||k>=N)?null:V[k];}
+function scaleT(v){return Math.pow(clamp((v-sMin)/(sMax-sMin)),0.55);}
 
-/* ---------- deterministic noise ---------- */
+/* ---------- estado ---------- */
+var YEAR=Y1,PIN=null,HOV=null,phase=RM?'end':'intro',playing=false,hinted=false;
+var RATE=24; /* años por segundo al reproducir tras la intro */
+
+/* ---------- cadenas del lienzo y de la barra (el resto va por data-en) ---------- */
+var STR={
+  es:{hint:'Pincha una provincia · arrastra para recorrer los años',hintT:'Toca una provincia · arrastra para recorrer los años',
+      chA:'Emisiones totales de GEI · Mt CO₂e',chAs:'Emisiones GEI · Mt CO₂e',
+      chB:'Stock de carbono forestal · España · Mt C',chBs:'Stock C forestal · España · Mt C',
+      chBp:'Stock de carbono forestal · {p} · Mt C',chBps:'Stock C forestal · {p} · Mt C',
+      stock:'Stock de carbono forestal',last:'último dato',noData:'sin serie en este dato',perHa:'t C/ha',
+      release:'Pincha fuera para soltar',releaseT:'Toca fuera para soltar',
+      rGei:'Emisiones GEI',rStock:'Stock C forestal',rNat:'España',canarias:'Canarias',mt:'Mt CO₂e',mtc:'Mt C',
+      play:'Reproducir',pause:'Pausar',year:'Año'},
+  en:{hint:'Click a province · drag to move through the years',hintT:'Tap a province · drag to move through the years',
+      chA:'Total GHG emissions · Mt CO₂e',chAs:'GHG emissions · Mt CO₂e',
+      chB:'Forest carbon stock · Spain · Mt C',chBs:'Forest C stock · Spain · Mt C',
+      chBp:'Forest carbon stock · {p} · Mt C',chBps:'Forest C stock · {p} · Mt C',
+      stock:'Forest carbon stock',last:'latest available',noData:'no series for this figure',perHa:'t C/ha',
+      release:'Click outside to release',releaseT:'Tap outside to release',
+      rGei:'GHG emissions',rStock:'Forest C stock',rNat:'Spain',canarias:'Canary Islands',mt:'Mt CO₂e',mtc:'Mt C',
+      play:'Play',pause:'Pause',year:'Year'}
+};
+function LANG(){return document.documentElement.lang==='en'?'en':'es';}
+function TXT(k){var L=STR[LANG()]||STR.es;return L[k]!==undefined?L[k]:STR.es[k];}
+var nfc={};
+function NF(kind){var key=kind+LANG();if(nfc[key])return nfc[key];var loc=LANG()==='en'?'en-GB':'es-ES',o;
+  if(kind==='g0')o={maximumFractionDigits:0};else if(kind==='g1')o={maximumFractionDigits:1};else o={maximumSignificantDigits:3};
+  try{nfc[key]=new Intl.NumberFormat(loc,o);}catch(e){nfc[key]={format:function(v){return String(Math.round(v*100)/100);}};}
+  return nfc[key];}
+function fmtG(v){return NF(v>=100?'g0':'g1').format(v);}
+function fmtS(v){return NF('s3').format(v);}
+
+/* ---------- ruido determinista y pinceles (heredados de la V5) ---------- */
 function hash(n){var s=Math.sin(n*12.9898+78.233)*43758.5453;return s-Math.floor(s);}
 function smooth(t){return t*t*(3-2*t);}
 function noise(x,seed){var i0=Math.floor(x),f=x-i0,a=hash(i0+seed*131.7),b=hash(i0+1+seed*131.7);return (a+(b-a)*smooth(f))*2-1;}
 function fbm(x,seed){return noise(x,seed)*0.62+noise(x*2.31,seed+7)*0.26+noise(x*4.7,seed+19)*0.12;}
+function clamp(x){return x<0?0:x>1?1:x;}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function cumLen(p){var c=[0];for(var j=1;j<p.length;j++){var dx=p[j][0]-p[j-1][0],dy=p[j][1]-p[j-1][1];c[j]=c[j-1]+Math.sqrt(dx*dx+dy*dy);}return c;}
+function resample(p,MM){var c=cumLen(p),L=c[c.length-1],out=[],j=0;for(var q=0;q<MM;q++){var s=L*q/(MM-1);while(j<c.length-2&&c[j+1]<s)j++;var sg=c[j+1]-c[j],u=sg>0?(s-c[j])/sg:0;out.push([lerp(p[j][0],p[j+1][0],u),lerp(p[j][1],p[j+1][1],u)]);}return out;}
+function normals(p){var n=p.length,out=new Array(n);for(var j=0;j<n;j++){var a=p[Math.max(0,j-2)],b=p[Math.min(n-1,j+2)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.sqrt(dx*dx+dy*dy)||1;out[j]=[-dy/l,dx/l];}return out;}
+function ribbon(g,pts,nrm,hw,col,alpha,from,to){
+  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a)return;
+  g.globalAlpha=alpha;g.fillStyle=col;g.beginPath();var j,p,n,w;
+  for(j=a;j<=b;j++){p=pts[j];n=nrm[j];w=hw[j];if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);}
+  for(j=b;j>=a;j--){p=pts[j];n=nrm[j];w=hw[j];g.lineTo(p[0]-n[0]*w,p[1]-n[1]*w);}
+  g.closePath();g.fill();g.globalAlpha=1;}
+function bristles(g,pts,nrm,hw,col,alpha,seed,count,from,to){
+  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a+1)return;
+  g.strokeStyle=col;g.lineWidth=0.85;g.lineCap='round';
+  for(var h=0;h<count;h++){var u=(h+0.5)/count*2-1,sd=seed+h*3.7;g.globalAlpha=alpha*(0.35+0.5*hash(sd));g.beginPath();
+    for(var j=a;j<=b;j++){var w=hw[j]*(u*0.72+fbm(j*0.09,sd)*0.22),p=pts[j],n=nrm[j];
+      if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);}
+    g.stroke();}
+  g.globalAlpha=1;}
+function paintStroke(g,pts,nrm,hw,a,b){
+  g.lineJoin='round';g.lineCap='round';
+  ribbon(g,pts,nrm,hw.map(function(w){return w*1.62;}),COBRE_WET,0.15,a,b);
+  ribbon(g,pts,nrm,hw,COBRE,0.86,a,b);
+  ribbon(g,pts,nrm,hw.map(function(w){return w*0.52;}),COBRE_D,0.45,a,b);
+  bristles(g,pts,nrm,hw,'#2A0E03',0.26,5,4,a,b);
+  bristles(g,pts,nrm,hw,'#F3C793',0.30,17,2,a,b);}
+function paintDry(g,pts,nrm,hw,a,b){
+  g.lineJoin='round';g.lineCap='round';
+  ribbon(g,pts,nrm,hw.map(function(w){return w*2.0;}),'#6E90AC',0.14,a,b);
+  ribbon(g,pts,nrm,hw,'#BFD2E0',0.72,a,b);
+  bristles(g,pts,nrm,hw.map(function(w){return w*1.5;}),'#DCE7F0',0.20,23,3,a,b);}
 
-/* ---------- projection (Lambert conformal conic, as in the CAHE kit) ---------- */
-var RAD=Math.PI/180,P1=37*RAD,P2=43*RAD,L0=-3*RAD,P0=40*RAD;
-var cn=Math.log(Math.cos(P1)/Math.cos(P2))/Math.log(Math.tan(Math.PI/4+P2/2)/Math.tan(Math.PI/4+P1/2));
-var cF=Math.cos(P1)*Math.pow(Math.tan(Math.PI/4+P1/2),cn)/cn;
-var cR0=cF/Math.pow(Math.tan(Math.PI/4+P0/2),cn);
+/* ---------- proyección (cónica conforme de Lambert, como el visor) ---------- */
+var RAD=Math.PI/180,PA=37*RAD,PB=43*RAD,L0=-3*RAD,PH0=40*RAD;
+var cn=Math.log(Math.cos(PA)/Math.cos(PB))/Math.log(Math.tan(Math.PI/4+PB/2)/Math.tan(Math.PI/4+PA/2));
+var cF=Math.cos(PA)*Math.pow(Math.tan(Math.PI/4+PA/2),cn)/cn;
+var cR0=cF/Math.pow(Math.tan(Math.PI/4+PH0/2),cn);
 function raw(p){var r=cF/Math.pow(Math.tan(Math.PI/4+p[1]*RAD/2),cn),th=cn*(p[0]*RAD-L0);return [r*Math.sin(th),cR0-r*Math.cos(th)];}
 function cent(r){var x=0,y=0;for(var j=0;j<r.length;j++){x+=r[j][0];y+=r[j][1];}return [x/r.length,y/r.length];}
 function bboxOf(rs){var b=[Infinity,Infinity,-Infinity,-Infinity];rs.forEach(function(r){r.forEach(function(p){if(p[0]<b[0])b[0]=p[0];if(p[1]<b[1])b[1]=p[1];if(p[0]>b[2])b[2]=p[0];if(p[1]>b[3])b[3]=p[1];});});return b;}
-
 var rings=S.outline,mainRings=[],canRings=[],fitRings=[];
 rings.forEach(function(r){var c=cent(r);if(c[0]<-10)canRings.push(r);else{mainRings.push(r);if(c[1]>35.95)fitRings.push(r);}});
 var mainRaw=mainRings.map(function(r){return r.map(raw);}),canRaw=canRings.map(function(r){return r.map(raw);});
 var fitB=bboxOf(fitRings.map(function(r){return r.map(raw);})),canB=bboxOf(canRaw);
 var provRaw=S.provinces.map(function(p){return {name:p.name,can:p.c[0]<-10,c:raw(p.c),rings:p.rings.map(function(r){return r.map(raw);})};});
-
-/* Levante coast (Tarifa -> Cap de Creus) and the Atlantic remainder */
+/* costa de Levante (Tarifa -> Cap de Creus) y el resto atlántico-cantábrico */
 var lev=S.levante,pen=S.peninsula,PL=pen.length;
 function eq(a,b){return Math.abs(a[0]-b[0])<1e-9&&Math.abs(a[1]-b[1])<1e-9;}
 var iCap=-1,iTar=-1;for(i=0;i<PL;i++){if(iCap<0&&eq(pen[i],lev[0]))iCap=i;if(iTar<0&&eq(pen[i],lev[lev.length-1]))iTar=i;}
@@ -312,591 +387,446 @@ if(iCap>=0&&iTar>=0){var k2=iCap;rest.push(pen[k2]);var g0=0;while(k2!==iTar&&g0
 else rest=pen.slice();
 var levRaw=lev.slice().reverse().map(raw),restRaw=rest.map(raw);
 
-/* ---------- polyline helpers ---------- */
-function clamp(x){return x<0?0:x>1?1:x;}
-function lerp(a,b,t){return a+(b-a)*t;}
-function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
-function easeOut(t){return 1-Math.pow(1-t,3);}
-function cumLen(p){var c=[0];for(var j=1;j<p.length;j++){var dx=p[j][0]-p[j-1][0],dy=p[j][1]-p[j-1][1];c[j]=c[j-1]+Math.sqrt(dx*dx+dy*dy);}return c;}
-function resample(p,MM){var c=cumLen(p),L=c[c.length-1],out=[],j=0;for(var q=0;q<MM;q++){var s=L*q/(MM-1);while(j<c.length-2&&c[j+1]<s)j++;var sg=c[j+1]-c[j],u=sg>0?(s-c[j])/sg:0;out.push([lerp(p[j][0],p[j+1][0],u),lerp(p[j][1],p[j+1][1],u)]);}return out;}
-function normals(p){var n=p.length,out=new Array(n);for(var j=0;j<n;j++){var a=p[Math.max(0,j-2)],b=p[Math.min(n-1,j+2)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.sqrt(dx*dx+dy*dy)||1;out[j]=[-dy/l,dx/l];}return out;}
-
-/* ---------- brush: a tapered ribbon plus bristle hairs ---------- */
-function ribbon(g,pts,nrm,hw,col,alpha,from,to){
-  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a)return;
-  g.globalAlpha=alpha;g.fillStyle=col;g.beginPath();
-  var j,p,n,w;
-  for(j=a;j<=b;j++){p=pts[j];n=nrm[j];w=hw[j];if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);}
-  for(j=b;j>=a;j--){p=pts[j];n=nrm[j];w=hw[j];g.lineTo(p[0]-n[0]*w,p[1]-n[1]*w);}
-  g.closePath();g.fill();g.globalAlpha=1;
-}
-function bristles(g,pts,nrm,hw,col,alpha,seed,count,from,to){
-  var a=from|0,b=(to===undefined?pts.length-1:to);if(b<=a+1)return;
-  g.strokeStyle=col;g.lineWidth=0.85;g.lineCap='round';
-  for(var h=0;h<count;h++){
-    var u=(h+0.5)/count*2-1,sd=seed+h*3.7;
-    g.globalAlpha=alpha*(0.35+0.5*hash(sd));
-    g.beginPath();
-    for(var j=a;j<=b;j++){
-      var w=hw[j]*(u*0.72+fbm(j*0.09,sd)*0.22),p=pts[j],n=nrm[j];
-      if(j===a)g.moveTo(p[0]+n[0]*w,p[1]+n[1]*w);else g.lineTo(p[0]+n[0]*w,p[1]+n[1]*w);
-    }
-    g.stroke();
-  }
-  g.globalAlpha=1;
-}
-
-/* ---------- layout ---------- */
-var W,H,dpr,mobile,pad,k,ox,oy,xL,xR,yB,yT,M=240,inset,capH=0,tlH=0;
-var capEl=document.getElementById('cap'),tlEl=document.getElementById('tl'),
-    tlY=document.getElementById('tl-y'),tlR=document.getElementById('tl-r'),
-    tlV=document.getElementById('tl-v');
-var chartRes,chartNrm,coastRes,coastNrm,restRes,restNrm,hwProf,hwRest,mainScr,canScr,provScr;
-var groundPat,groundLayer,glazeLayer,chartLayer,coastLayer,tickAt,accW,monoFont,yearFont;
-var finalLayer=null,building=false,provBB=null;
+/* ---------- geometría de pantalla ---------- */
+var W,H,dpr,mobile,pad,k,ox,oy,xL,xR,yB,yT,M=240,inset,panel,mapBox,chA,chB,panH;
+var FSANS='"Source Sans 3",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif';
+var F12='500 12px '+FSANS,F12B='600 12px '+FSANS,F13B='600 13px '+FSANS,F14B='600 14px '+FSANS;
+var chartRes,chartNrm,coastRes,coastNrm,restRes,restNrm,hwProf,hwRest,mainScr,canScr,provScr,provBB,tickAt,accW;
+var groundPat,groundLayer,chartLayer,coastLayer,texLayer,restLayer,mapCache=null;
+var capEl=document.getElementById('cap');
 function sx(p){return [ox+(p[0]-fitB[0])*k,oy+(fitB[3]-p[1])*k];}
 function sxc(p){return [inset.x0+(p[0]-canB[0])*inset.k,inset.y0+(canB[3]-p[1])*inset.k];}
 function xs(y){return xL+(y-Y0)/(Y1-Y0)*(xR-xL);}
 function xsInv(x){return Y0+(x-xL)/(xR-xL)*(Y1-Y0);}
 function ys(v){return yB+(v/vMax)*(yT-yB);}
 
-/* dark primed canvas: a woven ground, not paper */
 function makeGroundTile(){
   var t=document.createElement('canvas'),TS=168;t.width=TS;t.height=TS;
   var g=t.getContext('2d');g.fillStyle=PRUSIA2;g.fillRect(0,0,TS,TS);
   var im=g.getImageData(0,0,TS,TS),d=im.data,j;
   for(j=0;j<d.length;j+=4){var n=(hash(j*0.37)-0.5)*22+(hash(j*0.041)-0.5)*15;
     d[j]=Math.max(0,Math.min(255,d[j]+n*0.7));d[j+1]=Math.max(0,Math.min(255,d[j+1]+n*0.9));d[j+2]=Math.max(0,Math.min(255,d[j+2]+n));}
-  g.putImageData(im,0,0);
-  /* canvas weave */
-  g.lineWidth=1;
+  g.putImageData(im,0,0);g.lineWidth=1;
   for(j=0;j<TS;j+=3){
-    g.strokeStyle='rgba(196,215,232,'+(0.020+hash(j*1.7)*0.024).toFixed(3)+')';
-    g.beginPath();g.moveTo(0,j+0.5);g.lineTo(TS,j+0.5);g.stroke();
-    g.strokeStyle='rgba(4,12,22,'+(0.05+hash(j*2.9)*0.06).toFixed(3)+')';
-    g.beginPath();g.moveTo(j+0.5,0);g.lineTo(j+0.5,TS);g.stroke();
-  }
-  return t;
-}
-
-/* the verdigris glaze: forest carbon density per province.
-   La escala se calcula sobre TODA la matriz, no sobre el año en pantalla: si se
-   renormalizara año a año, mover la línea del tiempo no enseñaría nada. */
-var cvMin=Infinity,cvMax=-Infinity;
-for(var ck in PCV){if(!Object.prototype.hasOwnProperty.call(PCV,ck))continue;
-  var carr=PCV[ck];for(var cj=0;cj<carr.length;cj++){var cvv=carr[cj];if(cvv==null)continue;
-    if(cvv<cvMin)cvMin=cvv;if(cvv>cvMax)cvMax=cvv;}}
-if(!isFinite(cvMin)){cvMin=0;cvMax=1;}
-function carbT(v){return clamp((v-cvMin)/(cvMax-cvMin));}
-
-function buildGlaze(){
-  glazeLayer=document.createElement('canvas');glazeLayer.width=canvas.width;glazeLayer.height=canvas.height;
-  var g=glazeLayer.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.lineJoin='round';
-  provScr.forEach(function(p,pi){
-    var val=CARB[p.name];
-    var has=(typeof val==='number');
-    var t=has?Math.pow(carbT(val),0.78):0;
-    var tone=has?mix(VERD_LO,VERD_HI,t):SLATE;
-    /* wobbly, non-vectorial province edge */
-    var wr=p.scr.map(function(r,ri){
-      return r.map(function(q,qi){var d=fbm(qi*0.55+ri*13+pi*3.1,pi+ri)*1.1;var d2=fbm(qi*0.19+pi*2.7,pi+41)*1.4;return [q[0]+d+d2,q[1]-d*0.8+d2*0.6];});
-    });
-    g.save();
-    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});
-    g.clip();
-    var b=[Infinity,Infinity,-Infinity,-Infinity];
-    wr.forEach(function(r){r.forEach(function(q){if(q[0]<b[0])b[0]=q[0];if(q[1]<b[1])b[1]=q[1];if(q[0]>b[2])b[2]=q[0];if(q[1]>b[3])b[3]=q[1];});});
-    /* flat wash */
-    g.globalAlpha=has?(0.20+0.56*t):0.10;g.fillStyle=tone;g.fillRect(b[0]-3,b[1]-3,b[2]-b[0]+6,b[3]-b[1]+6);
-    /* two or three loose brush passes so the wash is not flat */
-    var bw=b[2]-b[0],bh=b[3]-b[1],passes=bw*bh>1400?3:2;
-    var cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2,ang=(hash(pi*17.3)-0.5)*1.5;
-    g.translate(cx,cy);g.rotate(ang);g.translate(-cx,-cy);
-    b=[cx-(bw+bh)*0.55,cy-(bw+bh)*0.55,cx+(bw+bh)*0.55,cy+(bw+bh)*0.55];bw=b[2]-b[0];bh=b[3]-b[1];
-    for(var s=0;s<passes;s++){
-      g.globalAlpha=(0.05+0.17*t)*(0.5+0.5*hash(pi*9.4+s));
-      g.fillStyle=s%2?mix(VERD_LO,PRUSIA,0.42):tone;
-      g.beginPath();
-      var y0=b[1]+bh*(s+0.15)/passes,hgt=bh/passes*0.95;
-      g.moveTo(b[0]-4,y0);
-      for(var q=0;q<=10;q++){var xx=b[0]-4+(bw+8)*q/10;g.lineTo(xx,y0+fbm(q*0.7+s*5+pi,pi+s)*hgt*0.34);}
-      for(q=10;q>=0;q--){var xb=b[0]-4+(bw+8)*q/10;g.lineTo(xb,y0+hgt+fbm(q*0.6+s*9+pi*1.3,pi+s+3)*hgt*0.34);}
-      g.closePath();g.fill();
-    }
-    g.setTransform(dpr,0,0,dpr,0,0);
-    /* pigment gathering at the rim */
-    g.globalAlpha=has?(0.14+0.40*t):0.08;g.strokeStyle=mix(tone,CAL,0.16);g.lineWidth=5.5;
-    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});g.stroke();
-    g.globalAlpha=1;g.restore();
-    /* dry pen line of the province boundary */
-    g.globalAlpha=0.30;g.strokeStyle='#7E99B2';g.lineWidth=mobile?0.55:0.7;
-    g.beginPath();wr.forEach(function(r){g.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)g.lineTo(r[j][0],r[j][1]);g.closePath();});g.stroke();
-    g.globalAlpha=1;
-  });
-}
+    g.strokeStyle='rgba(196,215,232,'+(0.020+hash(j*1.7)*0.024).toFixed(3)+')';g.beginPath();g.moveTo(0,j+0.5);g.lineTo(TS,j+0.5);g.stroke();
+    g.strokeStyle='rgba(4,12,22,'+(0.05+hash(j*2.9)*0.06).toFixed(3)+')';g.beginPath();g.moveTo(j+0.5,0);g.lineTo(j+0.5,TS);g.stroke();}
+  return t;}
+function newLayer(){var cv=document.createElement('canvas');cv.width=canvas.width;cv.height=canvas.height;var g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);return cv;}
+function tracePath(pa,rs){rs.forEach(function(r){pa.moveTo(r[0][0],r[0][1]);for(var j=1;j<r.length;j++)pa.lineTo(r[j][0],r[j][1]);pa.closePath();});}
 
 function layout(){
   var r=stage.getBoundingClientRect();W=Math.max(200,Math.round(r.width));H=Math.max(200,Math.round(r.height));
   dpr=Math.min(2,window.devicePixelRatio||1);
   canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
   mobile=W<560;accW=mobile?4.2:5.8;
-  monoFont='500 '+(mobile?10:11)+'px "Geist Mono", ui-monospace, Menlo, Consolas, monospace';
-  yearFont='500 '+(mobile?11:12)+'px "Geist Mono", ui-monospace, Menlo, Consolas, monospace';
-  /* el rótulo vive arriba y la línea del tiempo abajo: se les reserva sitio en el lienzo
-     para que el mapa no se pinte debajo de ellos */
-  capH=capEl?Math.ceil(capEl.getBoundingClientRect().height)+(mobile?6:18):0;
-  tlH=tlEl?Math.ceil(tlEl.getBoundingClientRect().height)+(mobile?2:6):0;
-  /* la tira ocupa el margen inferior que antes quedaba vac\u00edo, as\u00ed que el margen base baja */
-  pad={l:mobile?8:10,r:mobile?10:14,t:(mobile?4:14)+capH,b:(mobile?8:34)+tlH};
-  var bw=fitB[2]-fitB[0],bh=fitB[3]-fitB[1];
-  k=Math.min((W-pad.l-pad.r)/bw,(H-pad.t-pad.b)/bh);
-  ox=pad.l+((W-pad.l-pad.r)-bw*k)/2;oy=pad.t+((H-pad.t-pad.b)-bh*k)*(mobile?0.20:0.36);
+  var capH=0;
+  if(capEl){var keepY=capY.textContent;capY.textContent=P1+' ('+TXT('last')+')';
+    capH=Math.ceil(capEl.getBoundingClientRect().height)+(mobile?6:10);capY.textContent=keepY;}
+  panH=mobile?118:Math.max(176,Math.min(256,H*0.31));
+  pad={l:mobile?8:12,r:mobile?8:14,t:capH+(mobile?4:8),b:mobile?6:10};
+  panel={x0:pad.l,x1:W-pad.r,y0:H-pad.b-panH,y1:H-pad.b};
+  mapBox={x0:pad.l,y0:pad.t,x1:W-pad.r,y1:panel.y0-(mobile?6:10)};
+  var mid=(panel.x0+panel.x1)/2,gap=mobile?5:15;
+  chA={x0:panel.x0,x1:mid-gap,y0:panel.y0,y1:panel.y1};chB={x0:mid+gap,x1:panel.x1,y0:panel.y0,y1:panel.y1};
+  /* la leyenda: bajo el conmutador de idioma en escritorio; bajo el rótulo, sobre Francia, en móvil */
+  if(legEl){legEl.style.top=(mobile?mapBox.y0+2:Math.max(56,mapBox.y0))+'px';}
+  /* el mapa cabe en su caja, centrado */
+  var bw=fitB[2]-fitB[0],bh=fitB[3]-fitB[1],mw=mapBox.x1-mapBox.x0,mh=mapBox.y1-mapBox.y0;
+  k=Math.min(mw/bw,mh/bh);ox=mapBox.x0+(mw-bw*k)/2;oy=mapBox.y0+(mh-bh*k)*0.5;
   mainScr=mainRaw.map(function(rg){return rg.map(sx);});
   var coast=levRaw.map(sx),restS=restRaw.map(sx);
-  xL=pad.l+6;xR=coast[coast.length-1][0];yB=coast[0][1];yT=coast[coast.length-1][1];
+  /* la curva de la intro usa todo el escenario */
+  xL=pad.l+10;xR=W-pad.r-10;yB=H-pad.b-24;yT=pad.t+(mobile?22:30);
   chartRes=resample(YR.map(function(y,j){return [xs(y),ys(V[j])];}),M);
   coastRes=resample(coast,M);chartNrm=normals(chartRes);coastNrm=normals(coastRes);
   restRes=resample(restS,300);restNrm=normals(restRes);
-  /* stroke half-width follows the value of the series */
   hwProf=new Array(M);
   for(var j=0;j<M;j++){
     var yy=clamp((xsInv(chartRes[j][0])-Y0)/(Y1-Y0)),idx=Math.round(yy*(N-1)),vn=V[idx]/vMax;
-    hwProf[j]=Math.max(mobile?1.4:1.8,accW*(0.24+0.86*vn)*(1+0.20*fbm(j*0.11,3)))*Math.min(1,0.35+j/9)*Math.min(1,0.35+(M-1-j)/7);
-  }
+    hwProf[j]=Math.max(mobile?1.4:1.8,accW*(0.24+0.86*vn)*(1+0.20*fbm(j*0.11,3)))*Math.min(1,0.35+j/9)*Math.min(1,0.35+(M-1-j)/7);}
   hwRest=new Array(restRes.length);
   for(j=0;j<restRes.length;j++)hwRest[j]=(mobile?0.9:1.15)*(1+0.55*fbm(j*0.13,11))*Math.min(1,0.3+j/8)*Math.min(1,0.3+(restRes.length-1-j)/8);
-
-  /* Canary inset, bottom-right, kept clear of the mainland */
+  /* Canarias, recuadro abajo a la derecha de la caja del mapa, sin pisar la península */
   var cw=canB[2]-canB[0],ch=canB[3]-canB[1],kc=k*0.72,tries=0,ok=false;inset=null;
-  var insetBot=H-tlH-(mobile?10:6);
-  while(!ok&&tries++<10){var iw=cw*kc,ih=ch*kc,x1=W-pad.r+4,y1=insetBot,x0=x1-iw,y0=y1-ih;ok=true;
-    for(var a=0;a<mainScr.length&&ok;a++){var rr=mainScr[a];for(j=0;j<rr.length;j++){if(rr[j][0]>=x0-16&&rr[j][1]>=y0-18){ok=false;break;}}}
+  while(!ok&&tries++<12){var iw=cw*kc,ih=ch*kc,x1=mapBox.x1-2,y1=mapBox.y1-2,x0=x1-iw,y0=y1-ih;ok=true;
+    for(var a=0;a<mainScr.length&&ok;a++){var rr=mainScr[a];for(j=0;j<rr.length;j++){if(rr[j][0]>=x0-14&&rr[j][1]>=y0-16){ok=false;break;}}}
     if(!ok)kc*=0.86;else inset={x0:x0,y0:y0,x1:x1,y1:y1,k:kc};}
-  if(!inset)inset={x0:W-pad.r-cw*kc,y0:insetBot-ch*kc,x1:W-pad.r,y1:insetBot,k:kc};
+  if(!inset)inset={x0:mapBox.x1-cw*kc,y0:mapBox.y1-ch*kc,x1:mapBox.x1,y1:mapBox.y1,k:kc};
   canScr=canRaw.map(function(rg){return rg.map(sxc);});
-  provScr=provRaw.map(function(p){return {name:p.name,can:p.can,c:p.can?sxc(p.c):sx(p.c),scr:p.rings.map(function(rg){return rg.map(p.can?sxc:sx);})};});
+  provScr=provRaw.map(function(p,pi){
+    var scr=p.rings.map(function(rg){return rg.map(p.can?sxc:sx);});
+    var wr=scr.map(function(rg,ri){return rg.map(function(q,qi){var d=fbm(qi*0.55+ri*13+pi*3.1,pi+ri)*1.1,d2=fbm(qi*0.19+pi*2.7,pi+41)*1.4;return [q[0]+d+d2,q[1]-d*0.8+d2*0.6];});});
+    var path=new Path2D(),wp=new Path2D();tracePath(path,scr);tracePath(wp,wr);
+    return {name:p.name,can:p.can,c:p.can?sxc(p.c):sx(p.c),scr:scr,path:path,wp:wp,wr:wr};});
   provBB=provScr.map(function(p){var b=[Infinity,Infinity,-Infinity,-Infinity];
     p.scr.forEach(function(rg){rg.forEach(function(q){if(q[0]<b[0])b[0]=q[0];if(q[1]<b[1])b[1]=q[1];if(q[0]>b[2])b[2]=q[0];if(q[1]>b[3])b[3]=q[1];});});return b;});
-  finalLayer=null;HOV=null;clearTip();
-
-  /* the primed ground */
-  if(!groundPat)groundPat=ctx.createPattern(makeGroundTile(),'repeat');
-  groundLayer=document.createElement('canvas');groundLayer.width=canvas.width;groundLayer.height=canvas.height;
-  var pg=groundLayer.getContext('2d');pg.setTransform(dpr,0,0,dpr,0,0);
-  pg.fillStyle=groundPat;pg.fillRect(0,0,W,H);
-  var vg=pg.createRadialGradient(W*0.42,H*0.34,Math.min(W,H)*0.10,W*0.5,H*0.5,Math.max(W,H)*0.82);
-  vg.addColorStop(0,'rgba(52,96,132,0.30)');vg.addColorStop(1,'rgba(3,9,17,0.55)');
-  pg.fillStyle=vg;pg.fillRect(0,0,W,H);
-
-  /* the finished painted curve, revealed by a moving clip */
-  chartLayer=document.createElement('canvas');chartLayer.width=canvas.width;chartLayer.height=canvas.height;
-  var cg=chartLayer.getContext('2d');cg.setTransform(dpr,0,0,dpr,0,0);
-  paintStroke(cg,chartRes,chartNrm,hwProf,0,M-1);
-
-  /* the finished painted coast */
-  coastLayer=document.createElement('canvas');coastLayer.width=canvas.width;coastLayer.height=canvas.height;
-  var sg=coastLayer.getContext('2d');sg.setTransform(dpr,0,0,dpr,0,0);
-  paintStroke(sg,coastRes,coastNrm,hwProf,0,M-1);
-
-  buildGlaze();
-
   tickAt=[1860,1900,1950,2000,Y1].map(function(y){
     var s=clamp((y-Y0)/(Y1-Y0)),f=s*(M-1),a2=Math.floor(f),b2=Math.min(M-1,a2+1),u=f-a2;
-    return {year:y,s:s,i:Math.round(f),cx:xs(y),
-      tx:lerp(coastRes[a2][0],coastRes[b2][0],u),ty:lerp(coastRes[a2][1],coastRes[b2][1],u),
-      nx:coastNrm[Math.round(f)][0],ny:coastNrm[Math.round(f)][1]};
-  });
+    return {year:y,s:s,cx:xs(y),tx:lerp(coastRes[a2][0],coastRes[b2][0],u),ty:lerp(coastRes[a2][1],coastRes[b2][1],u),
+            nx:coastNrm[Math.round(f)][0],ny:coastNrm[Math.round(f)][1]};});
+
+  /* capas fijas */
+  if(!groundPat)groundPat=ctx.createPattern(makeGroundTile(),'repeat');
+  groundLayer=newLayer();var pg=groundLayer.getContext('2d');pg.fillStyle=groundPat;pg.fillRect(0,0,W,H);
+  var vg=pg.createRadialGradient(W*0.42,H*0.34,Math.min(W,H)*0.10,W*0.5,H*0.5,Math.max(W,H)*0.82);
+  vg.addColorStop(0,'rgba(52,96,132,0.30)');vg.addColorStop(1,'rgba(3,9,17,0.55)');pg.fillStyle=vg;pg.fillRect(0,0,W,H);
+  chartLayer=newLayer();paintStroke(chartLayer.getContext('2d'),chartRes,chartNrm,hwProf,0,M-1);
+  coastLayer=newLayer();paintStroke(coastLayer.getContext('2d'),coastRes,coastNrm,hwProf,0,M-1);
+  restLayer=newLayer();var rg2=restLayer.getContext('2d');paintDry(rg2,restRes,restNrm,hwRest,0,restRes.length-1);
+  canScr.forEach(function(rg){var nr=normals(rg),hw=rg.map(function(_,j){return (mobile?0.8:1.0)*(1+0.5*fbm(j*0.2,5));});paintDry(rg2,rg,nr,hw,0,rg.length-1);});
+  buildTex();mapCache=null;
 }
 
-/* one loaded brush stroke of copper: wet halo, body, bristles */
-function paintStroke(g,pts,nrm,hw,a,b){
-  g.lineJoin='round';g.lineCap='round';
-  ribbon(g,pts,nrm,hw.map(function(w){return w*1.62;}),COBRE_WET,0.15,a,b);
-  ribbon(g,pts,nrm,hw,COBRE,0.86,a,b);
-  ribbon(g,pts,nrm,hw.map(function(w){return w*0.52;}),COBRE_D,0.45,a,b);
-  bristles(g,pts,nrm,hw,'#2A0E03',0.26,5,4,a,b);
-  bristles(g,pts,nrm,hw,'#F3C793',0.30,17,2,a,b);
+/* textura fija de la aguada: pasadas sueltas de pincel, cerco de pigmento y línea seca de límite.
+   El color por año se pinta aparte (plano, barato), así reproducir no cuesta nada. */
+function buildTex(){
+  texLayer=newLayer();var g=texLayer.getContext('2d');g.lineJoin='round';
+  provScr.forEach(function(p,pi){
+    var b=[Infinity,Infinity,-Infinity,-Infinity];
+    p.wr.forEach(function(r){r.forEach(function(q){if(q[0]<b[0])b[0]=q[0];if(q[1]<b[1])b[1]=q[1];if(q[0]>b[2])b[2]=q[0];if(q[1]>b[3])b[3]=q[1];});});
+    g.save();g.clip(p.wp);
+    var bw=b[2]-b[0],bh=b[3]-b[1],passes=bw*bh>1400?3:2,cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2,ang=(hash(pi*17.3)-0.5)*1.5;
+    g.translate(cx,cy);g.rotate(ang);g.translate(-cx,-cy);
+    b=[cx-(bw+bh)*0.55,cy-(bw+bh)*0.55,cx+(bw+bh)*0.55,cy+(bw+bh)*0.55];bw=b[2]-b[0];bh=b[3]-b[1];
+    for(var s=0;s<passes;s++){
+      g.globalAlpha=(s%2?0.11:0.07)*(0.5+0.5*hash(pi*9.4+s));g.fillStyle=s%2?PRUSIA:CAL;g.beginPath();
+      var y0=b[1]+bh*(s+0.15)/passes,hgt=bh/passes*0.95;g.moveTo(b[0]-4,y0);
+      for(var q=0;q<=10;q++){var xx=b[0]-4+(bw+8)*q/10;g.lineTo(xx,y0+fbm(q*0.7+s*5+pi,pi+s)*hgt*0.34);}
+      for(q=10;q>=0;q--){var xb=b[0]-4+(bw+8)*q/10;g.lineTo(xb,y0+hgt+fbm(q*0.6+s*9+pi*1.3,pi+s+3)*hgt*0.34);}
+      g.closePath();g.fill();}
+    g.setTransform(dpr,0,0,dpr,0,0);
+    g.globalAlpha=0.16;g.strokeStyle=CAL;g.lineWidth=5.5;g.stroke(p.wp);
+    g.restore();
+    g.globalAlpha=0.32;g.strokeStyle='#7E99B2';g.lineWidth=mobile?0.6:0.75;g.stroke(p.wp);g.globalAlpha=1;});
 }
-/* the Atlantic remainder, drawn with a dry pale brush */
-function paintDry(g,pts,nrm,hw,a,b){
-  g.lineJoin='round';g.lineCap='round';
-  ribbon(g,pts,nrm,hw.map(function(w){return w*2.0;}),'#6E90AC',0.14,a,b);
-  ribbon(g,pts,nrm,hw,'#BFD2E0',0.72,a,b);
-  bristles(g,pts,nrm,hw.map(function(w){return w*1.5;}),'#DCE7F0',0.20,23,3,a,b);
+/* la aguada del año: un plano por provincia + la textura fija */
+function mapLayerFor(y){
+  if(mapCache&&mapCache.y===y)return mapCache.cv;
+  var cv=mapCache?mapCache.cv:newLayer(),g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,W,H);
+  provScr.forEach(function(p){
+    var v=stockOf(p.name,y),has=(typeof v==='number');
+    var t=has?scaleT(v):0;
+    g.globalAlpha=has?(0.22+0.62*t):0.10;g.fillStyle=has?mix(VERD_LO,VERD_HI,t):SLATE;g.fill(p.wp);});
+  g.globalAlpha=1;g.drawImage(texLayer,0,0,W,H);
+  mapCache={y:y,cv:cv};return cv;
 }
 
-/* ---------- script ---------- */
-var T={grain:280,draw0:320,draw1:3300,morph0:3600,morph1:5200,rest0:5150,rest1:6600,glaze0:5450,glaze1:7300,end:7700};
-var PER=15000;
+/* ---------- guion de la intro (ms) ---------- */
+var T={grain:280,d0:250,d1:5900,m0:5900,m1:6800,r0:6700,r1:7500,g0:6900,g1:7600,p0:7100,p1:7700,end:7900};
 
+function niceStep(max,n){var raw0=max/n,p=Math.pow(10,Math.floor(Math.log(raw0)/Math.LN10)),c=[1,2,2.5,5,10],best=c[0]*p;
+  for(var j=0;j<c.length;j++){best=c[j]*p;if(best>=raw0)break;}return best;}
 function axes(alpha){
-  if(alpha<=0)return;ctx.globalAlpha=alpha;ctx.font=monoFont;ctx.lineWidth=1;
-  (mobile?[200]:[100,200,300]).forEach(function(v){var y=ys(v);ctx.strokeStyle=HAIR;
+  if(alpha<=0)return;ctx.globalAlpha=alpha;ctx.font=F12;ctx.lineWidth=1;
+  var st=niceStep(vMax,mobile?2:4);
+  for(var v=st;v<vMax*1.02;v+=st){var y=ys(v);ctx.strokeStyle=HAIR;
     ctx.beginPath();for(var x=xL;x<xR;x+=7){ctx.moveTo(x,y+fbm(x*0.05,31)*0.7);ctx.lineTo(Math.min(xR,x+4.4),y+fbm(x*0.05+2,31)*0.7);}ctx.stroke();
-    ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(v+' Mt CO\u2082e',xL,y-4);});
-  ctx.strokeStyle=HAIR;ctx.beginPath();ctx.moveTo(xL,yB);ctx.lineTo(xR,yB);ctx.stroke();
-  ctx.globalAlpha=1;
-}
+    ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(fmtG(v)+' '+TXT('mt'),xL,y-3);}
+  ctx.strokeStyle=HAIR;ctx.beginPath();ctx.moveTo(xL,yB);ctx.lineTo(xR,yB);ctx.stroke();ctx.globalAlpha=1;}
 function ticks(m,alpha){
-  ctx.font=monoFont;ctx.globalAlpha=alpha;
+  if(alpha<=0)return;ctx.font=F12;ctx.globalAlpha=alpha;
   tickAt.forEach(function(tk){
     var w=1-tk.s,l=m>=1?1:ease(clamp((m-0.35*w)/0.65));
     var x=lerp(tk.cx,tk.tx,l),y=lerp(yB,tk.ty,l);
     if(l<0.5){ctx.strokeStyle=HAIR;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+4);ctx.stroke();
-      ctx.fillStyle=MUTED;ctx.textAlign=tk.year===Y1?'right':tk.year===Y0?'left':'center';ctx.textBaseline='top';ctx.fillText(tk.year,x,y+8);}
+      ctx.fillStyle=MUTED;ctx.textAlign=tk.year===Y1?'right':tk.year===Y0?'left':'center';ctx.textBaseline='top';ctx.fillText(tk.year,x,y+7);}
     else{ctx.fillStyle=CAL;ctx.beginPath();ctx.arc(x,y,2,0,6.2832);ctx.fill();
       var nx=tk.nx,ny=tk.ny;ctx.textAlign=nx>.35?'left':nx<-.35?'right':'center';ctx.textBaseline=ny>.35?'top':ny<-.35?'bottom':'middle';
-      ctx.fillStyle=CAL2;ctx.fillText(tk.year,x+nx*10,y+ny*10);}
-  });
-  ctx.globalAlpha=1;
-}
+      ctx.fillStyle=CAL2;ctx.fillText(tk.year,x+nx*10,y+ny*10);}});
+  ctx.globalAlpha=1;}
 function wetHead(x,y,a,rad){
   if(a<=0)return;ctx.globalAlpha=a*0.24;ctx.fillStyle=COBRE_WET;ctx.beginPath();ctx.arc(x,y,rad*2.6,0,6.2832);ctx.fill();
-  ctx.globalAlpha=a*0.92;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(x,y,rad,0,6.2832);ctx.fill();ctx.globalAlpha=1;
-}
-function glaze(alpha,rev){
-  if(alpha<=0)return;
-  ctx.save();
-  if(rev<1){var d=(W+H)*rev;ctx.beginPath();ctx.moveTo(-40,-40);ctx.lineTo(-40+d,-40);ctx.lineTo(-40,-40+d);ctx.closePath();ctx.clip();}
-  ctx.globalAlpha=alpha;ctx.drawImage(glazeLayer,0,0,W,H);ctx.globalAlpha=1;ctx.restore();
-}
-/* the line that used to name what the curve carried has gone: the subtitle already says it,
-   and the plate now answers for itself when it is pointed at. */
-var hinted=false;
-function hint(){
-  if(hinted)return;
-  var g=ctx,x=pad.l+2,y=H-tlH-(mobile?9:8);
-  g.save();g.font=monoFont;g.textAlign='left';g.textBaseline='bottom';
-  g.globalAlpha=0.9;g.fillStyle=MUTED;
-  g.fillText(COARSE?TXT('hintT'):TXT('hintM'),x+15,y);
-  g.strokeStyle=COBRE;g.lineWidth=1.1;g.globalAlpha=0.85;
-  g.beginPath();g.arc(x+5.5,y-4.2,4.5,0,6.2832);g.stroke();
-  g.fillStyle=COBRE;g.beginPath();g.arc(x+5.5,y-4.2,1.5,0,6.2832);g.fill();
-  g.restore();g.globalAlpha=1;
-}
+  ctx.globalAlpha=a*0.92;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(x,y,rad,0,6.2832);ctx.fill();ctx.globalAlpha=1;}
+function label(g,text,x,y,align,font,col){
+  g.font=font||F12B;g.textBaseline='middle';var w=g.measureText(text).width,h=15,x0=align==='right'?x-w:align==='center'?x-w/2:x;
+  g.fillStyle='rgba(6,16,27,0.82)';g.fillRect(x0-5,y-h/2-1,w+10,h+2);
+  g.fillStyle=col||CAL;g.textAlign='left';g.fillText(text,x0,y);}
 function canaryFrame(alpha){
   if(alpha<=0)return;ctx.globalAlpha=alpha*0.65;ctx.strokeStyle=HAIR;ctx.lineWidth=1;
-  var bx=inset.x0-12,by=inset.y0-12;ctx.beginPath();ctx.moveTo(bx,inset.y1+2);ctx.lineTo(bx,by);ctx.lineTo(inset.x1+2,by);ctx.stroke();
-  ctx.font=monoFont;ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(TXT('canarias'),bx,by-5);ctx.globalAlpha=1;
+  var bx=inset.x0-10,by=inset.y0-10;ctx.beginPath();ctx.moveTo(bx,inset.y1+2);ctx.lineTo(bx,by);ctx.lineTo(inset.x1+2,by);ctx.stroke();
+  ctx.font=F12;ctx.fillStyle=MUTED;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(TXT('canarias'),bx,by-4);ctx.globalAlpha=1;}
+function hint(){
+  if(mobile)return; /* en móvil no queda sitio libre en el mapa para la pista */
+  ctx.save();ctx.font=F12;ctx.textAlign='left';ctx.textBaseline='bottom';ctx.globalAlpha=0.9;ctx.fillStyle=MUTED;
+  var x=mapBox.x0+2,y=mapBox.y1-3;ctx.fillText(COARSE?TXT('hintT'):TXT('hint'),x+15,y);
+  ctx.strokeStyle=COBRE;ctx.lineWidth=1.1;ctx.globalAlpha=0.85;ctx.beginPath();ctx.arc(x+5.5,y-5.2,4.5,0,6.2832);ctx.stroke();
+  ctx.fillStyle=COBRE;ctx.beginPath();ctx.arc(x+5.5,y-5.2,1.5,0,6.2832);ctx.fill();ctx.restore();}
+
+/* ---------- el panel de las dos gráficas: curva nacional + stock (España o provincia fijada) ---------- */
+function fitTitle(g,longT,shortT,w){g.font=F12B;if(g.measureText(longT).width<=w)return longT;var t=shortT;
+  while(t.length>4&&g.measureText(t+'\u2026').width>w)t=t.slice(0,-1);return t===shortT?t:t.replace(/[\s\u00b7]+$/,'')+'\u2026';}
+function drawChart(g,ch,title,years,vals,col,unit,fmt,showX){
+  var px0=ch.x0+6,px1=ch.x1-6,py0=ch.y0+24,py1=ch.y1-(showX?18:6);
+  g.font=F12B;g.fillStyle=CAL2;g.textAlign='left';g.textBaseline='top';g.fillText(title,ch.x0+4,ch.y0+5);
+  var mx=0,j;for(j=0;j<vals.length;j++)if(vals[j]!=null&&vals[j]>mx)mx=vals[j];
+  if(mx<=0)mx=1;var ymax=mx*1.08;
+  function X(y){return px0+(y-Y0)/(Y1-Y0)*(px1-px0);}
+  function Yv(v){return py1-(v/ymax)*(py1-py0);}
+  var st=niceStep(mx,2);g.lineWidth=1;g.font=F12;
+  for(var v=st;v<ymax;v+=st){var yy=Yv(v);g.strokeStyle=HAIR;g.globalAlpha=0.8;g.beginPath();g.moveTo(px0,yy);g.lineTo(px1,yy);g.stroke();
+    g.globalAlpha=1;if(yy-14>=py0-2){g.fillStyle=MUTED;g.textAlign='left';g.textBaseline='bottom';g.fillText(fmt(v),px0+2,yy-1);}}
+  g.strokeStyle=HAIR;g.globalAlpha=1;g.beginPath();g.moveTo(px0,py1);g.lineTo(px1,py1);g.stroke();
+  if(showX){g.fillStyle=MUTED;g.textBaseline='top';g.font=F12;
+    var xt=(px1-px0)<260?[Y0,1950,Y1]:[Y0,1900,1950,2000,Y1];
+    xt.forEach(function(y){var x=X(y);g.textAlign=y===Y0?'left':y===Y1?'right':'center';g.fillText(y,x,py1+4);
+      g.strokeStyle=HAIR;g.beginPath();g.moveTo(x,py1);g.lineTo(x,py1+3);g.stroke();});}
+  /* línea: halo húmedo + cuerpo */
+  g.lineJoin='round';g.lineCap='round';
+  for(var pass=0;pass<2;pass++){
+    g.beginPath();var started=false;
+    for(j=0;j<vals.length;j++){if(vals[j]==null){started=false;continue;}var x=X(years[j]),y=Yv(vals[j]);if(!started){g.moveTo(x,y);started=true;}else g.lineTo(x,y);}
+    if(pass===0){g.globalAlpha=0.18;g.strokeStyle=col;g.lineWidth=6;}else{g.globalAlpha=1;g.strokeStyle=col;g.lineWidth=mobile?1.7:2.1;}
+    g.stroke();}
+  g.globalAlpha=1;
+  /* cursor del año */
+  var cy=YEAR>years[years.length-1]?years[years.length-1]:YEAR<years[0]?years[0]:YEAR,ci=cy-years[0],cv=vals[ci];
+  var cx=X(cy);g.strokeStyle=CAL;g.globalAlpha=0.5;g.lineWidth=1;g.beginPath();g.moveTo(cx,py0-4);g.lineTo(cx,py1);g.stroke();g.globalAlpha=1;
+  if(cv!=null){var dy=Yv(cv);g.fillStyle=col;g.beginPath();g.arc(cx,dy,3.6,0,6.2832);g.fill();g.strokeStyle=CAL;g.lineWidth=1.2;g.stroke();
+    var txt=cy+' · '+fmt(cv)+' '+unit;g.font=F12B;var tw=g.measureText(txt).width,right=(cx+12+tw+6<=px1),lx=right?cx+12:cx-12-tw,ly=Math.max(py0+8,Math.min(py1-8,dy-12));
+    if(lx<px0)lx=px0;if(lx+tw>px1)lx=px1-tw;
+    label(g,txt,lx,ly,'left',F12B,CAL);}
 }
+function drawPanel(alpha){
+  if(alpha<=0)return;var g=ctx;g.save();g.globalAlpha=alpha;
+  g.fillStyle='rgba(6,16,27,0.62)';g.fillRect(panel.x0-2,panel.y0-2,panel.x1-panel.x0+4,panel.y1-panel.y0+4);
+  g.strokeStyle=HAIR;g.lineWidth=1;g.beginPath();g.moveTo(panel.x0-2,panel.y0-2);g.lineTo(panel.x1+2,panel.y0-2);g.stroke();
+  var wA=chA.x1-chA.x0-8,wB=chB.x1-chB.x0-8;
+  drawChart(g,chA,fitTitle(g,TXT('chA'),TXT('chAs'),wA),YR,V,COBRE_HI,TXT('mt'),fmtG,true);
+  var tB,vB;
+  if(PIN!==null&&STK[provScr[PIN].name]){var pn=provScr[PIN].name;tB=fitTitle(g,TXT('chBp').replace('{p}',pn),TXT('chBps').replace('{p}',pn),wB);vB=STK[pn];}
+  else{tB=fitTitle(g,TXT('chB'),TXT('chBs'),wB);vB=NAT;}
+  drawChart(g,chB,tB,PY,vB,VERD_HI,TXT('mtc'),fmtS,true);
+  g.restore();}
 
-
-/* ---------- las cadenas que dibuja el lienzo y las que rellena la línea del tiempo ----------
-   El resto de la portada se traduce por data-en; esto no puede, así que lee el idioma vivo. */
-var STR={
-  es:{hintT:'Toca una provincia', hintM:'Pincha una provincia',
-      carb:'Carbono forestal', gei:'Emisiones GEI', perHa:'t C por hect\u00e1rea de monte',
-      perHaS:'t C por ha de monte', noData:'sin dato en esta serie',
-      mt:'millones de toneladas de CO\u2082 equivalente', mtS:'Mt CO\u2082e',
-      release:'Toca fuera para soltar', releaseM:'Pincha fuera para soltar',
-      yearLabel:'A\u00f1o del mapa', canarias:'Canarias'},
-  en:{hintT:'Tap a province', hintM:'Click a province',
-      carb:'Forest carbon', gei:'GHG emissions', perHa:'t C per hectare of woodland',
-      perHaS:'t C per ha of woodland', noData:'no figure in this series',
-      mt:'million tonnes of CO\u2082 equivalent', mtS:'Mt CO\u2082e',
-      release:'Tap outside to release', releaseM:'Click outside to release',
-      yearLabel:'Map year', canarias:'Canary Islands'}
-};
-function LANG(){return document.documentElement.lang==='en'?'en':'es';}
-function TXT(k){var L=STR[LANG()]||STR.es;return L[k]!==undefined?L[k]:STR.es[k];}
-
-/* ---------- the reading: point at a province or at the copper shore ---------- */
-var HOV=null;
-function mkNF(loc,d){return (window.Intl&&Intl.NumberFormat)?new Intl.NumberFormat(loc,{maximumFractionDigits:d})
-  :{format:function(v){return ''+(d?v:Math.round(v));}};}
-var NFS={es:[mkNF('es-ES',0),mkNF('es-ES',1)],en:[mkNF('en-GB',0),mkNF('en-GB',1)]};
-function NFM(){return NFS[LANG()][0];}
-function NF1(){return NFS[LANG()][1];}
+/* ---------- lectura de una provincia ---------- */
 function clearTip(){if(tipEl)tipEl.className='tip';}
-function showTip(html,x,y,cls){
-  tipEl.innerHTML=html;tipEl.className='tip on'+(cls?' '+cls:'');
-  var w=tipEl.offsetWidth,h=tipEl.offsetHeight,px,py;
-  /* el suelo util del plato deja fuera la linea del tiempo: la tira se pinta por encima
-     de la ficha (z-index 5 contra 4), y sin esto en movil la ultima linea de la ficha
-     -la que dice como soltarla- quedaba debajo del deslizador */
-  var yFloor=H-tlH-8;
-  if(COARSE){px=Math.min(Math.max(8,x-w/2),W-w-8);py=(y>H*0.55)?Math.max(8,y-h-28):Math.max(8,Math.min(yFloor-h,y+28));}
-  else {px=Math.min(Math.max(8,x+18),W-w-8);py=(y+18+h<=yFloor)?(y+18):Math.max(8,y-h-26);}
-  tipEl.style.left=px+'px';tipEl.style.top=py+'px';
-}
-function inRings(x,y,rings){
-  var inside=false;
-  for(var r=0;r<rings.length;r++){
-    var rg=rings[r];
-    for(var a=0,b=rg.length-1;a<rg.length;b=a++){
-      var xi=rg[a][0],yi=rg[a][1],xj=rg[b][0],yj=rg[b][1];
-      if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;
-    }
-  }
-  return inside;
-}
-function provPath(p){
-  var pa=new Path2D();
-  p.scr.forEach(function(rg){pa.moveTo(rg[0][0],rg[0][1]);
-    for(var j=1;j<rg.length;j++)pa.lineTo(rg[j][0],rg[j][1]);pa.closePath();});
-  return pa;
-}
+function showTip(html,x,y){
+  tipEl.innerHTML=html;tipEl.className='tip on';
+  var w=tipEl.offsetWidth,h=tipEl.offsetHeight,px,py,yFloor=panel.y0-6;
+  if(COARSE){px=Math.min(Math.max(8,x-w/2),W-w-8);py=(y>mapBox.y1*0.55)?Math.max(8,y-h-28):Math.max(8,Math.min(yFloor-h,y+28));}
+  else{px=Math.min(Math.max(8,x+18),W-w-8);py=(y+18+h<=yFloor)?(y+18):Math.max(8,y-h-26);}
+  tipEl.style.left=px+'px';tipEl.style.top=py+'px';}
+function provTip(i,at){
+  var p=provScr[i],my=mapYear(YEAR),v=stockOf(p.name,my),d=densOf(p.name,my),pinned=(PIN===i);
+  var when=my+(YEAR>P1?' ('+TXT('last')+')':'');
+  showTip('<span class="k">'+p.name+'</span><span class="p">'+TXT('stock')+' · '+when+'</span>'+
+          '<span class="v">'+((typeof v==='number')?('<em>'+fmtS(v)+'</em> '+TXT('mtc')+(typeof d==='number'?' · '+fmtS(d)+' '+TXT('perHa'):'')):TXT('noData'))+'</span>'+
+          (pinned?'<span class="x">'+(COARSE?TXT('releaseT'):TXT('release'))+'</span>':''),
+          at?at[0]:p.c[0],at?at[1]:p.c[1]);}
+function inRings(x,y,rs){var inside=false;
+  for(var r=0;r<rs.length;r++){var rg=rs[r];for(var a=0,b=rg.length-1;a<rg.length;b=a++){var xi=rg[a][0],yi=rg[a][1],xj=rg[b][0],yj=rg[b][1];
+    if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;}}return inside;}
 function pick(x,y){
-  if(!coastRes||!provScr)return null;
-  var R=COARSE?44:24,best=1e9,bi=-1,j;
-  for(j=0;j<M;j++){var dx=coastRes[j][0]-x,dy=coastRes[j][1]-y,dd=dx*dx+dy*dy;if(dd<best){best=dd;bi=j;}}
-  if(bi>=0&&Math.sqrt(best)<=R)return {mode:'coast',i:bi};
-  var pad2=COARSE?18:2;
-  for(j=0;j<provScr.length;j++){
-    var b=provBB[j];
-    if(x<b[0]-pad2||x>b[2]+pad2||y<b[1]-pad2||y>b[3]+pad2)continue;
-    if(inRings(x,y,provScr[j].scr))return {mode:'prov',i:j};
-  }
-  if(COARSE){
-    var bp=-1;best=44*44;
-    for(j=0;j<provScr.length;j++){
-      var bb=provBB[j];
-      if(x<bb[0]-44||x>bb[2]+44||y<bb[1]-44||y>bb[3]+44)continue;
-      var rings=provScr[j].scr;
-      for(var r2=0;r2<rings.length;r2++){
-        var rg=rings[r2];
-        for(var q=0;q<rg.length-1;q++){
-          var ax=rg[q][0],ay=rg[q][1],bx=rg[q+1][0]-ax,by=rg[q+1][1]-ay;
-          var LL=bx*bx+by*by,ux=x-ax,uy=y-ay;
-          var tt=LL>0?(ux*bx+uy*by)/LL:0; if(tt<0)tt=0; else if(tt>1)tt=1;
-          var ex=ux-tt*bx,ey=uy-tt*by,d2=ex*ex+ey*ey;
-          if(d2<best){best=d2;bp=j;}
-        }
-      }
-    }
-    if(bp>=0)return {mode:'prov',i:bp};
-  }
-  return null;
-}
-function hoverPaint(){
-  if(!HOV)return;
-  var g=ctx;
-  g.save();g.globalAlpha=0.58;g.fillStyle=PRUSIA;g.fillRect(0,0,W,H);g.restore();
-  if(HOV.mode==='prov'){
-    var p=provScr[HOV.i],pa=provPath(p);
-    g.save();g.clip(pa);g.drawImage(glazeLayer,0,0,W,H);
-    var val0=CARB[p.name];
-    g.globalAlpha=(typeof val0==='number')?0.16:0.08;
-    g.fillStyle=mix(VERD_HI,CAL,0.25);g.fillRect(0,0,W,H);g.globalAlpha=1;g.restore();
-    g.globalAlpha=0.9;g.strokeStyle=CAL;g.lineWidth=1.4;g.lineJoin='round';g.stroke(pa);g.globalAlpha=1;
-    g.font=monoFont;g.textAlign='center';g.textBaseline='middle';
-    g.fillStyle='rgba(9,23,38,0.75)';
-    var tw=g.measureText(p.name).width;
-    g.fillRect(p.c[0]-tw/2-5,p.c[1]-8,tw+10,16);
-    g.fillStyle=CAL;g.fillText(p.name,p.c[0],p.c[1]);
-  }else{
-    var i2=HOV.i,a0=Math.max(0,i2-9),b0=Math.min(M-1,i2+9);
-    paintStroke(g,coastRes,coastNrm,hwProf.map(function(w){return w*1.5;}),a0,b0);
-    var q=coastRes[i2];
-    wetHead(q[0],q[1],1,4.2);
-    var nx=-coastNrm[i2][0],ny=-coastNrm[i2][1];
-    g.globalAlpha=0.55;g.strokeStyle=COBRE_HI;g.lineWidth=1;
-    g.beginPath();g.moveTo(q[0],q[1]);g.lineTo(q[0]+nx*15,q[1]+ny*15);g.stroke();g.globalAlpha=1;
-  }
-}
-function acted(){return RM||(startTime!==null&&performance.now()-startTime>=T.end);}
-function hoverAt(x,y,fromTap){
-  if(!acted())return;
-  if(PIN!==null&&!fromTap)return;          /* con una provincia fijada, el rat\u00f3n no manda */
-  var h=pick(x,y);
-  if(h)hinted=true;
-  var same=(h&&HOV&&h.mode===HOV.mode&&h.i===HOV.i);
-  HOV=h;
-  if(!h)clearTip();
-  else if(!same||tipEl.className.indexOf('on')<0){
-    if(h.mode==='prov')provTip(h.i);
-    else{
-      var f=h.i/(M-1);
-      var yr=Math.round(Y0+f*(Y1-Y0));
-      var idx=Math.max(0,Math.min(N-1,Math.round((yr-Y0)/(Y1-Y0)*(N-1))));
-      showTip('<span class="k">'+yr+'</span><span class="p">'+TXT('gei')+'</span>'+
-              '<span class="v"><em>'+NFM().format(V[idx])+'</em> '+TXT('mt')+'</span>',
-              coastRes[h.i][0],coastRes[h.i][1]);
-    }
-  }
-  if(RM)render(T.end);
-}
-function provTip(i){
-  var p=provScr[i],v=CARB[p.name],pinned=(PIN===i);
-  showTip('<span class="k">'+p.name+'</span>'+
-          '<span class="p">'+TXT('carb')+' \u00b7 '+YEAR+'</span>'+
-          '<span class="v">'+((typeof v==='number')
-             ?('<em>'+NF1().format(v)+'</em> '+(COARSE?TXT('perHaS'):TXT('perHa')))
-             :TXT('noData'))+'</span>'+
-          (pinned?'<span class="x">'+(COARSE?TXT('release'):TXT('releaseM'))+'</span>':''),
-          p.c[0],p.c[1],'verd');
-}
-function hoverOff(){if(PIN!==null)return;HOV=null;clearTip();if(RM)render(T.end);}
-function unpin(){if(PIN===null)return;PIN=null;HOV=null;clearTip();if(RM||!raf)render(T.end);}
+  if(!provScr||y>=panel.y0)return null;var j,pad2=COARSE?18:2;
+  for(j=0;j<provScr.length;j++){var b=provBB[j];if(x<b[0]-pad2||x>b[2]+pad2||y<b[1]-pad2||y>b[3]+pad2)continue;if(inRings(x,y,provScr[j].scr))return j;}
+  if(COARSE){var bp=-1,best=44*44;
+    for(j=0;j<provScr.length;j++){var bb=provBB[j];if(x<bb[0]-44||x>bb[2]+44||y<bb[1]-44||y>bb[3]+44)continue;
+      var rs=provScr[j].scr;for(var r2=0;r2<rs.length;r2++){var rg=rs[r2];for(var q=0;q<rg.length-1;q++){
+        var ax=rg[q][0],ay=rg[q][1],bx=rg[q+1][0]-ax,by=rg[q+1][1]-ay,LL=bx*bx+by*by,ux=x-ax,uy=y-ay,tt=LL>0?(ux*bx+uy*by)/LL:0;
+        if(tt<0)tt=0;else if(tt>1)tt=1;var ex=ux-tt*bx,ey=uy-tt*by,d2=ex*ex+ey*ey;if(d2<best){best=d2;bp=j;}}}}
+    if(bp>=0)return bp;}
+  return null;}
+function focusPaint(){
+  var g=ctx,ml=mapLayerFor(mapYear(YEAR));
+  g.save();g.globalAlpha=0.42;g.fillStyle=PRUSIA;g.fillRect(0,0,W,panel.y0-4);g.restore();
+  [PIN,HOV].forEach(function(idx,n){
+    if(idx===null||idx===undefined||(n===1&&idx===PIN))return;
+    var p=provScr[idx],pinned=(n===0);
+    g.save();g.clip(p.wp);g.drawImage(ml,0,0,W,H);g.globalAlpha=0.14;g.fillStyle=CAL;g.fillRect(0,0,W,H);g.restore();
+    g.globalAlpha=0.95;g.strokeStyle=pinned?COBRE_HI:CAL;g.lineWidth=pinned?1.8:1.3;g.lineJoin='round';g.stroke(p.wp);g.globalAlpha=1;
+    label(g,p.name,p.c[0],p.c[1],'center',F13B,CAL);});}
 
-/* ---------- la l\u00ednea del tiempo: el a\u00f1o recolorea las provincias ----------
-   El kit portada/ no trae series provinciales, as\u00ed que el color sigue siendo el carbono
-   forestal por provincia (el mismo dato que ya pintaba el plato) y la cifra nacional del
-   a\u00f1o es la de la curva: emisiones de GEI. Nada inventado. */
-function natMt(y){var i=YR.indexOf(y);if(i<0)return null;return V[i];}
-function readout(){
-  if(!tlY||!tlV)return;
-  tlY.textContent=YEAR;
-  var v=natMt(YEAR);
-  tlV.innerHTML=TXT('gei')+' \u00b7 '+(v==null?'\u2014':'<em>'+NFM().format(v)+'</em> '+TXT('mtS'));
-  if(tlR)tlR.setAttribute('aria-label',TXT('yearLabel'));
-}
-var pendY=null,yRaf=null;
-function askYear(y){pendY=y;if(yRaf)return;
-  yRaf=requestAnimationFrame(function(){yRaf=null;var q=pendY;pendY=null;setYear(q);});}
-function setYear(y){
-  if(y===YEAR||y==null)return;
-  YEAR=y;carbSet(y);
-  if(provScr){buildGlaze();finalLayer=null;}
-  readout();
-  if(PIN!==null)provTip(PIN);
-  if(RM||!raf)render(T.end);
-}
-if(tlR){
-  if(PCY.length){tlR.min=PCY[0];tlR.max=PCY[PCY.length-1];tlR.value=YEAR;}
-  tlR.addEventListener('input',function(){askYear(parseInt(tlR.value,10));});
-  /* el arrastre del a\u00f1o no debe soltar la provincia fijada ni cerrar su ficha */
-  tlR.addEventListener('pointerdown',function(e){e.stopPropagation();});
-}
-window.addEventListener('cahe:lang',function(){
-  readout();
-  if(PIN!==null)provTip(PIN);
-  else if(HOV&&HOV.mode==='prov')provTip(HOV.i);
-  finalLayer=null;if(RM||!raf)render(T.end);
-});
-
-function buildFinal(){
-  finalLayer=document.createElement('canvas');finalLayer.width=canvas.width;finalLayer.height=canvas.height;
-  var real=ctx,hv=HOV,off=finalLayer.getContext('2d');
-  off.setTransform(dpr,0,0,dpr,0,0);
-  ctx=off;HOV=null;building=true;
-  render(T.end);
-  building=false;HOV=hv;ctx=real;
-}
+/* ---------- render ---------- */
 function render(t){
-  if(!building&&t>=T.end){
-    if(!tlOn){tlOn=true;if(tlEl)tlEl.classList.add('on');stage.classList.add('acted');readout();}
-    if(!finalLayer)buildFinal();
-    ctx.clearRect(0,0,W,H);ctx.drawImage(finalLayer,0,0,W,H);
-    if(HOV){hoverPaint();return;}
-    hint();
-    if(!RM){
-      var ph0=((t-T.end)%PER)/PER,a0=Math.min(1,Math.sin(Math.PI*ph0)*2.4),k0=Math.round(ph0*(M-1));
-      ctx.globalAlpha=a0;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(coastRes[k0][0],coastRes[k0][1],2.6,0,6.2832);ctx.fill();
-      ctx.font=yearFont;var qx=-coastNrm[k0][0],qy=-coastNrm[k0][1];
-      ctx.textAlign=qx>.35?'left':qx<-.35?'right':'center';ctx.textBaseline=qy>.35?'top':qy<-.35?'bottom':'middle';
-      ctx.fillStyle=CAL;ctx.fillText(Math.round(Y0+ph0*(Y1-Y0)),coastRes[k0][0]+qx*12,coastRes[k0][1]+qy*12);
-      ctx.globalAlpha=1;
-    }
-    return;
-  }
   ctx.clearRect(0,0,W,H);
-  ctx.globalAlpha=Math.min(1,t/T.grain);ctx.drawImage(groundLayer,0,0,W,H);ctx.globalAlpha=1;
-  if(t<T.morph0){
-    var u=clamp((t-T.draw0)/(T.draw1-T.draw0)),f=0.5*u+0.5*ease(u);
-    axes(1);ticks(0,1);
-    var idx=Math.min(M-1,f*(M-1));
-    ctx.save();ctx.beginPath();ctx.rect(0,0,chartRes[Math.floor(idx)][0]+(idx-Math.floor(idx))*8+2,H);ctx.clip();
-    ctx.drawImage(chartLayer,0,0,W,H);ctx.restore();
-    if(u>0&&u<1){var ii=Math.floor(idx);wetHead(chartRes[ii][0],chartRes[ii][1],1,Math.max(3,hwProf[ii]*0.95));
-      ctx.font=yearFont;ctx.fillStyle=CAL;ctx.textAlign='left';ctx.textBaseline='bottom';
-      ctx.fillText(Math.round(xsInv(chartRes[ii][0])),chartRes[ii][0]+11,chartRes[ii][1]-10);}
-    return;
-  }
-  if(t<T.morph1){
-    var m=clamp((t-T.morph0)/(T.morph1-T.morph0)),fade=1-clamp(m/0.4);
-    axes(fade);
-    var pts=new Array(M);
-    for(var j=0;j<M;j++){var wgt=1-j/(M-1),l=ease(clamp((m-0.35*wgt)/0.65));
-      pts[j]=[lerp(chartRes[j][0],coastRes[j][0],l),lerp(chartRes[j][1],coastRes[j][1],l)];}
-    paintStroke(ctx,pts,normals(pts),hwProf,0,M-1);
-    ticks(m,1);
-    return;
-  }
-  /* map phase */
-  var rv=easeOut(clamp((t-T.rest0)/(T.rest1-T.rest0)));
-  var ga=clamp((t-T.glaze0)/700),gr=easeOut(clamp((t-T.glaze0)/(T.glaze1-T.glaze0)));
-  glaze(ga,gr);
-  ctx.globalAlpha=1;ctx.drawImage(coastLayer,0,0,W,H);
-  var last=Math.max(1,Math.round(rv*(restRes.length-1)));
-  paintDry(ctx,restRes,restNrm,hwRest,0,last);
-  if(rv>=1){canScr.forEach(function(rg){var nr=normals(rg),hw=rg.map(function(_,j){return (mobile?0.8:1.0)*(1+0.5*fbm(j*0.2,5));});paintDry(ctx,rg,nr,hw,0,rg.length-1);});
-    canaryFrame(clamp((t-T.rest1)/500));}
-  ticks(1,0.85);
-}
+  if(phase==='intro'){
+    ctx.globalAlpha=Math.min(1,t/T.grain);ctx.drawImage(groundLayer,0,0,W,H);ctx.globalAlpha=1;
+    if(t<T.m0){
+      var u=clamp((t-T.d0)/(T.d1-T.d0)),f=0.5*u+0.5*ease(u);
+      axes(1);ticks(0,1);
+      var idx=Math.min(M-1,f*(M-1));
+      ctx.save();ctx.beginPath();ctx.rect(0,0,chartRes[Math.floor(idx)][0]+(idx-Math.floor(idx))*8+2,H);ctx.clip();ctx.drawImage(chartLayer,0,0,W,H);ctx.restore();
+      if(u>0&&u<1){var ii=Math.floor(idx),yr=Math.round(xsInv(chartRes[ii][0])),vi=geiOf(yr);
+        wetHead(chartRes[ii][0],chartRes[ii][1],1,Math.max(3,hwProf[ii]*0.95));
+        if(vi!=null){var txt=yr+' · '+fmtG(vi)+' '+TXT('mt'),right=chartRes[ii][0]+14+ctx.measureText(txt).width<xR-40;
+          label(ctx,txt,right?chartRes[ii][0]+14:chartRes[ii][0]-14,chartRes[ii][1]-16,right?'left':'right',F13B,CAL);}}
+      return;}
+    if(t<T.m1){
+      var m=clamp((t-T.m0)/(T.m1-T.m0));axes(1-clamp(m/0.4));
+      var pts=new Array(M);
+      for(var j=0;j<M;j++){var wgt=1-j/(M-1),l=ease(clamp((m-0.35*wgt)/0.65));pts[j]=[lerp(chartRes[j][0],coastRes[j][0],l),lerp(chartRes[j][1],coastRes[j][1],l)];}
+      paintStroke(ctx,pts,normals(pts),hwProf,0,M-1);ticks(m,1-clamp((m-0.55)/0.45));
+      return;}
+    var rv=easeOut(clamp((t-T.r0)/(T.r1-T.r0))),ga=clamp((t-T.g0)/700),gr=easeOut(clamp((t-T.g0)/(T.g1-T.g0)));
+    if(ga>0){ctx.save();if(gr<1){var d=(W+H)*gr;ctx.beginPath();ctx.moveTo(-40,-40);ctx.lineTo(-40+d,-40);ctx.lineTo(-40,-40+d);ctx.closePath();ctx.clip();}
+      ctx.globalAlpha=ga;ctx.drawImage(mapLayerFor(mapYear(YEAR)),0,0,W,H);ctx.globalAlpha=1;ctx.restore();}
+    ctx.drawImage(coastLayer,0,0,W,H);
+    var last=Math.max(1,Math.round(rv*(restRes.length-1)));
+    if(rv>=1){ctx.drawImage(restLayer,0,0,W,H);canaryFrame(clamp((t-T.r1)/500));}else paintDry(ctx,restRes,restNrm,hwRest,0,last);
+    drawPanel(clamp((t-T.p0)/(T.p1-T.p0)));
+    if(t>=T.end)endIntro();
+    return;}
+  ctx.drawImage(groundLayer,0,0,W,H);
+  ctx.drawImage(mapLayerFor(mapYear(YEAR)),0,0,W,H);
+  ctx.drawImage(coastLayer,0,0,W,H);ctx.drawImage(restLayer,0,0,W,H);canaryFrame(1);
+  if(PIN!==null||HOV!==null)focusPaint();else if(!hinted)hint();
+  drawPanel(1);}
+function draw(){if(phase==='end')render(0);}
 
-/* ---------- clock, skip, resize ---------- */
-var startTime=null,raf=null,hiddenAt=null,frames=0,fpsT0=0,tlOn=false;
+/* ---------- reloj: intro, reproducción, fps ---------- */
+var startTime=null,raf=null,hiddenAt=null,frames=0,fpsT0=0,lastNow=null,yAcc=0;
 window.__fps=0;
-function frame(now){raf=null;if(startTime===null)startTime=now;
-  frames++;if(!fpsT0)fpsT0=now;
-  if(now-fpsT0>=500){window.__fps=Math.round(frames*1000/(now-fpsT0));frames=0;fpsT0=now;}
-  render(now-startTime);if(!document.hidden)raf=requestAnimationFrame(frame);}
-function finish(){if(RM)return;var now=performance.now();if(startTime===null)startTime=now;if(now-startTime<T.end)startTime=now-T.end;}
-function start(){layout();if(RM){render(T.end);return;}raf=requestAnimationFrame(frame);}
-document.addEventListener('visibilitychange',function(){if(RM)return;if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}hiddenAt=performance.now();}else{if(hiddenAt!==null&&startTime!==null)startTime+=performance.now()-hiddenAt;hiddenAt=null;if(!raf)raf=requestAnimationFrame(frame);}});
-var rt=null;function onResize(){clearTimeout(rt);rt=setTimeout(function(){PIN=null;HOV=null;clearTip();layout();if(RM)render(T.end);},70);}
-window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){finish();hoverOff();}});
-/* pointing at the plate: during the act it keeps out of the way, after it the plate answers */
+function frame(now){raf=null;
+  frames++;if(!fpsT0)fpsT0=now;if(now-fpsT0>=500){window.__fps=Math.round(frames*1000/(now-fpsT0));frames=0;fpsT0=now;}
+  if(phase==='intro'){if(startTime===null)startTime=now;var t=now-startTime;
+    var u=clamp((t-T.d0)/(T.d1-T.d0)),f=0.5*u+0.5*ease(u),y=Math.round(Y0+f*(Y1-Y0));
+    if(y!==YEAR){YEAR=y;syncYear();}
+    render(t);if(phase==='intro'&&!document.hidden)raf=requestAnimationFrame(frame);return;}
+  if(playing){if(lastNow===null)lastNow=now;var dt=Math.min(100,now-lastNow);lastNow=now;yAcc+=dt*RATE/1000;
+    if(yAcc>=1){var step=Math.floor(yAcc);yAcc-=step;var ny=Math.min(Y1,YEAR+step);setYear(ny,true);if(ny>=Y1){playing=false;syncPlay();}}
+    else render(0);
+    if(playing&&!document.hidden)raf=requestAnimationFrame(frame);}}
+function endIntro(){phase='end';stage.classList.add('acted');YEAR=Y1;syncYear();syncPlay();draw();}
+function interrupt(){if(phase!=='intro')return;if(raf){cancelAnimationFrame(raf);raf=null;}phase='end';stage.classList.add('acted');mapCache=null;syncYear();syncPlay();draw();}
+function play(){interrupt();if(YEAR>=Y1)setYear(Y0,true);playing=true;lastNow=null;yAcc=0;syncPlay();if(!raf)raf=requestAnimationFrame(frame);}
+function pause(){if(!playing)return;playing=false;syncPlay();}
+function togglePlay(){if(phase==='intro'){interrupt();return;}if(playing)pause();else play();}
+function setYear(y,fromPlay){
+  y=Math.round(y);if(y<Y0)y=Y0;if(y>Y1)y=Y1;
+  if(!fromPlay){interrupt();pause();}
+  if(y===YEAR){if(fromPlay)render(0);return;}
+  YEAR=y;syncYear();if(PIN!==null)provTip(PIN,COARSE?null:undefined);draw();}
+function syncPlay(){var on=(phase==='intro')||playing;tlEl.classList.toggle('playing',on);
+  tlPlay.setAttribute('aria-label',on?TXT('pause'):TXT('play'));}
+function syncYear(){
+  tlY.textContent=YEAR;if(String(tlR.value)!==String(YEAR))tlR.value=YEAR;
+  var my=mapYear(YEAR);capY.textContent=my+(YEAR>P1?' ('+TXT('last')+')':'');
+  var g=geiOf(YEAR),html='<i class="c"></i>'+TXT('rGei')+' '+YEAR+' <em>'+(g==null?'—':fmtG(g))+'</em> '+TXT('mt');
+  var nat=NAT[pIdx(YEAR)];html+=' &nbsp;·&nbsp; <i class="g"></i>'+TXT('rStock')+' '+my+' · '+TXT('rNat')+' <em>'+(nat==null?'—':fmtS(nat))+'</em> '+TXT('mtc');
+  if(PIN!==null){var pn=provScr[PIN].name,sv=stockOf(pn,my);html+=' · '+pn+' <em>'+(sv==null?'—':fmtS(sv))+'</em> '+TXT('mtc');}
+  tlV.innerHTML=html;tlR.setAttribute('aria-label',TXT('year'));}
+function syncLegend(){
+  legMin.textContent=fmtS(sMin);legMax.textContent=fmtS(sMax);
+  var stops=[];for(var q=0;q<=10;q++){var f=q/10;stops.push(mix(VERD_LO,VERD_HI,scaleT(sMin+f*(sMax-sMin)))+' '+(f*100)+'%');}
+  legBar.style.backgroundImage='linear-gradient(90deg,'+stops.join(',')+')';}
+
+/* ---------- puntero: hover, fijar, arrastrar el tiempo ---------- */
 function local(e){var r=stage.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
-stage.addEventListener('pointermove',function(e){
-  if(e.pointerType==='touch')return;
-  if(e.target.closest&&e.target.closest('.tl'))return;
-  var p=local(e);hoverAt(p[0],p[1]);
-},{passive:true});
-/* a touch pointer is destroyed on release and fires pointerleave right after pointerdown:
-   only a real mouse leaving the plate should put the reading away */
-stage.addEventListener('pointerleave',function(e){if(e.pointerType==='touch')return;hoverOff();},{passive:true});
-document.addEventListener('pointerdown',function(e){
-  if(e.target.closest&&e.target.closest('a,button'))return;
-  if(e.target.closest&&e.target.closest('.tl'))return;   /* la l\u00ednea del tiempo se maneja sola */
-  var inStage=stage.contains(e.target);
-  if(!acted()){finish();if(inStage){var p0=local(e);setTimeout(function(){hoverAt(p0[0],p0[1],true);},30);}return;}
-  if(!inStage){unpin();hoverOff();return;}
-  /* dentro del plato: un toque sobre una provincia fija su ficha; fuera de ella, la suelta */
-  var p=local(e),hit=pick(p[0],p[1]);
-  if(hit&&hit.mode==='prov'){PIN=hit.i;HOV=hit;provTip(hit.i);if(RM||!raf)render(T.end);return;}
-  if(PIN!==null){unpin();}
-  hoverAt(p[0],p[1],true);
+function yearAtX(x){var ch=x>=chB.x0-8?chB:chA,px0=ch.x0+6,px1=ch.x1-6;return Math.round(Y0+clamp((x-px0)/(px1-px0))*(Y1-Y0));}
+function unpin(){if(PIN===null)return;PIN=null;HOV=null;clearTip();syncYear();draw();}
+function hover(p){
+  if(phase==='intro')return;var h=pick(p[0],p[1]);if(h!==null)hinted=true;
+  var same=(h===HOV);HOV=h;
+  if(h===null){if(PIN!==null)provTip(PIN);else clearTip();}
+  else if(!same||tipEl.className.indexOf('on')<0)provTip(h,p);
+  if(!same)draw();}
+var press=null;
+stage.addEventListener('pointerdown',function(e){
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  var p=local(e);press={x:p[0],y:p[1],year0:YEAR,inPanel:(phase==='end'&&p[1]>=panel.y0),moved:false,id:e.pointerId,type:e.pointerType};
+  try{stage.setPointerCapture(e.pointerId);}catch(err){}
+  if(press.inPanel){press.moved=true;hinted=true;setYear(yearAtX(p[0]));}
 });
-/* the autocheck reads this */
-window.__probe=function(){var b={year:YEAR,pin:PIN,tlOn:tlOn,series:SER_ID};
-  b.tip=tipEl.className.indexOf('on')>=0;b.mode=HOV?HOV.mode:null;b.text=b.tip?tipEl.textContent:'';
-  return b;};
-window.addEventListener('wheel',finish,{passive:true});window.addEventListener('touchmove',finish,{passive:true});
+stage.addEventListener('pointermove',function(e){
+  var p=local(e);
+  if(press&&press.id===e.pointerId){
+    if(press.inPanel){setYear(yearAtX(p[0]));return;}
+    var dx=p[0]-press.x;
+    if(!press.moved&&Math.abs(dx)>10){press.moved=true;hinted=true;HOV=null;clearTip();}
+    if(press.moved)setYear(press.year0+dx/(W*0.75)*(Y1-Y0));
+    return;}
+  if(e.pointerType!=='mouse')return;hover(p);
+},{passive:true});
+function release(e){
+  if(!press||press.id!==e.pointerId)return;var was=press;press=null;
+  try{stage.releasePointerCapture(e.pointerId);}catch(err){}
+  if(was.moved)return;
+  var p=local(e);
+  if(phase==='intro'){interrupt();}
+  hinted=true;
+  var h=pick(p[0],p[1]);
+  if(h!==null){if(PIN===h){unpin();if(was.type==='mouse'){HOV=h;provTip(h,p);draw();}}else{PIN=h;HOV=h;provTip(h,was.type==='mouse'?p:null);syncYear();draw();}}
+  else{unpin();if(was.type==='mouse')hover(p);}
+}
+stage.addEventListener('pointerup',release);
+stage.addEventListener('pointercancel',function(e){press=null;});
+stage.addEventListener('pointerleave',function(e){if(e.pointerType!=='mouse'||press)return;HOV=null;if(PIN!==null)provTip(PIN);else clearTip();draw();},{passive:true});
+document.addEventListener('pointerdown',function(e){
+  if(stage.contains(e.target))return;
+  if(e.target.closest&&e.target.closest('a,button,input,.tl'))return;
+  unpin();});
+/* barra de tiempo */
+tlPlay.addEventListener('click',function(){togglePlay();});
+tlR.addEventListener('input',function(){setYear(parseInt(tlR.value,10));});
+tlR.addEventListener('pointerdown',function(e){e.stopPropagation();});
+document.addEventListener('keydown',function(e){
+  var tgt=e.target,tag=tgt&&tgt.tagName;
+  if(tag==='TEXTAREA'||(tag==='INPUT'&&tgt.type!=='range'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();setYear(YEAR+(e.key==='ArrowRight'?1:-1)*(e.shiftKey?10:1));}
+  else if(e.key===' '&&tag!=='BUTTON'&&tag!=='A'){e.preventDefault();togglePlay();}
+  else if(e.key==='Escape'){if(phase==='intro')interrupt();else{unpin();HOV=null;clearTip();draw();}}
+  else if(e.key==='Home'){e.preventDefault();setYear(Y0);}else if(e.key==='End'){e.preventDefault();setYear(Y1);}
+});
+window.addEventListener('wheel',function(){interrupt();},{passive:true});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}hiddenAt=performance.now();}
+  else{if(hiddenAt!==null&&startTime!==null&&phase==='intro')startTime+=performance.now()-hiddenAt;hiddenAt=null;lastNow=null;
+    if(!raf&&(phase==='intro'||playing))raf=requestAnimationFrame(frame);}});
+var rt=null;
+function relayout(){var pinName=PIN!==null?provScr[PIN].name:null;HOV=null;clearTip();layout();
+  if(pinName!==null){PIN=-1;provScr.forEach(function(p,j){if(p.name===pinName)PIN=j;});if(PIN<0)PIN=null;else provTip(PIN);}
+  if(phase==='end')draw();}
+function onResize(){clearTimeout(rt);rt=setTimeout(relayout,70);}
+window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
+/* el escenario también cambia de alto cuando la barra de tiempo crece a dos filas */
+if(window.ResizeObserver){var lastWH=null;new ResizeObserver(function(){var r=stage.getBoundingClientRect(),key=Math.round(r.width)+'x'+Math.round(r.height);
+  if(lastWH!==null&&key!==lastWH)onResize();lastWH=key;}).observe(stage);}
+window.addEventListener('cahe:lang',function(){nfc={};syncLegend();syncYear();syncPlay();if(PIN!==null)provTip(PIN);else if(HOV!==null)provTip(HOV);draw();});
+
+/* sonda para la comprobación automática */
+window.__probe=function(){return {year:YEAR,pin:PIN===null?null:provScr[PIN].name,hov:HOV===null?null:provScr[HOV].name,phase:phase,playing:playing,
+  tip:tipEl.className.indexOf('on')>=0,text:tipEl.textContent,fps:window.__fps,mapYear:mapYear(YEAR)};};
+window.__portada={
+  provPoint:function(name){var r=stage.getBoundingClientRect();for(var j=0;j<provScr.length;j++)if(provScr[j].name===name)return [r.left+provScr[j].c[0],r.top+provScr[j].c[1]];return null;},
+  panelPoint:function(y){var r=stage.getBoundingClientRect(),ch=chA,px0=ch.x0+6,px1=ch.x1-6;return [r.left+px0+(y-Y0)/(Y1-Y0)*(px1-px0),r.top+(ch.y0+ch.y1)/2];},
+  finish:interrupt,play:play,pause:pause,setYear:function(y){setYear(y);}};
+
+/* ---------- arranque ---------- */
+tlR.min=Y0;tlR.max=Y1;
+syncLegend();
+layout();
+if(RM){phase='end';stage.classList.add('acted');YEAR=Y1;syncYear();syncPlay();draw();}
+else{YEAR=Y0;syncYear();syncPlay();raf=requestAnimationFrame(frame);}
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){onResize();});
-start();
 })();
 </script>
 
 <script>
-/* Bilingual door. Every translatable node carries its English in data-en and keeps its Spanish as
-   the written text, so the page is correct with JavaScript off. The choice is stored under the
-   same key the explorer reads (cahe_lang), so entering the viewer does not undo it. */
+/* Puerta bilingüe. Cada nodo traducible lleva su inglés en data-en (y aria-label en data-en-label)
+   y conserva el español como texto escrito, así la página es correcta sin JavaScript. La elección
+   se guarda con la misma clave que lee el explorador (cahe_lang). */
 (function(){
   var btn = document.getElementById('lang-toggle');
   if (!btn) return;
-  var TITULOS = {es: document.title, en: 'CAHE \u00b7 Spain\u2019s Historical Environmental Accounts'};
+  var TITULOS = {es: document.title, en: 'CAHE · Spain’s Historical Environmental Accounts'};
   var nodos = [].slice.call(document.querySelectorAll('[data-en]'));
   nodos.forEach(function(n){ n.dataset.es = n.innerHTML; });
-  var nav = document.querySelector('[data-en-label]');
-  var navEs = nav ? nav.getAttribute('aria-label') : null;
+  var labs = [].slice.call(document.querySelectorAll('[data-en-label]'));
+  labs.forEach(function(n){ n.dataset.esLabel = n.getAttribute('aria-label') || ''; });
 
   function aplicar(lang){
     var en = lang === 'en';
     nodos.forEach(function(n){ n.innerHTML = en ? n.dataset.en : n.dataset.es; });
-    if (nav) nav.setAttribute('aria-label', en ? nav.dataset.enLabel : navEs);
+    labs.forEach(function(n){ n.setAttribute('aria-label', en ? n.dataset.enLabel : n.dataset.esLabel); });
     document.documentElement.lang = en ? 'en' : 'es';
     document.title = TITULOS[en ? 'en' : 'es'];
     btn.textContent = en ? 'ES' : 'EN';
-    /* el lienzo tiene texto propio (eje, pista, fichas) que no pasa por data-en */
     try { window.dispatchEvent(new CustomEvent('cahe:lang', { detail: lang })); } catch (e) {}
   }
 
   var guardado = 'es';
   try { guardado = localStorage.getItem('cahe_lang') || 'es'; } catch (e) {}
-  aplicar(guardado);
+  if (guardado === 'en') aplicar('en');
 
   btn.addEventListener('click', function(){
     var nuevo = document.documentElement.lang === 'en' ? 'es' : 'en';
