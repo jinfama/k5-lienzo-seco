@@ -12,10 +12,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
 <style>
-/* Portada V7 (2026-09-08, noche). Una sola escena: la curva de emisiones sube, se hace contorno
-   de España y el contorno se eleva a un globo que gira. Paleta de la V5 aprobada («La costa
-   pintada»): azul de Prusia · cal · cobre · cardenillo; Fraunces + Geist. El interior del visor
-   toma estos mismos tokens (css/styles.css). */
+/* Portada V7 (2026-09-08, noche; retoque 2026-09-09). Una sola escena: la curva de emisiones
+   sube, se hace contorno de España y el contorno se eleva a un globo que gira. La curva queda
+   detrás como una estela de cobre luminosa y el globo se puede acercar (rueda, pellizco, +/−) y
+   alejar; doble clic o doble toque vuelve a la vista inicial. Paleta de la V5 aprobada («La
+   costa pintada»): azul de Prusia · cal · cobre · cardenillo; Fraunces + Geist. El interior del
+   visor toma estos mismos tokens (css/styles.css). */
 :root{
   --prusia:#0A1B2C; --prusia2:#0E2438; --prusia3:#13314A;
   --cal:#EFE8D8; --cal2:#D6CDBA; --muted:#8AA0B4; --hair:rgba(214,205,186,.20); --hair2:rgba(214,205,186,.34);
@@ -81,24 +83,22 @@ body.on .enter.d1{transition-delay:.05s}
 body.on .enter.d2{transition-delay:.10s}
 body.on .enter.d3{transition-delay:.14s}
 
-/* Chrome mínimo de la escena: rótulo de una línea, año, pausa. */
+/* Chrome mínimo de la escena: rótulo de una línea, dos botones de zoom, una pista que se apaga. */
 .cap{position:absolute;left:clamp(12px,1.4vw,18px);top:12px;z-index:3;pointer-events:none;max-width:calc(100% - 96px);
      margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal2);
      opacity:.82;line-height:1.35}
-.ctl{position:absolute;left:clamp(12px,1.4vw,18px);bottom:clamp(12px,1.8vh,20px);z-index:3;display:flex;align-items:center;gap:13px}
-.pbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
+.zoom{position:absolute;right:18px;top:72px;z-index:3;display:flex;flex-direction:column;gap:6px;opacity:0;transition:opacity .6s ease}
+.stage.globe .zoom{opacity:1}
+.zbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
       background:rgba(10,27,44,.55);border:1px solid var(--hair2);color:var(--cal);border-radius:0;
       transition:border-color .15s,background .15s}
-.pbtn:hover,.pbtn:focus-visible{border-color:var(--cobre-hi);background:rgba(19,49,74,.85);outline:none}
-.pbtn:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
-.pbtn svg{width:15px;height:15px;fill:currentColor;display:block}
-.pbtn .ic-play{display:none}
-body.paused .pbtn .ic-play{display:block}
-body.paused .pbtn .ic-pause{display:none}
-.yr{font-family:var(--display);font-weight:400;font-variation-settings:"opsz" 72;font-size:clamp(24px,2.3vw,32px);line-height:1;
-    color:var(--cal);font-variant-numeric:tabular-nums;letter-spacing:-.01em;opacity:.92;min-width:2.4em}
+.zbtn:hover,.zbtn:focus-visible{border-color:var(--cobre-hi);background:rgba(19,49,74,.85);outline:none}
+.zbtn:focus-visible{outline:2px solid var(--cobre-hi);outline-offset:2px}
+.zbtn svg{width:16px;height:16px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round}
 .hint{position:absolute;right:clamp(12px,1.4vw,18px);bottom:clamp(20px,2.4vh,30px);z-index:3;pointer-events:none;
       font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);opacity:0;transition:opacity .8s ease}
+.hint .hc{display:none}
+@media (pointer:coarse){.hint .hf{display:none}.hint .hc{display:inline}}
 .stage.globe .hint{opacity:.9}
 .stage.globe.dragged .hint,.stage.globe.hinted .hint{opacity:0}
 
@@ -126,12 +126,11 @@ body.paused .pbtn .ic-pause{display:none}
             background:rgba(19,49,74,.96);box-shadow:0 -6px 24px rgba(3,9,17,.55)}
   .enterbtn b{font-size:21px}
   .enterbtn s{margin-top:3px}
-  .cap{left:10px;top:9px;max-width:calc(100% - 80px);font-size:12px}
+  .cap{left:10px;top:9px;max-width:calc(100% - 72px);font-size:12px}
   .cap .sep{display:none}
   .cap .l2{display:block;color:var(--muted)}
-  .ctl{left:10px;bottom:10px;gap:10px}
-  .yr{font-size:24px}
-  .hint{right:10px;bottom:16px}
+  .zoom{right:10px;top:10px}
+  .hint{right:10px;bottom:16px;max-width:calc(100% - 20px);text-align:right}
   .lang-toggle{top:10px;right:10px}
 }
 @media (max-height:540px) and (orientation:landscape){
@@ -149,10 +148,11 @@ body.paused .pbtn .ic-pause{display:none}
   .index a{font-size:12.5px;gap:8px}
   .index a svg{width:14px;height:14px}
   .nav{padding-top:6px;padding-bottom:8px}
+  .zoom{top:60px;right:12px}
 }
 @media (prefers-reduced-motion:reduce){
   .enter{transition:none;opacity:1;transform:none}
-  .index a,.index a .ar,.enterbtn,.enterbtn i,.pbtn,.hint{transition:none}
+  .index a,.index a .ar,.enterbtn,.enterbtn i,.zbtn,.zoom,.hint{transition:none}
 }
 </style>
 </head>
@@ -176,22 +176,20 @@ body.paused .pbtn .ic-pause{display:none}
       <li><a class="idx" href="explorer.html#perspectivas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span data-en="Perspectives">Perspectivas</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
       <li><a class="idx" href="explorer.html#publicaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg><span data-en="Publications">Publicaciones</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
       <li><a class="idx" href="explorer.html#datos"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg><span data-en="Data &amp; methodology">Datos y metodología</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
+      <li><a class="idx" href="explorer.html#metodos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6h11"/><path d="M10 12h11"/><path d="M10 18h11"/><path d="M3 6l1.5 1.5L7 5"/><path d="M3 12l1.5 1.5L7 11"/><path d="M3 18l1.5 1.5L7 17"/></svg><span data-en="How we work">Cómo trabajamos</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
       <li><a class="idx q" href="explorer.html#acerca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-en="About">Acerca</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
       <li><a class="idx q" href="explorer.html#novedades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 5h11l-1 4 1 4H4"/><path d="M18 8h2"/><path d="M18 12h2"/><path d="M18 16h2"/></svg><span data-en="What&rsquo;s new">Novedades</span><i class="ar" aria-hidden="true">&rarr;</i></a></li>
     </ul>
   </nav>
 
-  <section class="stage" id="stage" aria-label="Escena: la curva de emisiones de España se convierte en el contorno del país y en un globo terráqueo" data-en-label="Scene: Spain's emissions curve becomes the outline of the country and a globe">
+  <section class="stage" id="stage" aria-label="Escena: la curva de emisiones de España se convierte en el contorno del país y en un globo terráqueo que se puede girar y acercar" data-en-label="Scene: Spain's emissions curve becomes the outline of the country and a globe you can spin and zoom">
     <canvas id="c" aria-hidden="true"></canvas>
     <p class="cap"><span data-en="Total GHG emissions">Emisiones totales de GEI</span><span class="sep"> · </span><span class="l2" data-en="Spain 1860–2023 · Mt&nbsp;CO₂e">España 1860–2023 · Mt&nbsp;CO₂e</span></p>
-    <div class="ctl">
-      <button class="pbtn" id="pbtn" type="button" aria-label="Pausar" data-en-label="Pause">
-        <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg>
-        <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>
-      </button>
-      <output class="yr" id="yr" aria-live="off">1860</output>
+    <div class="zoom" role="group" aria-label="Acercar o alejar el globo" data-en-label="Zoom the globe">
+      <button class="zbtn" id="zin" type="button" aria-label="Acercar" data-en-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
+      <button class="zbtn" id="zout" type="button" aria-label="Alejar" data-en-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
     </div>
-    <p class="hint" data-en="Drag to spin the globe">Arrastra para girar el globo</p>
+    <p class="hint"><span data-en="Drag to spin">Arrastra para girar</span><span class="sep"> · </span><span class="hf" data-en="scroll to zoom in">rueda para acercar</span><span class="hc" data-en="pinch to zoom in">pellizca para acercar</span></p>
   </section>
 </main>
 
@@ -208,7 +206,7 @@ body.paused .pbtn .ic-pause{display:none}
    Contorno: SPAIN.peninsula (un solo anillo) para el trazo; SPAIN.outline (18 anillos, con
    Baleares y Canarias) para pintar España sobre el globo. Tierras: WORLD110.objects.land. */
 var S=window.SPAIN,C=window.CAHE,WD=window.WORLD110,d3=window.d3,tj=window.topojson;
-var canvas=document.getElementById('c'),stage=document.getElementById('stage'),yrEl=document.getElementById('yr'),pbtn=document.getElementById('pbtn');
+var canvas=document.getElementById('c'),stage=document.getElementById('stage'),zin=document.getElementById('zin'),zout=document.getElementById('zout');
 var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 requestAnimationFrame(function(){document.body.classList.add('on');});
 if(!S||!C||!WD||!d3||!tj||!canvas.getContext)return;
@@ -217,6 +215,7 @@ var TAU=Math.PI*2;
 
 var PRUSIA='#0A1B2C',PRUSIA2='#0E2438',CAL='#EFE8D8',CAL2='#D6CDBA',HAIR='#3A5570',
     COBRE='#C4753C',COBRE_HI='#E39A5B',COBRE_D='#7E3F1A',VERD_HI='#8FCBB0',LAND='#28534A';
+var MONO='500 11px "Geist Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace';
 
 var ser=C.series['emisiones-gei'];if(!ser)return;
 var YR=ser.years,N=YR.length,V=ser.values.map(function(v){return v/1e6;}),Y0=YR[0],Y1=YR[N-1];
@@ -228,7 +227,6 @@ function lerp(a,b,t){return a+(b-a)*t;}
 function lp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
 function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
 function easeOut(t){return 1-Math.pow(1-t,3);}
-function easeIn(t){return t*t*t;}
 function hash(n){var s=Math.sin(n*12.9898+78.233)*43758.5453;return s-Math.floor(s);}
 function eq(a,b){return Math.abs(a[0]-b[0])<1e-9&&Math.abs(a[1]-b[1])<1e-9;}
 function cumLen(p){var c=[0];for(var j=1;j<p.length;j++){var dx=p[j][0]-p[j-1][0],dy=p[j][1]-p[j-1][1];c[j]=c[j-1]+Math.sqrt(dx*dx+dy*dy);}return c;}
@@ -267,11 +265,12 @@ var land=tj.feature(WD,WD.objects.land);
 var grat=d3.geoGraticule().step([15,15])();
 var proj=d3.geoOrthographic().clipAngle(90).precision(0.6);
 var gpath=d3.geoPath(proj,ctx);
-var ROT_HOME=[3.5,-40];
+var ROT_HOME=[3.5,-40],SPAIN_C=[-3.7,40.0];
 
 /* ---------- geometría de pantalla ---------- */
-var W,H,dpr,mobile,xL,xR,yB,yT,M=420,chartRes,ringRes,ringLL,GC,R_FIN,S_BIG,T_BIG;
-var groundLayer,estelaLayer;
+var W,H,dpr,mobile,xL,xR,yB,yT,M=420,chartRes,ringRes,ringLL,GC,R_FIN,S_BIG,T_BIG,EXT;
+var ZMIN=0.7,ZMAX=8,zoom=1;
+var groundLayer,estelaBack;
 function xs(y){return xL+(y-Y0)/(Y1-Y0)*(xR-xL);}
 function xsInv(x){return Y0+(x-xL)/(xR-xL)*(Y1-Y0);}
 function ys(v){return yB+(v/vMax)*(yT-yB);}
@@ -304,21 +303,33 @@ function layout(){
   var rs=resample(ringScr,M,pen);ringRes=rs.xy;ringLL=rs.ll;
   /* el globo: radio final y radio «plano» (el que hace coincidir España con el contorno) */
   GC=[W/2,H*0.5];R_FIN=Math.min(W,H)*(mobile?0.42:0.40);
-  proj.rotate(ROT_HOME).translate([0,0]).scale(1);
+  proj.clipExtent(null).rotate(ROT_HOME).translate([0,0]).scale(1);
   var b1=[Infinity,Infinity,-Infinity,-Infinity];
   pen.forEach(function(p){var q=proj(p);if(q[0]<b1[0])b1[0]=q[0];if(q[1]<b1[1])b1[1]=q[1];if(q[0]>b1[2])b1[2]=q[0];if(q[1]>b1[3])b1[3]=q[1];});
   S_BIG=(bw*k)/(b1[2]-b1[0]);
   /* el centro de la caja plana y el del contorno proyectado no coinciden exactamente: se
      desplaza la traslación inicial para que la fusión no dé un salto */
   T_BIG=[W/2-(b1[0]+b1[2])/2*S_BIG,H*0.48-(b1[1]+b1[3])/2*S_BIG];
+  /* zoom máximo: España llenando la escena (S_BIG la deja al 62 % del ancho) */
+  ZMAX=Math.max(6,S_BIG/R_FIN*1.5);if(zoom>ZMAX)zoom=ZMAX;
+  /* recorte al escenario: con el globo muy acercado, D3 no genera geometría fuera de pantalla */
+  EXT=[[-12,-12],[W+12,H+12]];proj.clipExtent(EXT);
   /* capas fijas: suelo con viñeta y la estela de la curva */
   if(!groundPat)groundPat=ctx.createPattern(makeGroundTile(),'repeat');
   groundLayer=newLayer();var pg=groundLayer.getContext('2d');pg.fillStyle=groundPat;pg.fillRect(0,0,W,H);
   var vg=pg.createRadialGradient(W*0.42,H*0.34,Math.min(W,H)*0.10,W*0.5,H*0.5,Math.max(W,H)*0.82);
   vg.addColorStop(0,'rgba(52,96,132,0.30)');vg.addColorStop(1,'rgba(3,9,17,0.55)');pg.fillStyle=vg;pg.fillRect(0,0,W,H);
-  estelaLayer=newLayer();var eg=estelaLayer.getContext('2d');
-  eg.strokeStyle=CAL2;eg.lineWidth=1;eg.lineJoin='round';eg.beginPath();chartRes.forEach(function(p,j){if(j)eg.lineTo(p[0],p[1]);else eg.moveTo(p[0],p[1]);});eg.stroke();
-  eg.strokeStyle=HAIR;eg.beginPath();eg.moveTo(xL,yB);eg.lineTo(xR,yB);eg.stroke();
+  /* la estela: la curva entera, luminosa, a toda la anchura, detrás del globo. Bruma de cobre
+     bajo la curva, halo ancho, cuerpo, filo claro, línea de base con tres marcas de año. */
+  estelaBack=newLayer();var eg=estelaBack.getContext('2d');
+  var fg=eg.createLinearGradient(0,yT,0,yB);fg.addColorStop(0,'rgba(196,117,60,0.36)');fg.addColorStop(0.55,'rgba(196,117,60,0.11)');fg.addColorStop(1,'rgba(196,117,60,0)');
+  eg.fillStyle=fg;eg.beginPath();eg.moveTo(chartRes[0][0],yB);chartRes.forEach(function(p){eg.lineTo(p[0],p[1]);});eg.lineTo(chartRes[M-1][0],yB);eg.closePath();eg.fill();
+  pathOf(eg,chartRes,M,false);eg.lineJoin='round';eg.lineCap='round';
+  eg.globalAlpha=0.09;eg.strokeStyle=COBRE;eg.lineWidth=mobile?22:30;eg.stroke();
+  eg.globalAlpha=0.20;eg.lineWidth=mobile?9:12;eg.stroke();
+  eg.globalAlpha=0.55;eg.lineWidth=4;eg.stroke();
+  eg.globalAlpha=1;eg.strokeStyle=COBRE_HI;eg.lineWidth=1.8;eg.stroke();
+  baseline(1,eg);
 }
 
 /* ---------- trazo luminoso de cobre: halo, cuerpo, filo ---------- */
@@ -333,9 +344,18 @@ function pathOf(g,pts,n,close){g.beginPath();for(var j=0;j<n;j++){if(j)g.lineTo(
 function head(x,y,a,rad){
   if(a<=0)return;ctx.globalAlpha=a*0.28;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(x,y,rad*3,0,TAU);ctx.fill();
   ctx.globalAlpha=a*0.95;ctx.fillStyle='#F6D2A6';ctx.beginPath();ctx.arc(x,y,rad,0,TAU);ctx.fill();ctx.globalAlpha=1;}
-function baseline(alpha){
-  if(alpha<=0)return;ctx.globalAlpha=alpha*0.7;ctx.strokeStyle=HAIR;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(xL,yB);ctx.lineTo(xR,yB);ctx.stroke();
-  [1900,1950,2000].forEach(function(y){var x=xs(y);ctx.beginPath();ctx.moveTo(x,yB);ctx.lineTo(x,yB+5);ctx.stroke();});ctx.globalAlpha=1;}
+/* línea de base, tres marcas y sus años (discretos); en el lienzo que se pida */
+function baseline(alpha,g){
+  g=g||ctx;if(alpha<=0)return;
+  g.globalAlpha=alpha*0.75;g.strokeStyle=HAIR;g.lineWidth=1;g.beginPath();g.moveTo(xL,yB+0.5);g.lineTo(xR,yB+0.5);g.stroke();
+  g.fillStyle=CAL2;g.font=MONO;g.textAlign='center';g.textBaseline='top';g.globalAlpha=alpha*0.5;
+  [1900,1950,2000].forEach(function(y){var x=xs(y);g.beginPath();g.moveTo(x,yB);g.lineTo(x,yB+5);g.stroke();g.fillText(String(y),x,yB+8);});
+  g.globalAlpha=1;}
+/* el año corre junto a la cabeza de la curva mientras sube */
+function yearTag(hd,yr,a){
+  if(a<=0)return;ctx.globalAlpha=0.9*a;ctx.fillStyle=CAL2;ctx.font=MONO;ctx.textBaseline='middle';
+  var right=hd[0]>xL+(xR-xL)*0.8;ctx.textAlign=right?'right':'left';
+  ctx.fillText(String(yr),hd[0]+(right?-13:13),hd[1]-(right?14:0));ctx.globalAlpha=1;}
 /* la curva hasta el índice fraccionario f·(M-1): bruma de cobre debajo y trazo encima */
 function curve(f,aLine,aFill){
   var idx=f*(M-1),i0=Math.min(M-2,Math.floor(idx)),u=idx-i0,hd=lp(chartRes[i0],chartRes[i0+1],u),n=i0+1;
@@ -344,6 +364,23 @@ function curve(f,aLine,aFill){
     for(var j=0;j<n;j++)ctx.lineTo(chartRes[j][0],chartRes[j][1]);ctx.lineTo(hd[0],hd[1]);ctx.lineTo(hd[0],yB);ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
   pathOf(ctx,chartRes,n,false);ctx.lineTo(hd[0],hd[1]);stroke3(ctx,aLine,1);
   return hd;}
+/* el filo de la curva sigue por delante del globo, fino y a media luz, recortado al disco: así
+   la subida 1950-2000 no desaparece detrás del planeta. Se apaga al acercar (frontFade). */
+var FRONT_A=0.55;
+function frontFade(){return clamp((2.2-zoom)/1.2);}
+function frontLine(a,s,c){
+  if(a<=0.005)return;ctx.save();ctx.beginPath();ctx.arc(c[0],c[1],s,0,TAU);ctx.clip();
+  pathOf(ctx,chartRes,M,false);ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.globalAlpha=a*0.30;ctx.strokeStyle=COBRE;ctx.lineWidth=5;ctx.stroke();
+  ctx.globalAlpha=a;ctx.strokeStyle=COBRE_HI;ctx.lineWidth=1.4;ctx.stroke();ctx.restore();ctx.globalAlpha=1;}
+/* un destello recorre la curva de 1860 a 2023 cada 11 s y descansa al final */
+var GLINT_T=11000;
+function glint(now,s,c,fa){
+  var p=(now%GLINT_T)/GLINT_T;if(p>0.82)return;var q=p/0.82,u=ease(q),ga=Math.sin(Math.PI*q);
+  var idx=u*(M-1),i0=Math.min(M-2,Math.floor(idx)),pt=lp(chartRes[i0],chartRes[i0+1],idx-i0);
+  var inside=Math.hypot(pt[0]-c[0],pt[1]-c[1])<s,a=ga*(inside?0.55*fa:1);if(a<=0.01)return;
+  ctx.globalAlpha=a*0.30;ctx.fillStyle=COBRE_HI;ctx.beginPath();ctx.arc(pt[0],pt[1],11,0,TAU);ctx.fill();
+  ctx.globalAlpha=a*0.95;ctx.fillStyle='#F6D2A6';ctx.beginPath();ctx.arc(pt[0],pt[1],3,0,TAU);ctx.fill();ctx.globalAlpha=1;}
 
 /* ---------- el globo ---------- */
 function drawGlobe(alpha,s,tr){
@@ -370,23 +407,25 @@ function drawShade(alpha,s,tr){
 
 /* ---------- guion (ms) ---------- */
 var T={curve0:350,curve1:6050,morph0:6650,morph1:8050,globe0:8150,globe1:9850,end:9850};
-var phase=RM?'end':'intro',YEAR=Y0,rot=[ROT_HOME[0],ROT_HOME[1]],paused=RM,OMEGA=2.6/1000,extra=0;
+var phase=RM?'end':'intro',YEAR=Y0,rot=[ROT_HOME[0],ROT_HOME[1]],paused=RM,OMEGA=2.6/1000,extra=0,anim=null;
 
-function setYear(y){if(y!==YEAR){YEAR=y;yrEl.textContent=y;}}
-function render(t){
+function applyProj(){proj.rotate(rot).scale(R_FIN*zoom).translate(GC);}
+function render(t,now){
   ctx.clearRect(0,0,W,H);ctx.drawImage(groundLayer,0,0,W,H);
   if(phase==='intro'){
     if(t<T.morph0){
       var u=clamp((t-T.curve0)/(T.curve1-T.curve0)),f=0.5*u+0.5*ease(u);
       baseline(1);
       var hd=curve(f,1,1);
-      var yr=Math.round(xsInv(hd[0]));setYear(Math.max(Y0,Math.min(Y1,yr)));
+      var yr=Math.round(xsInv(hd[0]));YEAR=Math.max(Y0,Math.min(Y1,yr));
       var pulse=t>T.curve1?0.6+0.4*Math.sin((t-T.curve1)/110):1;
       head(hd[0],hd[1],u<1?1:pulse,mobile?3:3.6);
+      yearTag(hd,YEAR,clamp((t-T.curve0)/400));
       return;}
     if(t<T.globe0){
       var m=clamp((t-T.morph0)/(T.morph1-T.morph0));
-      ctx.globalAlpha=0.22*clamp(m/0.5);ctx.drawImage(estelaLayer,0,0,W,H);ctx.globalAlpha=1;
+      /* la estela se enciende mientras la línea se despega de ella y se hace contorno */
+      ctx.globalAlpha=clamp(m/0.6);ctx.drawImage(estelaBack,0,0,W,H);ctx.globalAlpha=1;
       baseline(1-clamp(m/0.35));
       if(m<0.4)curve(1,0,1-clamp(m/0.4));
       var pts=new Array(M);
@@ -395,104 +434,190 @@ function render(t){
       if(m>0.8){ctx.globalAlpha=0.32*clamp((m-0.8)/0.2);ctx.fillStyle=COBRE;pathOf(ctx,pts,M,true);ctx.fill();ctx.globalAlpha=1;}
       return;}
     var g=clamp((t-T.globe0)/(T.globe1-T.globe0));
-    ctx.globalAlpha=0.22;ctx.drawImage(estelaLayer,0,0,W,H);ctx.globalAlpha=1;
+    ctx.drawImage(estelaBack,0,0,W,H);
     var b=ease(clamp(g/0.22)),e=ease(clamp((g-0.18)/0.82));
     var s=Math.exp(lerp(Math.log(S_BIG),Math.log(R_FIN),e)),tr=lp(T_BIG,GC,e);
     proj.rotate(ROT_HOME).scale(s).translate(tr);
     var ga=clamp((g-0.08)/0.45);
     if(ga>0)drawGlobe(ga,s,tr);
     if(g<0.36){
-      var q=new Array(M);for(var k=0;k<M;k++)q[k]=lp(ringRes[k],proj(ringLL[k]),b);
+      var q=new Array(M);for(var k=0;k<M;k++)q[k]=lp(ringRes[k],proj(ringLL[k])||ringRes[k],b);
       pathOf(ctx,q,M,true);ctx.globalAlpha=0.32+0.3*clamp((g-0.1)/0.3);ctx.fillStyle=COBRE;ctx.fill();ctx.globalAlpha=1;
       pathOf(ctx,q,M,true);stroke3(ctx,1,1-0.15*b);}
     else drawSpain(0.62,1);
-    if(ga>0)drawShade(ga,s,tr);
+    if(ga>0){drawShade(ga,s,tr);frontLine(ga*FRONT_A,s,tr);}
     if(t>=T.end)finish();
     return;}
-  /* estado vivo: el globo gira */
-  ctx.globalAlpha=0.22;ctx.drawImage(estelaLayer,0,0,W,H);ctx.globalAlpha=1;
-  proj.rotate(rot).scale(R_FIN).translate(GC);
-  drawGlobe(1,R_FIN,GC);drawSpain(0.62,1);drawShade(1,R_FIN,GC);
+  /* estado vivo: la estela respira, el globo gira, un destello recorre la curva */
+  var pulse=paused?1:0.86+0.14*Math.sin(now/1500);
+  ctx.globalAlpha=pulse;ctx.drawImage(estelaBack,0,0,W,H);ctx.globalAlpha=1;
+  applyProj();var sc=R_FIN*zoom;
+  drawGlobe(1,sc,GC);drawSpain(0.62,1);drawShade(1,sc,GC);
+  var fa=frontFade();
+  frontLine(FRONT_A*fa,sc,GC);
+  if(!paused)glint(now,sc,GC,fa);
 }
 
+/* ---------- zoom: rueda, pellizco, botones, doble toque ---------- */
+function zclamp(z){return z<ZMIN?ZMIN:z>ZMAX?ZMAX:z;}
+function geoAt(p){applyProj();var g=proj.invert(p);return (g&&isFinite(g[0])&&isFinite(g[1]))?g:null;}
+/* gira el globo para que el punto geográfico G caiga en el punto de pantalla P
+   (Newton con jacobiano numérico sobre [λ, φ]; converge en dos o tres pasos) */
+function placeAt(G,P){
+  if(!G)return;proj.clipExtent(null);
+  for(var it=0;it<6;it++){
+    applyProj();var Q=proj(G);if(!Q)break;
+    var ex=Q[0]-P[0],ey=Q[1]-P[1];if(Math.abs(ex)<0.25&&Math.abs(ey)<0.25)break;
+    var d=0.5;
+    proj.rotate([rot[0]+d,rot[1]]);var Qa=proj(G);
+    proj.rotate([rot[0],rot[1]+d]);var Qb=proj(G);
+    if(!Qa||!Qb)break;
+    var a=(Qa[0]-Q[0])/d,b=(Qb[0]-Q[0])/d,c=(Qa[1]-Q[1])/d,e=(Qb[1]-Q[1])/d,det=a*e-b*c;
+    if(Math.abs(det)<1e-9)break;
+    var dl=(-ex*e+b*ey)/det,dp=(-a*ey+c*ex)/det;
+    dl=Math.max(-40,Math.min(40,dl));dp=Math.max(-40,Math.min(40,dp));
+    rot[0]+=dl;rot[1]=Math.max(-80,Math.min(80,rot[1]+dp));}
+  proj.clipExtent(EXT);}
+function syncZoomUI(){var z=zoom>1.25;stage.classList.toggle('zoomed',z);stage.style.touchAction=z?'none':'pan-y';}
+function hintOff(){stage.classList.add('hinted');}
+/* acerca o aleja dejando quieto el punto de pantalla P */
+function zoomAt(P,z){var G=geoAt(P);zoom=zclamp(z);if(G)placeAt(G,P);syncZoomUI();}
+function animate(a){a.t0=performance.now();if(RM)a.dur=0;anim=a;if(RM)stepAnim(a.t0);kick();}
+function stepAnim(now){
+  var u=anim.dur>0?ease(clamp((now-anim.t0)/anim.dur)):1;
+  if(anim.kind==='zoom'){zoom=Math.exp(lerp(Math.log(anim.z0),Math.log(anim.z1),u));var P=lp(anim.P0,anim.P1,u);if(anim.G)placeAt(anim.G,P);}
+  else{zoom=Math.exp(lerp(Math.log(anim.z0),0,u));rot[0]=anim.r0[0]+anim.dl*u;rot[1]=lerp(anim.r0[1],ROT_HOME[1],u);}
+  if(u>=1){anim=null;syncZoomUI();}}
+/* botones y teclado: paso de ×1,6. Al acercar, si España está a la vista, el zoom tira hacia
+   ella (se queda fija y se desplaza a medio camino del centro); si no, sobre el centro. */
+function zoomStep(dir){
+  if(phase==='intro')skip();hintOff();
+  var z1=zclamp(zoom*(dir>0?1.6:1/1.6));if(Math.abs(z1-zoom)<1e-6)return;
+  var G=null,P0,P1;
+  if(dir>0){applyProj();var q=proj(SPAIN_C);
+    if(q&&Math.hypot(q[0]-GC[0],q[1]-GC[1])<R_FIN*zoom*0.92&&q[0]>0&&q[0]<W&&q[1]>0&&q[1]<H){G=SPAIN_C;P0=q;P1=lp(q,GC,0.6);}}
+  if(!G){G=geoAt(GC);P0=GC;P1=GC;}
+  extra=0;animate({kind:'zoom',dur:480,z0:zoom,z1:z1,G:G,P0:P0,P1:P1});}
+function resetView(){
+  if(phase==='intro')skip();hintOff();extra=0;
+  var dl=((ROT_HOME[0]-rot[0])%360+540)%360-180;
+  animate({kind:'home',dur:720,z0:zoom,r0:[rot[0],rot[1]],dl:dl});}
+zin.addEventListener('click',function(){zoomStep(1);});
+zout.addEventListener('click',function(){zoomStep(-1);});
+stage.addEventListener('wheel',function(e){
+  e.preventDefault();
+  var dy=e.deltaY;if(e.deltaMode===1)dy*=16;else if(e.deltaMode===2)dy*=H;
+  dy=Math.max(-160,Math.min(160,dy));
+  var f=Math.exp(-dy*(e.ctrlKey?0.0075:0.0018));
+  if(phase==='intro')skip();anim=null;hintOff();
+  hold=performance.now()+700; /* el giro base se detiene mientras se acerca: el punto bajo el cursor no deriva */
+  zoomAt(local(e),zoom*f);kick();
+},{passive:false});
+
 /* ---------- reloj ---------- */
-var startTime=null,raf=null,hiddenAt=null,frames=0,fpsT0=0,lastNow=null,pausedAt=null;
+var startTime=null,raf=null,hiddenAt=null,frames=0,fpsT0=0,lastNow=null,hold=0;
 window.__fps=0;
+function kick(){if(!raf&&!document.hidden)raf=requestAnimationFrame(frame);}
 function frame(now){raf=null;
   frames++;if(!fpsT0)fpsT0=now;if(now-fpsT0>=500){window.__fps=Math.round(frames*1000/(now-fpsT0));frames=0;fpsT0=now;}
-  if(phase==='intro'){if(startTime===null)startTime=now;render(now-startTime);
+  if(phase==='intro'){if(startTime===null)startTime=now;render(now-startTime,now);
     /* si la intro acaba de terminar, el globo sigue girando en el mismo bucle */
-    if(!paused&&!document.hidden)raf=requestAnimationFrame(frame);return;}
+    if(!document.hidden)raf=requestAnimationFrame(frame);return;}
   if(lastNow===null)lastNow=now;var dt=Math.min(80,now-lastNow);lastNow=now;
-  if(!dragging){rot[0]+=((paused?0:OMEGA)+extra)*dt;extra*=Math.exp(-dt/650);if(Math.abs(extra)<1e-5)extra=0;}
-  render(0);
-  if(!paused||dragging||extra!==0){if(!document.hidden)raf=requestAnimationFrame(frame);}else lastNow=null;}
-function finish(){phase='end';rot=[ROT_HOME[0],ROT_HOME[1]];lastNow=null;setYear(Y1);stage.classList.add('globe');
-  setTimeout(function(){stage.classList.add('hinted');},9000);syncBtn();render(0);}
-function skip(){if(phase!=='intro')return;if(raf){cancelAnimationFrame(raf);raf=null;}finish();if(!paused&&!raf)raf=requestAnimationFrame(frame);}
-function syncBtn(){document.body.classList.toggle('paused',paused);
-  var L=document.documentElement.lang==='en';pbtn.setAttribute('aria-label',paused?(L?'Play':'Reproducir'):(L?'Pause':'Pausar'));}
-function togglePause(){
-  paused=!paused;syncBtn();
-  if(paused)extra=0; /* pausar congela también la inercia del último arrastre */
-  if(phase==='intro'){if(paused){if(raf){cancelAnimationFrame(raf);raf=null;}pausedAt=performance.now();}
-    else{if(pausedAt!==null&&startTime!==null)startTime+=performance.now()-pausedAt;pausedAt=null;if(!raf)raf=requestAnimationFrame(frame);}}
-  else{lastNow=null;if(!paused&&!raf)raf=requestAnimationFrame(frame);}}
-pbtn.addEventListener('click',togglePause);
+  /* el giro base se amortigua al acercar: a zoom alto el planeta apenas deriva */
+  if(!dragging&&!anim){var om=(paused||now<hold)?0:OMEGA*Math.max(0.015,frontFade());rot[0]+=(om+extra)*dt;extra*=Math.exp(-dt/650);if(Math.abs(extra)<1e-5)extra=0;}
+  if(anim)stepAnim(now);
+  render(0,now);
+  if(!paused||dragging||extra!==0||anim){if(!document.hidden)raf=requestAnimationFrame(frame);}else lastNow=null;}
+function finish(){phase='end';rot=[ROT_HOME[0],ROT_HOME[1]];zoom=1;anim=null;lastNow=null;YEAR=Y1;
+  stage.classList.add('globe');syncZoomUI();
+  setTimeout(function(){stage.classList.add('hinted');},6500);render(0,performance.now());}
+function skip(){if(phase!=='intro')return;if(raf){cancelAnimationFrame(raf);raf=null;}finish();kick();}
 
-/* ---------- arrastrar el globo ---------- */
-var dragging=false,press=null,vel=0,vT=0;
+/* ---------- arrastrar el globo (y pellizcar en táctil) ---------- */
+var dragging=false,press=null,vel=0,vT=0,pts={},pinch=null,lastTap=null;
 function local(e){var r=stage.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
+function dragK(){return 57.3/(R_FIN*zoom)*0.85;}
+function nPts(){return Object.keys(pts).length;}
 stage.addEventListener('pointerdown',function(e){
   if(e.pointerType==='mouse'&&e.button!==0)return;
   if(e.target.closest&&e.target.closest('button'))return;
-  var p=local(e);press={x:p[0],y:p[1],id:e.pointerId,moved:false,type:e.pointerType,t:e.timeStamp};vel=0;
+  var p=local(e);
   try{stage.setPointerCapture(e.pointerId);}catch(err){}
+  if(e.pointerType!=='mouse'){pts[e.pointerId]=p;
+    if(nPts()>=2){ /* segundo dedo: pellizco */
+      var ids=Object.keys(pts).map(Number),A=pts[ids[0]],B=pts[ids[1]];
+      pinch={a:ids[0],b:ids[1],d0:Math.hypot(B[0]-A[0],B[1]-A[1])||1,z0:zoom,mid:[(A[0]+B[0])/2,(A[1]+B[1])/2]};
+      if(phase==='intro')skip();anim=null;extra=0;dragging=true;stage.classList.add('dragging','dragged');press=null;lastNow=null;kick();return;}}
+  press={x:p[0],y:p[1],id:e.pointerId,moved:false,type:e.pointerType,t:e.timeStamp,x0:p[0],y0:p[1]};vel=0;
 });
 stage.addEventListener('pointermove',function(e){
+  if(pinch){
+    if(!(e.pointerId in pts))return;pts[e.pointerId]=local(e);
+    var A=pts[pinch.a],B=pts[pinch.b];if(!A||!B)return;
+    var d=Math.hypot(B[0]-A[0],B[1]-A[1])||1,mid=[(A[0]+B[0])/2,(A[1]+B[1])/2];
+    var G=geoAt(pinch.mid);zoom=zclamp(pinch.z0*d/pinch.d0);if(G)placeAt(G,mid);pinch.mid=mid;syncZoomUI();kick();return;}
   if(!press||press.id!==e.pointerId)return;
   var p=local(e),dx=p[0]-press.x,dy=p[1]-press.y;
   if(!press.moved){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;press.moved=true;dragging=true;stage.classList.add('dragging','dragged');
-    if(phase==='intro')skip();extra=0;lastNow=null;if(!raf)raf=requestAnimationFrame(frame);}
-  var k=57.3/R_FIN*0.85,dt=Math.max(1,e.timeStamp-press.t);
+    if(phase==='intro')skip();anim=null;extra=0;lastNow=null;kick();}
+  var k=dragK(),dt=Math.max(1,e.timeStamp-press.t);
   rot[0]+=dx*k;
-  if(press.type==='mouse')rot[1]=Math.max(-80,Math.min(80,rot[1]-dy*k));
+  /* en táctil el eje vertical se reserva al desplazamiento de la página, salvo con zoom */
+  if(press.type==='mouse'||zoom>1.25)rot[1]=Math.max(-80,Math.min(80,rot[1]-dy*k));
   vel=0.6*vel+0.4*(dx*k/dt);vT=e.timeStamp;
   press.x=p[0];press.y=p[1];press.t=e.timeStamp;
 },{passive:true});
+function tap(e,was){
+  var now=e.timeStamp;
+  if(lastTap&&now-lastTap.t<360&&Math.abs(was.x0-lastTap.x)<30&&Math.abs(was.y0-lastTap.y)<30){lastTap=null;resetView();}
+  else lastTap={t:now,x:was.x0,y:was.y0};}
 function release(e){
-  if(!press||press.id!==e.pointerId)return;var was=press;press=null;
+  if(e.pointerId in pts)delete pts[e.pointerId];
   try{stage.releasePointerCapture(e.pointerId);}catch(err){}
-  if(!was.moved)return;
+  if(pinch){
+    if(e.pointerId===pinch.a||e.pointerId===pinch.b){pinch=null;
+      var ids=Object.keys(pts).map(Number);
+      if(ids.length){var q=pts[ids[0]];press={x:q[0],y:q[1],id:ids[0],moved:true,type:'touch',t:e.timeStamp,x0:q[0],y0:q[1]};vel=0;}
+      else{dragging=false;stage.classList.remove('dragging');extra=0;lastNow=null;kick();}}
+    return;}
+  if(!press||press.id!==e.pointerId)return;var was=press;press=null;
+  if(!was.moved){tap(e,was);return;}
   dragging=false;stage.classList.remove('dragging');
-  var stale=(e.timeStamp-vT)>120;extra=stale?0:Math.max(-0.05,Math.min(0.05,vel));lastNow=null;
-  if(!raf)raf=requestAnimationFrame(frame);}
+  var stale=(e.timeStamp-vT)>120;extra=stale?0:Math.max(-0.05,Math.min(0.05,vel));lastNow=null;kick();}
 stage.addEventListener('pointerup',release);
-stage.addEventListener('pointercancel',function(e){if(press&&press.id===e.pointerId){press=null;dragging=false;stage.classList.remove('dragging');lastNow=null;if(!raf&&!paused)raf=requestAnimationFrame(frame);}});
+stage.addEventListener('pointercancel',function(e){
+  if(e.pointerId in pts)delete pts[e.pointerId];
+  pinch=null;if(press&&press.id===e.pointerId)press=null;
+  dragging=false;stage.classList.remove('dragging');lastNow=null;kick();});
 document.addEventListener('keydown',function(e){
   var tag=e.target&&e.target.tagName;if(tag==='INPUT'||tag==='TEXTAREA')return;
-  if(e.key===' '&&tag!=='BUTTON'&&tag!=='A'){e.preventDefault();togglePause();}
-  else if(e.key==='Escape')skip();
-  else if(phase==='end'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){rot[0]+=(e.key==='ArrowRight'?8:-8);if(!raf)render(0);}
+  if(e.key==='Escape')skip();
+  else if(e.key==='+'||e.key==='=')zoomStep(1);
+  else if(e.key==='-'||e.key==='_')zoomStep(-1);
+  else if(e.key==='0'||e.key==='Home')resetView();
+  else if(phase==='end'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){rot[0]+=(e.key==='ArrowRight'?8:-8)/zoom;kick();}
 });
 document.addEventListener('visibilitychange',function(){
   if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}hiddenAt=performance.now();}
-  else{if(hiddenAt!==null&&startTime!==null&&phase==='intro'&&!paused)startTime+=performance.now()-hiddenAt;hiddenAt=null;lastNow=null;
-    if(!raf&&!paused)raf=requestAnimationFrame(frame);}});
+  else{if(hiddenAt!==null&&startTime!==null&&phase==='intro')startTime+=performance.now()-hiddenAt;hiddenAt=null;lastNow=null;kick();}});
 var rt=null;
-function onResize(){clearTimeout(rt);rt=setTimeout(function(){layout();if(phase==='end'||paused)render(phase==='intro'?(performance.now()-startTime):0);},70);}
+function onResize(){clearTimeout(rt);rt=setTimeout(function(){layout();syncZoomUI();if(phase==='end')render(0,performance.now());},70);}
 window.addEventListener('resize',onResize);window.addEventListener('orientationchange',onResize);
-window.addEventListener('cahe:lang',syncBtn);
 
 /* sonda para la comprobación automática */
-window.__probe=function(){return {phase:phase,year:YEAR,rot:[Math.round(rot[0]*10)/10,Math.round(rot[1]*10)/10],paused:paused,fps:window.__fps,
-  globe:stage.classList.contains('globe'),R:Math.round(R_FIN),S_BIG:Math.round(S_BIG)};};
-window.__portada={finish:skip,pause:function(){if(!paused)togglePause();},play:function(){if(paused)togglePause();}};
+window.__probe=function(){applyProj();var q=proj(SPAIN_C);
+  return {phase:phase,year:YEAR,rot:[Math.round(rot[0]*10)/10,Math.round(rot[1]*10)/10],zoom:Math.round(zoom*100)/100,
+  zmax:Math.round(ZMAX*10)/10,anim:!!anim,fps:window.__fps,globe:stage.classList.contains('globe'),R:Math.round(R_FIN),S_BIG:Math.round(S_BIG),
+  touchAction:stage.style.touchAction||'',spain:q?[Math.round(q[0]),Math.round(q[1])]:null};};
+window.__portada={finish:skip,
+  zoomTo:function(z,x,y){if(phase==='intro')skip();anim=null;zoomAt([x===undefined?GC[0]:x,y===undefined?GC[1]:y],z);kick();},
+  zoomStep:zoomStep,reset:resetView};
 
 /* ---------- arranque ---------- */
-layout();syncBtn();
+layout();
 if(RM){finish();}
-else{setYear(Y0);raf=requestAnimationFrame(frame);}
+else{raf=requestAnimationFrame(frame);}
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){onResize();});
 })();
 </script>

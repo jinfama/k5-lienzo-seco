@@ -45,8 +45,6 @@ const state = {
   globalYear: null, globalSpeed: 4, globalPlaying: false,
   yearStart: null, yearEnd: null, globalYearStart: null, globalYearEnd: null,
   mapMiniOpen: true, mapMiniUserSet: false,
-  /* «Cómo trabajamos» vive dentro de «Datos y metodología» y arranca plegada */
-  metodosOpen: false,
   lang: localStorage.getItem("cahe_lang") || "es",
 };
 function isCompactViewport(){
@@ -98,7 +96,6 @@ const UI = {
     nationalSeries: "Serie nacional", variables: "Variables", types: "Tipos", coverage: "Cobertura", fullMethod: "Metodología",
     dataPageTitle: "Datos y metodología", dataPageIntro: "Cada serie se descarga aquí directamente, junto con su documento metodológico. Zenodo y GitHub reunirán los depósitos completos y los paquetes de replicación a medida que se publiquen.",
     dataSeriesTitle: "Series y descargas", zenodoDeposits: "Depósitos Zenodo", community: "Comunidad",
-    methodsShow: "Ver cómo trabajamos", methodsHide: "Ocultar cómo trabajamos",
     methodsLede: "De dónde sale cada cifra: varias fuentes reunidas y comparadas entre sí, revisadas por fiabilidad y, solo al final, con los huecos rellenos. Lo que se publica identifica, celda a celda, el origen del valor y el método de estimación.",
     dataDownload: "Descargar datos", doiPending: "DOI pendiente de depósito",
     perspectivesTitle: "Perspectivas", perspectivesIntro: "Análisis breves y divulgativos en texto y audio, con autoría revisada y apoyo de IA cuando se indica.",
@@ -123,7 +120,6 @@ const UI = {
     nationalSeries: "National series", variables: "Variables", types: "Types", coverage: "Coverage", fullMethod: "Methodology",
     dataPageTitle: "Data and methods", dataPageIntro: "Every series can be downloaded here directly, together with its methodology document. Zenodo and GitHub will hold the full deposits and replication packages as they are published.",
     dataSeriesTitle: "Series and downloads", zenodoDeposits: "Zenodo deposits", community: "Community",
-    methodsShow: "See how we work", methodsHide: "Hide how we work",
     methodsLede: "Where every figure comes from: several sources gathered and compared against each other, reviewed for reliability and, only then, with their gaps filled. What we publish identifies, cell by cell, the origin of the value and the estimation method.",
     dataDownload: "Download data", doiPending: "DOI pending deposit",
     perspectivesTitle: "Perspectives", perspectivesIntro: "Short public-facing analyses in text and audio, reviewed by their authors and AI-assisted when indicated.",
@@ -1941,6 +1937,7 @@ function renderMain(){
   } else if(state.section === "perspectivas") renderPerspectivas();
   else if(state.section === "publicaciones") renderPublicaciones();
   else if(state.section === "datos") renderDatos();
+  else if(state.section === "metodos") renderComoTrabajamos();
   else if(state.section === "novedades") renderNovedades();
   else if(state.section === "acerca") renderAcerca();
 }
@@ -5320,16 +5317,16 @@ const DATASETS = [
   /* La base industrial no vive en docs/: se internalizó un nivel más arriba. */
   { label: "Industria", file: "FinalDB_1860_2021.csv", dataHref: "data/downloads/FinalDB_1860_2021.csv", desc: "Base industrial 1860-2021 con energía final y primaria, emisiones, gasto energético, valor añadido, fábricas y trabajadores por ramas industriales.", scope: "Nacional" },
 ];
-/* «Cómo trabajamos»: qué cifras se contaron y cuáles construimos nosotros.
-   El JSON de procedencia pesa cientos de KB, así que se carga la primera vez que se abre
-   la sección, no al arrancar. El módulo se importa en diferido por lo mismo. */
-/* Ya no es una sección de la barra: se monta dentro de «Datos y metodología» cuando el
-   lector abre el bloque, que es también cuando conviene pagar los cientos de KB de procedencia. */
-function mountComoTrabajamos(host){
-  if(!host || host.dataset.mounted === "1") return;
-  host.dataset.mounted = "1";
+/* «Cómo trabajamos»: qué cifras se contaron y cuáles construimos nosotros. Sección propia de
+   la barra, como el 5 de septiembre: Juan la quiere separada de «Datos y metodología». El JSON
+   de procedencia pesa cientos de KB, así que el módulo se importa en diferido al entrar en la
+   sección, no al arrancar. La página pone cabecera y lede; el módulo se monta debajo, desplegado. */
+function renderComoTrabajamos(){
+  els.workspace.innerHTML = `<div class="page metodos-page"><div class="page-head"><div class="eyebrow">${t("method")}</div><h1>${t("metodos")}</h1><p>${t("methodsLede")}</p></div>
+    <div class="metodos-body"><div id="pv-root"></div></div></div>`;
+  const host = els.workspace.querySelector("#pv-root");
   import("./methods/como-trabajamos.js?v=20260906k").then(m => {
-    m.default.render(host, state.lang);
+    if(host.isConnected) m.default.render(host, state.lang);
   });
 }
 
@@ -5354,31 +5351,8 @@ function renderDatos(){
   const methodAction = d => d.method
     ? `<a class="link data-method" href="${V1_DOCS}/${encodeURIComponent(d.method)}" target="_blank" rel="noopener" title="${escAttr(`${t("fullMethod")} — ${tx(d.label)}`)}" aria-label="${escAttr(`${t("fullMethod")} — ${tx(d.label)}`)}">${t("fullMethod")} ${ext(d.method)}</a>`
     : "";
-  /* «Cómo trabajamos» va aquí dentro y va primero: es la letra pequeña de todo lo que se
-     descarga debajo, y tenía poco sentido como pestaña hermana de «Datos y metodología». */
-  const metodosBlock = `<section class="section-block metodos-block">
-      <button class="metodos-toggle${state.metodosOpen ? " open" : ""}" type="button" id="metodos-toggle"
-              aria-expanded="${state.metodosOpen ? "true" : "false"}" aria-controls="metodos-body">
-        <span class="mt-text"><span class="mt-title">${t("metodos")}</span><span class="mt-lede">${t("methodsLede")}</span></span>
-        <span class="mt-cta"><span class="mt-cta-label">${state.metodosOpen ? t("methodsHide") : t("methodsShow")}</span><span class="mt-ico" aria-hidden="true"></span></span>
-      </button>
-      <div class="metodos-body" id="metodos-body"${state.metodosOpen ? "" : " hidden"}><div id="pv-root"></div></div>
-    </section>`;
   els.workspace.innerHTML = `<div class="page"><div class="page-head"><h1>${t("dataPageTitle")}</h1><p>${t("dataPageIntro")}</p></div>
-    ${metodosBlock}
     <section class="section-block"><h2>${t("dataSeriesTitle")}</h2><div class="data-list">${DATASETS.map(d => `<div class="data-row"><div class="data-main"><div class="label">${tx(d.label)}</div><div class="desc">${tx(d.desc)}</div></div><div class="meta">${tx(d.scope || "Repositorio")}</div><div class="data-actions">${downloadAction(d)}${methodAction(d)}</div><div class="data-actions data-actions-repo">${d.zenodo ? zenodoAction(d.zenodo) : `<span class="meta doi-pending">${t("doiPending")}</span>`}${githubAction(d.github || null)}</div></div>`).join("")}</div></section></div>`;
-
-  const toggle = els.workspace.querySelector("#metodos-toggle");
-  const body = els.workspace.querySelector("#metodos-body");
-  const syncMetodos = () => {
-    toggle.classList.toggle("open", state.metodosOpen);
-    toggle.setAttribute("aria-expanded", state.metodosOpen ? "true" : "false");
-    toggle.querySelector(".mt-cta-label").textContent = state.metodosOpen ? t("methodsHide") : t("methodsShow");
-    body.hidden = !state.metodosOpen;
-    if(state.metodosOpen) mountComoTrabajamos(body.querySelector("#pv-root"));
-  };
-  toggle.addEventListener("click", () => { state.metodosOpen = !state.metodosOpen; syncMetodos(); });
-  syncMetodos();
 }
 
 function renderNovedades(){
@@ -5541,6 +5515,7 @@ function updateChrome(){
   if(brandSub) brandSub.textContent = t("brandSub");
   els.nav.querySelector('[data-section="visualizacion"]').textContent = t("visualizacion");
   els.nav.querySelector('[data-section="datos"]').textContent = t("datos");
+  els.nav.querySelector('[data-section="metodos"]').textContent = t("metodos");
   els.nav.querySelector('[data-section="perspectivas"]').textContent = t("perspectivas");
   els.nav.querySelector('[data-section="publicaciones"]').textContent = t("publicaciones");
   els.nav.querySelector('[data-section="acerca"]').textContent = t("acerca");
@@ -5640,21 +5615,14 @@ function applyHashRoute(){
     state.perspectiveEntry = null;
     return true;
   }
-  /* Las dos secciones que se han mudado siguen teniendo enlace propio: #metodos abre
-     «Datos y metodología» con el bloque desplegado y #equipo lleva a «Acerca», donde el
-     equipo encabeza la página. */
-  if(hash === "metodos"){
-    state.section = "datos";
-    state.subsection = "landing";
-    state.metodosOpen = true;
-    return true;
-  }
+  /* «Equipo» vive dentro de «Acerca» y conserva su enlace: #equipo abre «Acerca», donde el
+     equipo encabeza la página. «Cómo trabajamos» es sección normal (#metodos), ver la lista. */
   if(hash === "equipo"){
     state.section = "acerca";
     state.subsection = "landing";
     return true;
   }
-  if(["perspectivas","publicaciones","datos","novedades","acerca"].includes(hash)){
+  if(["perspectivas","publicaciones","datos","metodos","novedades","acerca"].includes(hash)){
     state.section = hash;
     state.subsection = "landing";
     if(hash === "perspectivas") state.perspectiveEntry = null;

@@ -154,9 +154,9 @@
 }
 .pv-note { margin: 8px 0 0; font-size: .84rem; line-height: 1.5; color: var(--ink-soft, #4a473f); }
 
-/* la sección vive dentro de «Datos y metodología», que ya pone su propio ancho y su
-   propio relleno: aquí sobra el de la página suelta */
+/* la sección se monta en .metodos-body, dentro de una .page que ya pone su propio ancho y su
+   propio relleno (desde el 2026-09-09 vuelve a ser pestaña propia de la barra, #metodos) */
 .metodos-body .pv-section { max-width: none; margin: 0; padding: 4px 0 8px; }
-/* el titulo ya lo pone el propio bloque plegable, no hace falta repetirlo dentro */
+/* el título ya lo pone la cabecera de la página, no hace falta repetirlo dentro */
 .metodos-body .pv-section > h2 { position: absolute; width: 1px; height: 1px;
     overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }

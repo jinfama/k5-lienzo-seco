@@ -20,9 +20,11 @@ fuera de OneDrive sin romper este visor.
 ## Estructura
 
 ```
-index.html              PORTADA Y PUERTA DE ENTRADA. Portada V7 (2026-09-08):
-                        la curva de emisiones sube, se hace contorno de España y
-                        el contorno se eleva a un globo que gira. Autocontenida:
+index.html              PORTADA Y PUERTA DE ENTRADA. Portada V7 (2026-09-08,
+                        retocada el 09): la curva de emisiones sube, se hace
+                        contorno de España y el contorno se eleva a un globo que
+                        gira y se puede acercar; la curva queda detrás como una
+                        estela luminosa. Autocontenida:
                         lleva dentro su propio <style> y su propio <script>, no
                         usa css/styles.css ni js/. Ver "Entrada" mas abajo.
 explorer.html           LA APLICACIÓN (panel unificado). Se entra desde la
@@ -108,9 +110,10 @@ estéticamente chulo»). Es un único fichero autocontenido: su CSS y su JS van 
 topojson-client v3 por CDN, y los tres kits de `portada/`. **No depende de `css/styles.css`
 ni de `js/`**: tocar el cromo del visor no la cambia, y al revés. Las V5 y V6 quedan en
 `C:/Work/scratch/checkpoint/visores_2026-09/web_cahe_v3_backup/index.html.20260908.bak` y
-`index.html.20260908-v6.bak`.
+`index.html.20260908-v6.bak`; la V7 tal como se publicó el 8 (con año + pausa y estela tenue) en
+`index.html.20260909-v7a.bak`.
 
-Sus seis enlaces, y a dónde llevan:
+Sus siete enlaces, y a dónde llevan:
 
 | enlace de la portada  | destino                    | lo que sale                       |
 |-----------------------|----------------------------|-----------------------------------|
@@ -118,6 +121,7 @@ Sus seis enlaces, y a dónde llevan:
 | Perspectivas          | `explorer.html#perspectivas` | listado de entradas con audio   |
 | Publicaciones         | `explorer.html#publicaciones` | 40 publicaciones filtrables    |
 | Datos y metodología   | `explorer.html#datos`      | series y descargas                |
+| Cómo trabajamos       | `explorer.html#metodos`    | procedencia celda a celda, desplegada |
 | Acerca                | `explorer.html#acerca`      | La CAHE                          |
 | Novedades             | `explorer.html#novedades`  | La CAHE con el bloque Novedades abierto |
 
@@ -127,10 +131,10 @@ pantalla de navegación sin ninguna figura dentro, y la regla de Juan es que la
 portada lleve siempre a una figura. El índice de grupos sigue existiendo y se
 llega a él desde "Visualización" en la cabecera de la aplicación. Los anclas
 que reconoce el router estan en `applyHashRoute()` de `js/app.js`: secciones
-(`datos`, `perspectivas`, `publicaciones`, `acerca`, `novedades`), los dos
-alias heredados (`metodos` → `datos` con el bloque desplegado, `equipo` →
-`acerca`), grupos (`global`, `macro`, `sectorial`, `commodities`) e
-indicadores sueltos (`energia`, `emisiones`, `bosques`, `tendencias`…).
+(`datos`, `metodos`, `perspectivas`, `publicaciones`, `acerca`, `novedades`), el
+alias heredado `equipo` → `acerca`, grupos (`global`, `macro`, `sectorial`,
+`commodities`) e indicadores sueltos (`energia`, `emisiones`, `bosques`,
+`tendencias`…).
 
 **Idioma.** La portada tiene su propio conmutador EN/ES arriba a la derecha.
 Todo nodo traducible lleva su inglés en `data-en` y conserva el español como
@@ -141,12 +145,13 @@ lienzo (unidad del eje, pista de abajo, fichas de provincia, rótulo de
 Canarias) no puede llevar `data-en`: vive en el diccionario `STR` del script de
 la portada y se repinta cuando el conmutador emite el evento `cahe:lang`.
 
-**Lo que dibuja la portada** (V7, 2026-09-08). Una sola escena en un canvas, sin
-paneles, sin leyendas ni contadores:
+**Lo que dibuja la portada** (V7, 2026-09-08; retoque V7a del 09). Una sola escena en un
+canvas, sin paneles, sin leyendas ni contadores:
 
 1. La curva de **emisiones totales de GEI de España, 1860-2023** (`CAHE.series['emisiones-gei']`,
    Mt CO₂e) sube despacio (≈ 5,7 s) en cobre luminoso sobre azul de Prusia, con el año
-   corriendo en el rótulo de abajo a la izquierda (`#yr`).
+   corriendo junto a la cabeza de la línea (texto en el lienzo, `yearTag`); la línea de base
+   lleva marcas discretas en 1900, 1950 y 2000.
 2. Al llegar a 2023 la línea se **convierte en el contorno de la península** (`SPAIN.peninsula`,
    un solo anillo remuestreado a 420 puntos; nada de provincias, así no hay huecos). El anillo
    empieza en Tarifa y recorre el país en el sentido de las agujas del reloj, para que el pico
@@ -155,17 +160,32 @@ paneles, sin leyendas ni contadores:
    tierras de `portada/world-110m.js` en cardenillo apagado, España (`SPAIN.outline`, con
    Baleares y Canarias) en cobre, atmósfera y sombra suaves, graticulado tenue. El radio inicial
    es el que hace coincidir España con el contorno plano (`S_BIG`) y baja en escala logarítmica
-   hasta `R_FIN` (0,40·min(W,H); 0,42 en móvil). La curva queda como una estela fina al fondo.
-4. El globo **gira para siempre** (2,6°/s). Arrastrar lo gira (horizontal en táctil, ambos ejes
-   con ratón), al soltar sigue con la inercia del gesto y vuelve a la velocidad base. Botón
-   pausa/reproduce de 44 px; espacio pausa; Esc salta la intro; ← → giran 8°.
-5. `prefers-reduced-motion`: estado final estático (globo con España de frente, sin giro);
-   el botón permite arrancar el giro.
+   hasta `R_FIN` (0,40·min(W,H); 0,42 en móvil). La curva queda detrás como una **estela de
+   cobre luminosa** a toda la anchura (`estelaBack`: bruma bajo la curva, halo, cuerpo, filo y
+   la línea de base con sus marcas), que respira despacio y por la que corre un destello cada
+   11 s (`glint`). El filo continúa **por delante del globo**, fino y a media luz, recortado al
+   disco (`frontLine`), para que la subida 1950-2000 no desaparezca detrás del planeta; se
+   apaga al acercar (`frontFade`: cero desde zoom 2,2).
+4. El globo **gira para siempre** (2,6°/s a zoom 1; el giro se amortigua al acercar y a zoom
+   alto apenas deriva). Arrastrar lo gira (horizontal en táctil salvo con zoom, ambos ejes con
+   ratón; el paso por píxel se divide por el zoom), al soltar sigue con la inercia del gesto.
+   **Zoom** (retoque 2026-09-09, pedido por Juan): rueda del ratón y pellizco en táctil
+   acercan y alejan dejando quieto el punto bajo el cursor (`zoomAt` → `placeAt`, Newton sobre
+   [λ, φ]); botones «+»/«−» de 44 px arriba a la derecha (×1,6 animado; «+» tira hacia España
+   si está a la vista); doble clic o doble toque vuelve a la vista inicial; límites `ZMIN` 0,7
+   (planeta algo más pequeño) y `ZMAX` = 1,5·S_BIG/R_FIN (≈ 16: España llena la escena). Con
+   zoom > 1,25 el escenario pasa a `touch-action:none` para que el dedo mueva el mapa y no la
+   página. Teclado: Esc salta la intro, + y − acercan y alejan, 0 vuelve, ← → giran.
+5. `prefers-reduced-motion`: estado final estático (globo con España de frente, sin giro ni
+   pulso); zoom y arrastre funcionan, sin animación.
 
 Chrome de la escena: rótulo de una línea («Emisiones totales de GEI · España 1860-2023 ·
-Mt CO₂e», en dos líneas en móvil), el año, el botón pausa y una pista «Arrastra para girar el
-globo» que se apaga sola. Intro completa: 9,85 s. Sonda `window.__probe()` y
-`window.__portada.finish()` para la verificación automática.
+Mt CO₂e», en dos líneas en móvil), los dos botones de zoom y una pista «Arrastra para girar ·
+rueda/pellizca para acercar» que se apaga sola a los 6,5 s o al primer gesto. **No hay control
+de tiempo** (año + pausa): Juan lo quitó el 9 de septiembre («no sé para qué lo quiero»); la
+intro corre sola una vez y el globo queda vivo. Intro completa: 9,85 s. Sonda `window.__probe()`
+(fase, rot, zoom, zmax, fps, posición de España en pantalla) y
+`window.__portada.{finish, zoomTo(z,x,y), zoomStep(±1), reset}` para la verificación automática.
 
 **Lo que se quitó el 2026-09-06** (portada vieja: globo 3D + franjas
 climáticas, que abría `explorer.html` dentro de un `<iframe>`):
@@ -176,8 +196,8 @@ climáticas, que abría `explorer.html` dentro de un `<iframe>`):
   `.hero-*`, `.stripes-*`, `.globe-container`, `#globe-canvas`,
   `.viewer-frame`, `body.home-page`) y sus tres bloques `@media`.
 
-`explorer.html` pide hoy `css/provenance.css?v=20260908b`,
-`css/styles.css?v=20260908b` y `js/app.js?v=20260908b`; `app.js` importa
+`explorer.html` pide hoy `css/provenance.css?v=20260908c`,
+`css/styles.css?v=20260908c` y `js/app.js?v=20260908c`; `app.js` importa
 `methods/como-trabajamos.js?v=20260906k` y este `methods/provenance-panel.js?v=20260906k`.
 Al editar cualquiera de esos ficheros hay que subir el `?v=` en quien lo pide.
 
@@ -201,32 +221,37 @@ como aquí (`#visualizacion` → `#macro`).
 
 ## Secciones del explorador
 
-La barra de `explorer.html` tiene **cinco** botones. Eran siete hasta el
-2026-09-06: «Cómo trabajamos» y «Equipo» eran secciones hermanas y ahora viven
-dentro de la sección a la que pertenecen.
+La barra de `explorer.html` tiene **seis** botones. Eran siete hasta el
+2026-09-06 («Cómo trabajamos» y «Equipo» eran secciones hermanas); del 6 al 8
+fueron cinco, con las dos metidas dentro de otras; el 9 Juan pidió que «Cómo
+trabajamos» volviera a ser pestaña propia («datos por un lado y Cómo trabajamos
+como estaba antes»). «Equipo» sigue dentro de «Acerca».
 
 | barra                 | `data-section` | contenido |
 |-----------------------|----------------|-----------|
 | Visualización         | `visualizacion`| panel unificado; `#visualizacion` es el índice de grupos |
-| Datos y metodología   | `datos`        | **1.** bloque plegable «Cómo trabajamos» (arriba del todo) · **2.** «Series y descargas» |
+| Datos y metodología   | `datos`        | «Series y descargas»: los xlsx/csv y su documento metodológico |
+| Cómo trabajamos       | `metodos`      | procedencia celda a celda, desplegada (módulo `js/methods/como-trabajamos.js`) |
 | Perspectivas          | `perspectivas` | entradas de blog con audio |
 | Publicaciones         | `publicaciones`| listado filtrable |
 | Acerca                | `acerca`       | **1.** «Equipo CAHE» (arriba del todo) · **2.** acordeón La CAHE / Novedades / Financiación |
 
-**«Cómo trabajamos» dentro de «Datos y metodología».** Es la letra pequeña de
-todo lo que se descarga debajo, así que encabeza la página, plegada, y se abre
-al pincharla (`#metodos-toggle` → `#metodos-body`, estado en
-`state.metodosOpen`). El módulo `js/methods/como-trabajamos.js` se importa en
-diferido **la primera vez que se abre el bloque**, no al entrar en la sección:
-el JSON de procedencia pesa cientos de KB. El ancla `#metodos` sigue
-funcionando y llega con el bloque ya desplegado.
+**«Cómo trabajamos» como sección propia** (`renderComoTrabajamos()` en
+`js/app.js`): página `.metodos-page` con cabecera (eyebrow «Método», título
+«Cómo trabajamos», lede `methodsLede`) y debajo `.metodos-body > #pv-root`,
+donde se monta el módulo `js/methods/como-trabajamos.js`, desplegado. El módulo
+se importa en diferido **al entrar en la sección**, no al arrancar: el JSON de
+procedencia pesa cientos de KB. Ya no existe `state.metodosOpen` ni el bloque
+plegable (`.metodos-toggle`); «Datos y metodología» queda solo con las descargas
+y documentos. Ancla: `#metodos`.
 
 Dentro, la sección se maqueta a **dos columnas** en pantallas de 1000 px o más
 (`.pv-intro` en `css/provenance.css`): prosa a la izquierda, cifras y «Límites»
 a la derecha. Antes la prosa era una columna de 473 px que bajaba 886 px por la
 izquierda con 595 px de pantalla vacía a su derecha; medido a 1440 px, ese
-hueco es ahora 0. El `<h2>` interno del módulo se oculta porque el título ya lo
-pone el bloque plegable.
+hueco es ahora 0. El `<h2>` interno del módulo se oculta (`.metodos-body
+.pv-section > h2` en `css/provenance.css`) porque el título ya lo pone la
+cabecera de la página.
 
 El texto de esa sección describe un **procedimiento**, no una cronología:
 reunir varias fuentes, compararlas entre sí, revisar su fiabilidad y solo
@@ -295,7 +320,9 @@ id="cahe-nodata">`, mismo canal que en los demás visores desde el 7-IX) y la le
 muestra. En las comparativas globales España va en cobre (`COLOR_SPAIN #9a4e1d`) y el Mundo en
 cardenillo (`COLOR_WORLD #33735e`), como en el globo de la portada. Las miniaturas de
 Perspectivas usan los mismos dos tonos. Backups previos en
-`C:/Work/scratch/checkpoint/visores_2026-09/web_cahe_v3_backup/*.20260908-v7.bak`.
+`C:/Work/scratch/checkpoint/visores_2026-09/web_cahe_v3_backup/*.20260908-v7.bak`; los del
+retoque del 9 (`index.html`, `explorer.html`, `js/app.js`, `css/styles.css`,
+`css/provenance.css`, `CLAUDE.md`) en `*.20260909-v7a.bak`.
 
 Tokens de cromo en `css/styles.css` (`:root`):
 
