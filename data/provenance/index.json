@@ -4,7 +4,7 @@
     "label": "Superficie cultivada, España",
     "unit": "hectáreas"
   },
-  "generado_desde": "c:/Users/jinfa/OneDrive/05_projects/spain/datasets/agriculture/data/final/agriculture_spain_long.csv.gz",
+  "generado_desde": "ruta interna retirada",
   "totales": {
     "celdas": 19348,
     "observadas": 8330,
